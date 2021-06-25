@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/22 15:19:51 by gchopin           #+#    #+#             */
-/*   Updated: 2021/05/23 12:58:39 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/06/25 13:25:55 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	*threading_process(t_data *data)
 	usleep(30);
 	//pthread_mutex_lock(&fork[0]->fork);
 	//usleep(30);
-	/*pthread_mutex_unlock(&fork[1]->fork);
-	*/
+	//pthread_mutex_unlock(&fork[1]->fork);
+	
 	//usleep(30);
 	int test;
 	test = pthread_mutex_destroy(&fork[0]->fork);

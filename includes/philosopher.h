@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:25:41 by gchopin           #+#    #+#             */
-/*   Updated: 2021/05/24 16:29:01 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/06/25 18:01:23 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct	s_fork
 
 typedef struct	s_philosopher_time_state
 {
+	long int	time_simulation;
 	long int	time_to_die;
 	long int	time_to_eat;
 	long int	time_to_sleep;
@@ -46,6 +47,7 @@ typedef struct s_philosopher
 	int	alive;
 	int	eat;
 	int	sleep;
+	int	dead;
 	int	nb_fork;
 	int	think;
 } t_philosopher;
