@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:24:11 by gchopin           #+#    #+#             */
-/*   Updated: 2021/06/28 18:02:50 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/06/28 18:53:37 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,15 @@ int	sleeping(t_philosopher *philo)
 			{
 				printf("%ld %d is sleeping\n", current_time, philo->number);
 				usleep(philo->state.time_to_sleep * 1000);
+				current_time = math_time();
+				if (current_time != -1)
+					result = is_dying(current_time, philo->state.time_simulation, philo->state.time_to_die);
+				if (result == 1)
+				{
+					philo->dead = 1;
+					printf("%ld %d died\n", current_time, philo->number);
+					return (1);
+				}
 				//philo->sleep = 0;
 			}
 		}
@@ -194,7 +203,6 @@ void	*start_routine(void *args)
 				&& philosopher->dead == 0 && philosopher->eat == 1
 				&& philosopher->sleep == 1)
 		{
-			printf("%d %d is thinking\n", math_time(), philosopher->number);
 			philosopher->eat = 0;
 			philosopher->sleep = 0;
 		}
@@ -344,8 +352,8 @@ t_philosopher	**init_philosopher(int nb_philosopher, int argc, char **argv)
 		i++;
 		
 	}
-	while (dead == 0)
-		usleep(1);
+	while (dead == 0);
+//		usleep(100);
 	free_all(philosopher, fork, nb_philosopher);
 	i = 0;
 	return (NULL);
