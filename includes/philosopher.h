@@ -57,7 +57,6 @@ typedef struct s_main
 {
 	t_philosopher **philosopher;
 	pthread_t thread;
-	pthread_mutex_t secure;
 	int	nb_philosopher;
 	int	dead;
 } t_main;
