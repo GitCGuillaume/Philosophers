@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:25:41 by gchopin           #+#    #+#             */
-/*   Updated: 2021/06/30 12:20:31 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/06/30 20:55:33 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct	s_fork
 typedef struct	s_philosopher_time_state
 {
 	long int	current_time;
+	long int	start_time;
 	long int	time_simulation;
 	long int	time_to_die;
 	long int	time_to_eat;
@@ -44,10 +45,10 @@ typedef struct s_philosopher
 	t_fork	*fork_left;
 	pthread_t thread;
 	pthread_mutex_t secure;
+	int	*dead;
 	int	number;
 	int	eat;
 	int	sleep;
-	int	dead;
 	int	nb_fork;
 	int	think;
 	int	nb_time_active;
@@ -58,8 +59,11 @@ typedef struct s_main
 {
 	t_philosopher **philosopher;
 	pthread_t thread;
-	int	nb_philosopher;
+	pthread_mutex_t anti_overload;
 	int	dead;
+	int	nb_philosopher;
+	int	eat_at_least;
+	int	argc;
 } t_main;
 
 #endif
