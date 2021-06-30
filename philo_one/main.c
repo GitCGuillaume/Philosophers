@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:24:11 by gchopin           #+#    #+#             */
-/*   Updated: 2021/06/30 00:28:30 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/06/30 14:35:42 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,36 +38,38 @@ int	is_dying(long int current_time, long int time_simulation, long int time_to)
 int	eating(t_philosopher *philo)
 {
 	philo->state.current_time = math_time();
-	philo->eat = 1;
-	if (philo && philo->eat == 1)
-	{
-		if (philo->state.current_time != -1)
-		{
-			printf("%ld %d is eating\n", philo->state.current_time - philo->state.time_simulation, philo->number);
+	//if (philo)
+	//{
+		//if (philo->state.current_time != -1)
+		//{
+			printf("%ld %d is eating\n", philo->state.current_time, philo->number);
 			philo->state.time_simulation = math_time();
 			usleep(philo->state.time_to_eat * 1000);
+			if (philo->nb_time_active == 1)
+				philo->nb_time = philo->nb_time + 1;
 			philo->nb_fork = 0;
+			philo->eat = 1;
 			pthread_mutex_unlock(&philo->fork_right->mutex);
 			pthread_mutex_unlock(&philo->fork_left->mutex);
-		}
-	}
+		//}
+	//}
 	return (0);
 }
 
 int	sleeping(t_philosopher *philo)
 {
-	pthread_mutex_lock(&philo->secure);
+	//pthread_mutex_lock(&philo->secure);
 	philo->state.current_time = math_time();
 	philo->sleep = 1;
-	if (philo)
-	{
-		if (philo->state.current_time != -1)
-		{
-			printf("%ld %d is sleeping\n", philo->state.current_time - philo->state.time_simulation, philo->number);
-			pthread_mutex_unlock(&philo->secure);
+	//if (philo)
+	//{
+		//if (philo->state.current_time != -1)
+		//{
+			printf("%ld %d is sleeping\n", philo->state.current_time, philo->number);
+			//pthread_mutex_unlock(&philo->secure);
 			usleep(philo->state.time_to_sleep * 1000);
-		}
-	}
+		//}
+	//}
 	return (0);
 }
 
@@ -76,19 +78,14 @@ int	take_fork(t_philosopher *philo)
 	int	result_one;
 	int	result_two;
 
-	//pthread_mutex_lock(&philo->secure);
-	//pthread_mutex_unlock(&philo->secure);
-		
 	result_one = pthread_mutex_lock(&philo->fork_left->mutex);
 	philo->state.current_time = math_time();
-	printf("%ld %d has taken a fork left\n", philo->state.current_time - philo->state.time_simulation, philo->number);
+	printf("%ld %d has taken a fork left\n", philo->state.current_time, philo->number);
 	philo->nb_fork += 1;
 
 	result_two = pthread_mutex_lock(&philo->fork_right->mutex);
-	//pthread_mutex_lock(&philo->secure);
 	philo->state.current_time = math_time();
-	//pthread_mutex_unlock(&philo->secure);
-	printf("%ld %d has taken a fork right\n", philo->state.current_time - philo->state.time_simulation, philo->number);
+	printf("%ld %d has taken a fork right\n", philo->state.current_time, philo->number);
 	philo->nb_fork += 1;
 	return (result_one);
 }
@@ -97,6 +94,7 @@ void	*start_routine(void *args)
 {
 	t_philosopher *philosopher;
 	int	result;
+	int	current_time;
 
 	result = 0;
 	philosopher = (t_philosopher *)args;
@@ -120,11 +118,12 @@ void	*start_routine(void *args)
 				&& philosopher->dead == 0 && philosopher->eat == 1
 				&& philosopher->sleep == 1)
 		{
-			pthread_mutex_lock(&philosopher->secure);
+		//	pthread_mutex_lock(&philosopher->secure);
+			current_time = math_time();
 			philosopher->eat = 0;
 			philosopher->sleep = 0;
-			printf("%ld %d is thinking\n", math_time() - philosopher->state.time_simulation, philosopher->number);
-			pthread_mutex_unlock(&philosopher->secure);
+			printf("%d %d is thinking\n", current_time, philosopher->number);
+		//	pthread_mutex_unlock(&philosopher->secure);
 		}
 	}
 	return (NULL);
@@ -162,12 +161,16 @@ void	free_all(t_philosopher **philo, t_fork **fork, int nb_philo)
 void	init_values_two(t_philosopher **philosopher, char **argv, int argc, int i)
 {
 	if (argc == 6)
+	{
+		philosopher[i]->nb_time_active = 1;
 		philosopher[i]->state.nb_time_eat = ft_atoi(argv[5]);
+	}
 	else
 	{
-		philosopher[i]->state.nb_time = 0;
+		philosopher[i]->nb_time_active = 0;
 		philosopher[i]->state.nb_time_eat = 0;
 	}
+		philosopher[i]->nb_time = 0;
 	philosopher[i]->eat = 0;
 	philosopher[i]->think = 0;
 	philosopher[i]->sleep = 0;
@@ -247,7 +250,7 @@ t_philosopher	**init_philosopher(int nb_philosopher, int argc, char **argv)
 		{
 			philosopher[i]->fork_left = fork[nb_philosopher - 1];
 		}
-		printf("i=%d f_left=%d f_right=%d\n", i, philosopher[i]->fork_left->id, philosopher[i]->fork_right->id);
+		//printf("i=%d f_left=%d f_right=%d\n", i, philosopher[i]->fork_left->id, philosopher[i]->fork_right->id);
 		i++;
 	}
 	i = 0;
@@ -267,7 +270,7 @@ t_philosopher	**init_philosopher(int nb_philosopher, int argc, char **argv)
 	while (nb_philosopher > i)
 	{
 		pthread_create(&philosopher[i]->thread, NULL, start_routine, philosopher[i]);
-		usleep(10);
+		usleep(1);
 		//pthread_detach(philosopher[i]->thread);
 		i++;
 		
@@ -277,23 +280,37 @@ t_philosopher	**init_philosopher(int nb_philosopher, int argc, char **argv)
 	main.nb_philosopher = nb_philosopher;
 	main.dead = 0;
 	i = 0;
+	int	eat_at_least;
 	long int current_time;
-	while (main.dead == 0)
+
+	eat_at_least = 0;
+	while (main.dead == 0 && eat_at_least == 0)
 	{
+		eat_at_least = 1;
 		while (main.nb_philosopher > i && main.dead == 0)
 		{
 			current_time = math_time();
+			if (eat_at_least == 1 && argc == 6
+					&& philosopher[i]->nb_time < philosopher[i]->state.nb_time_eat)
+				eat_at_least = 0;
 			result = is_dying(current_time, philosopher[i]->state.time_simulation,
 					philosopher[i]->state.time_to_die);
 			if (result == 1)
 			{
-				pthread_detach(philosopher[i]->thread);
-				printf("%ld %d died\n", current_time - philosopher[i]->state.time_simulation, philosopher[i]->number);
 				main.dead = 1;
-				//free_all(philosopher, fork, nb_philosopher);
+				pthread_detach(philosopher[i]->thread);
+				printf("%ld %d died\n", current_time, philosopher[i]->number);
 				break;
 			}
 			i++;
+			if (eat_at_least == 1 && argc == 6)
+			{
+				pthread_detach(philosopher[i]->thread);
+				printf("%ld %d everyone has eaten\n", current_time, philosopher[i]->number);
+				break;
+			}
+			else
+				eat_at_least = 0;
 		}
 		i = 0;
 	}
