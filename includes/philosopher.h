@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:25:41 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/01 17:02:27 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/01 19:28:44 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,15 @@ typedef struct s_philosopher
 	int	think;
 	int	nb_time_active;
 	int	nb_time;
+	int	nb_time_reach;
+	int	everyone;
 } t_philosopher;
 
 typedef struct s_main
 {
 	pthread_t thread;
 	int	dead;
+	int	eat_at_least;
 } t_main;
 
 #endif
