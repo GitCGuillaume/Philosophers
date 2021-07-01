@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:25:41 by gchopin           #+#    #+#             */
-/*   Updated: 2021/06/30 20:55:33 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/01 17:02:27 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philosopher
 	t_fork	*fork_left;
 	pthread_t thread;
 	pthread_mutex_t secure;
+	pthread_mutex_t	mutex;
 	int	*dead;
 	int	number;
 	int	eat;
@@ -57,13 +58,8 @@ typedef struct s_philosopher
 
 typedef struct s_main
 {
-	t_philosopher **philosopher;
 	pthread_t thread;
-	pthread_mutex_t anti_overload;
 	int	dead;
-	int	nb_philosopher;
-	int	eat_at_least;
-	int	argc;
 } t_main;
 
 #endif
