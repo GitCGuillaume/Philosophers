@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:25:41 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/01 19:28:44 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/02 11:23:30 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,25 @@ typedef struct s_main
 	int	dead;
 	int	eat_at_least;
 } t_main;
+
+/*
+ ** THREAD
+*/
+int	is_dead(t_philosopher *philo);
+int	thinking(t_philosopher *philo);
+int	sleeping(t_philosopher *philo);
+int	eating(t_philosopher *philo);
+int	take_fork(t_philosopher *philo);
+void	*running_thread(t_philosopher **philosopher, int nb_philosopher);
+
+/*
+ ** INIT
+*/
+
+void	free_all(t_philosopher **philo, t_fork **fork, int nb_philo, int free_mutex);
+int	init_values(t_philosopher **philosopher, t_fork **fork, char **argv, int argc);
+void	init_values_two(t_philosopher **philosopher, char **argv, int argc, int i);
+int	init_forks(t_philosopher **philosopher, t_fork **fork, int nb_philosopher);
+int	mutex_init(t_philosopher **philosopher, t_fork **fork, int nb_philosopher);
 
 #endif

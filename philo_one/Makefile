@@ -1,14 +1,14 @@
 SRCS	=	../srcs
 
-SRCS_PATH	=	$(SRCS)/ft_args.c $(SRCS)/ft_atoi.c $(SRCS)/ft_str_is_digit.c
+SRCS_PATH	=	$(SRCS)/ft_args.c $(SRCS)/ft_atoi.c $(SRCS)/ft_str_is_digit.c $(SRCS)/threads_tools.c
 
-SRCS_PATH_ONE	=	main.c
+SRCS_PATH_ONE	=	free.c initialization.c routines.c running_thread.c main.c
 
 OBJS	=	$(SRCS_PATH:.c=.o)
 
 OBJS_ONE	=	$(SRCS_PATH_ONE:.c=.o)
 
-CLANG	=	clang -Wall -Wextra
+CLANG	=	clang -Wall -Wextra -Werror
 
 RM	=	rm -f
 
