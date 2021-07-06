@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:46:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/02 14:35:10 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/06 20:59:35 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,19 @@ int	take_fork(t_philosopher *philo)
 
 	result_one = pthread_mutex_lock(&philo->fork_left->mutex);
 	philo->state.current_time = math_time();
-	if (philo->dead == 0)
+	if (*philo->dead == 0)
+	{
 		printf("%ld %d has taken a fork\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
-	philo->nb_fork += 1;
+		philo->nb_fork += 1;
+	}
 	result_two = pthread_mutex_lock(&philo->fork_right->mutex);
 	philo->state.current_time = math_time();
 	if (*philo->dead == 0)
+	{
 		printf("%ld %d has taken a fork\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
-	philo->nb_fork += 1;
+		philo->nb_fork += 1;
+	}
 	return (result_one);
 }

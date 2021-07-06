@@ -1,4 +1,4 @@
-SRCS	=	../srcs
+SRCS	=	srcs
 
 SRCS_PATH	=	$(SRCS)/ft_args.c $(SRCS)/ft_atoi.c $(SRCS)/ft_str_is_digit.c $(SRCS)/threads_tools.c
 
@@ -12,16 +12,15 @@ CLANG	=	clang -Wall -Wextra -Werror
 
 RM	=	rm -f
 
-NAME	=	philo_one
+NAME	=	philo
 
 .c.o:
-	$(CLANG) -I../includes -c $< -o $(<:.c=.o)
+	$(CLANG) -Iincludes -c $< -o $(<:.c=.o)
 
 $(NAME):	$(OBJS) $(OBJS_ONE)
-	$(CLANG) -I../includes -pthread -o $(NAME) $(OBJS_ONE) $(OBJS)
+	$(CLANG) -Iincludes -pthread -o $(NAME) $(OBJS_ONE) $(OBJS)
 
-all:
-	$(NAME)
+all:	$(NAME)
 
 clean:
 	$(RM) $(OBJS)
@@ -34,4 +33,4 @@ re:
 	$(MAKE) fclean
 	$(MAKE) all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus
