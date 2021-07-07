@@ -6,17 +6,17 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 13:36:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/06 17:32:01 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/07 14:28:28 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
-int	math_time(void)
+long int	math_time(void)
 {
 	struct timeval	time;
 	int				res;
-	int				value;
+	long int				value;
 
 	res = gettimeofday(&time, NULL);
 	if (res == 0)
@@ -38,14 +38,16 @@ int	is_dying(long int current_time, long int time_simulation, long int time_to)
 int	is_dead(t_philosopher *philo)
 {
 	long int	current_time;
-	int			result;
+	//int			result;
 
 	current_time = math_time();
-	result = is_dying(current_time, philo->state.time_simulation,
-			philo->state.time_to_die);
-	if (result == 1)
+	//result = is_dying(current_time, philo->state.time_simulation,
+	//		philo->state.time_to_die);
+	//if (result == 1)
+	//{
+	if (current_time > (philo->state.time_simulation + philo->state.time_to_die))
 	{
-		current_time = math_time();
+		//current_time = math_time();
 		*philo->dead = 1;
 		printf("%ld %d died\n",
 			current_time - philo->state.start_time, philo->number);

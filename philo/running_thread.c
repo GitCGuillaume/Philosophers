@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:32:34 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/02 14:16:10 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/07 11:02:44 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void	*philo_dead_routine(void *args)
 			pthread_mutex_unlock(&philo->mutex);
 			return (NULL);
 		}
+		//printf("current=%zd time_sim=%ld time_to=%ld\n", math_time(), philo->state.time_simulation, philo->state.time_to_die);
 		result = is_dead(philo);
 		if (result == 1)
 		{

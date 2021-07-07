@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 12:00:54 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/06 13:47:08 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/07 11:05:55 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdlib.h>
 
 int	is_dying(long int current_time, long int time_simulation, long int time_to);
-int	math_time(void);
+long int	math_time(void);
 int	argv_ok(char *str);
 int	check_args(int argc, char **argv);
 int	ft_atoi(const char *str);

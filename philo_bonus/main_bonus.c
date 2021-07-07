@@ -6,19 +6,21 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:15:30 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/06 18:16:22 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/07 14:50:54 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
-void	free_all(t_philosopher **philo, int nb_philo)
+int	free_all(t_philosopher **philo, int nb_philo)
 {
 	char	*str;
+	char	*str_two;
 	int	i;
 
 	i = 0;
 	str = 0;
+	str_two = 0;
 	if (philo)
 	{
 		while (nb_philo > i)
@@ -26,8 +28,18 @@ void	free_all(t_philosopher **philo, int nb_philo)
 			if (philo[i] != NULL)
 			{
 				sem_close(philo[i]->secure);
+				sem_close(philo[i]->mutex);
 				str = ft_itoa(i);
+				if (str == NULL)
+					return (1);
+				str_two = ft_strjoin("b", str);
+				if (str_two == NULL)
+				{
+					free(str);
+					return (1);
+				}
 				sem_unlink(str);
+				sem_unlink(str_two);
 				free(str);
 				free(philo[i]);
 			}
@@ -36,6 +48,7 @@ void	free_all(t_philosopher **philo, int nb_philo)
 		free(philo);
 	}
 	philo = NULL;
+	return (0);
 }
 
 int	run_process(t_philosopher **philo, int nb_philosopher)
@@ -63,16 +76,25 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 			philo[i]->state.start_time = math_time();
 			//printf("Child process %d\n", philo[i]->process);
 			start_routine(philo[i]);
-			exit(0);
+	//		exit(0);
 		}
 		else
 		{
 		//	printf("Parent process %d\n", philo[i]->process);
 		}
 		i++;
-		usleep(100);
+		usleep(10);
 	//	waitpid(philo[i]->process, &wstatus, 0);
 	}
+	/*if (dead == 1)
+	{
+		i = 0;
+		while (nb_philosopher > i)
+		{
+			kill(philo[i]->process, SIGKILL);
+			i++;
+		}
+	}*/
 	return (0);
 }
 

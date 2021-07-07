@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:01:07 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/06 19:53:58 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/07 14:59:11 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ void	*philo_dead_routine(void *args)
 		sem_wait(philo->mutex);
 		if (philo->nb_time_reach > 0)
 		{
+		//	kill(philo->process, SIGKILL);
 			sem_post(philo->mutex);
-			//kill(philo->process, SIGKILL);
 			return (NULL);
 		}
 		result = is_dead(philo);
 		if (result == 1)
 		{
 			*philo->dead = 1;
+			kill(philo->process, SIGKILL);
 			sem_post(philo->mutex);
-		//	kill(philo->process, SIGKILL);
 			return (NULL);
 		}
 		sem_post(philo->mutex);
@@ -41,7 +41,6 @@ void	*philo_dead_routine(void *args)
 	}
 	return (NULL);
 }
-
 
 void	*start_routine(t_philosopher *philosopher)
 {
