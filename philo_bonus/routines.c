@@ -18,7 +18,8 @@ int	thinking(t_philosopher *philo)
 	philo->state.current_time = math_time();
 	philo->eat = 0;
 	philo->sleep = 0;
-	if (*philo->dead == 0)
+	
+	if (philo->dead == 0)
 		printf("%ld %d is thinking\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
 	sem_post(philo->secure);
@@ -29,10 +30,14 @@ int	sleeping(t_philosopher *philo)
 {
 	sem_wait(philo->secure);
 	philo->state.current_time = math_time();
-	philo->sleep = 1;
-	if (*philo->dead == 0)
+	if (philo->dead == 0)
+	{
 		printf("%ld %d is sleeping\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
+		philo->sleep = 1;
+	}
+	//else
+	//	sem_wait(philo->mutex_dead);
 	usleep(philo->state.time_to_sleep * 1000);
 	sem_post(philo->secure);
 	return (0);
@@ -43,7 +48,7 @@ int	eating(t_philosopher *philo)
 	//sem_wait(philo->secure);
 	philo->state.current_time = math_time();
 	philo->state.time_simulation = math_time();
-	if (*philo->dead == 0)
+	if (philo->dead == 0)
 		printf("%ld %d is eating\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
 	usleep(philo->state.time_to_eat * 1000);
@@ -70,7 +75,7 @@ int	take_fork(t_philosopher *philo)
 	result_one = sem_wait(philo->fork);
 	result_two = sem_wait(philo->fork);
 	philo->state.current_time = math_time();
-	if (*philo->dead == 0)
+	if (philo->dead == 0)
 	{
 	//	sem_wait(philo->secure);
 		printf("%ld %d has taken a fork left\n",
@@ -79,7 +84,7 @@ int	take_fork(t_philosopher *philo)
 	//	sem_post(philo->secure);
 	}
 	philo->state.current_time = math_time();
-	if (*philo->dead == 0)
+	if (philo->dead == 0)
 	{
 	//	sem_wait(philo->secure);
 		printf("%ld %d has taken a fork right\n",

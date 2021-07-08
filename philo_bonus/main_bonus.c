@@ -54,13 +54,11 @@ int	free_all(t_philosopher **philo, int nb_philo)
 int	run_process(t_philosopher **philo, int nb_philosopher)
 {
 	pid_t	process;
-	int	wait_pid;
 	int	dead;
 	int	i;
 	int	wstatus;
 
 	i = 0;
-	wait_pid = 0;
 	dead = 0;
 	while (nb_philosopher > i)
 	{
@@ -72,11 +70,11 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 		}
 		else if (philo[i]->process == 0)
 		{
-			philo[i]->dead = &dead;
+			philo[i]->dead = 0;
 			philo[i]->state.start_time = math_time();
 			//printf("Child process %d\n", philo[i]->process);
 			start_routine(philo[i]);
-	//		exit(0);
+			exit(0);
 		}
 		else
 		{
@@ -86,15 +84,13 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 		usleep(10);
 	//	waitpid(philo[i]->process, &wstatus, 0);
 	}
-	/*if (dead == 1)
-	{
 		i = 0;
-		while (nb_philosopher > i)
-		{
-			kill(philo[i]->process, SIGKILL);
-			i++;
-		}
-	}*/
+	waitpid(-1, &wstatus, 0);
+	while (nb_philosopher > i)
+	{
+		kill(philo[i]->process, SIGKILL);
+		i++;
+	}
 	return (0);
 }
 
@@ -134,6 +130,7 @@ int	main(int argc, char **argv)
 {
 	t_philosopher	**philosopher;
 	sem_t	*sem_fork;
+	sem_t	*sem_test;
 	pid_t	process;
 	char	*str;
 	char	*str_two;
@@ -148,6 +145,7 @@ int	main(int argc, char **argv)
 	i = 0;
 	nb_philosopher = ft_atoi(argv[1]);
 	sem_fork = sem_open("name", O_CREAT, S_IRWXU, nb_philosopher);
+	sem_test = sem_open("test", O_CREAT, S_IRWXU, 1);
 	philosopher = malloc(sizeof(t_philosopher) * nb_philosopher);
 	if (philosopher == NULL)
 		return (1);
@@ -159,6 +157,7 @@ int	main(int argc, char **argv)
 		philosopher[i]->fork = sem_fork;
 		str = ft_itoa(i);
 		philosopher[i]->secure = sem_open(str, O_CREAT, S_IRWXU, 1);
+		philosopher[i]->mutex_dead = sem_test;
 		free(str);
 		philosopher[i]->number = i + 1;
 		init_values(philosopher[i]);
@@ -209,6 +208,8 @@ int	main(int argc, char **argv)
 		pthread_join(philosopher[i]->thread, NULL);
 		i++;
 	}*/
+	sem_close(sem_test);
+	sem_unlink("test");
 	sem_close(sem_fork);
 	sem_unlink("name");
 	free_all(philosopher, nb_philosopher);

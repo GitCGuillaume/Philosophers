@@ -38,19 +38,16 @@ int	is_dying(long int current_time, long int time_simulation, long int time_to)
 int	is_dead(t_philosopher *philo)
 {
 	long int	current_time;
-	//int			result;
 
 	current_time = math_time();
-	//result = is_dying(current_time, philo->state.time_simulation,
-	//		philo->state.time_to_die);
-	//if (result == 1)
-	//{
 	if (current_time > (philo->state.time_simulation + philo->state.time_to_die))
 	{
-		//current_time = math_time();
-		*philo->dead = 1;
+		//sem_wait(philo->secure);
+		sem_wait(philo->mutex_dead);
+		philo->dead = 1;
 		printf("%ld %d died\n",
 			current_time - philo->state.start_time, philo->number);
+		//sem_post(philo->secure);
 		return (1);
 	}
 	return (0);
