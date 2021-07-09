@@ -51,19 +51,41 @@ int	free_all(t_philosopher **philo, int nb_philo)
 	return (0);
 }
 
+int	run_process_two(t_philosopher *philo, long int current_time)
+{
+	if (philo->process == -1)
+	{
+		printf("Error no process returned\n");
+		return (1);
+	}
+	else if (philo->process == 0)
+	{
+		philo->dead = 0;
+		philo->state.start_time = current_time;
+		philo->state.time_simulation = current_time;
+		philo->state.current_time = current_time;
+		pthread_create(&philo->thread, NULL,
+			philo_dead_routine, philo);
+		start_routine(philo);
+		pthread_join(philo->thread, NULL);
+		exit(0);
+	}
+	return (0);
+}
+
 int	run_process(t_philosopher **philo, int nb_philosopher)
 {
-	pid_t	process;
-	int	dead;
+	long int	current_time;
 	int	i;
 	int	wstatus;
 
+	current_time = math_time();
 	i = 0;
-	dead = 0;
 	while (nb_philosopher > i)
 	{
 		philo[i]->process = fork();
-		if (philo[i]->process == -1)
+		run_process_two(philo[i], current_time);
+		/*if (philo[i]->process == -1)
 		{
 			printf("Error no process returned\n");
 			return (1);
@@ -72,20 +94,14 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 		{
 			philo[i]->dead = 0;
 			philo[i]->state.start_time = math_time();
-			//printf("Child process %d\n", philo[i]->process);
 			start_routine(philo[i]);
 			exit(0);
-		}
-		else
-		{
-		//	printf("Parent process %d\n", philo[i]->process);
-		}
+		}*/
 		i++;
 		usleep(10);
-	//	waitpid(philo[i]->process, &wstatus, 0);
 	}
-		i = 0;
 	waitpid(-1, &wstatus, 0);
+	i = 0;
 	while (nb_philosopher > i)
 	{
 		kill(philo[i]->process, SIGKILL);
@@ -113,7 +129,7 @@ void	init_values_time(t_philosopher *philo, int argc, char **argv)
 	}
 }
 
-void	init_values(t_philosopher *philo)
+void	init_values_two(t_philosopher *philo)
 {
 	philo->dead = 0;
 	philo->eat = 0;
@@ -126,92 +142,106 @@ void	init_values(t_philosopher *philo)
 	philo->everyone = 0;
 }
 
+int	alloc_things(sem_t **sem_fork, sem_t **sem_test, t_philosopher ***philosopher, char **argv)
+{
+	int	nb_philosopher;
+
+	nb_philosopher = ft_atoi(argv[1]);
+	*sem_fork = sem_open("name", O_CREAT, S_IRWXU, nb_philosopher);
+	*sem_test = sem_open("test", O_CREAT, S_IRWXU, 1);
+	*philosopher = malloc(sizeof(t_philosopher) * nb_philosopher);
+	if (philosopher == NULL)
+		return (1);
+	return (0);
+}
+
+int	init_values(t_philosopher **philosopher, int argc, char **argv, int i)
+{
+	char	*str;
+
+	str = 0;
+	philosopher[i] = malloc(sizeof(t_philosopher));
+	if (philosopher[i] == NULL)
+		return (1);
+	str = ft_itoa(i);
+	philosopher[i]->secure = sem_open(str, O_CREAT, S_IRWXU, 1);
+	free(str);
+	philosopher[i]->number = i + 1;
+	init_values_two(philosopher[i]);
+	init_values_time(philosopher[i], argc, argv);
+	return (0);
+}
+
+int	init_mutex(t_philosopher **philosopher, int nb_philosopher)
+{
+	char	*str;
+	char	*str_itoa;
+	int	i;
+
+	str = 0;
+	str_itoa = 0;
+	i = 0;
+	while (nb_philosopher > i)
+	{
+		str_itoa = ft_itoa(i);
+		if (str_itoa == NULL)
+			return (1);
+		str = ft_strjoin("b", str_itoa);
+		if (str == NULL)
+		{
+			free(str_itoa);
+			return (1);
+		}
+		philosopher[i]->mutex = sem_open(str, O_CREAT, S_IRWXU, 1);
+		free(str_itoa);
+		free(str);
+		i++;
+	}
+	return (0);
+}
+
+int	run_program(t_philosopher **philosopher, char **argv, sem_t *sem_fork, sem_t *sem_test)
+{
+	int	result;
+
+	result = run_process(philosopher, ft_atoi(argv[1]));
+	if (result == 1)
+		return (1);
+	sem_close(sem_fork);
+	sem_close(sem_test);
+	sem_unlink("test");
+	sem_unlink("name");
+	result = free_all(philosopher, ft_atoi(argv[1]));
+	if (result == 1)
+		exit(1);	
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_philosopher	**philosopher;
 	sem_t	*sem_fork;
 	sem_t	*sem_test;
-	pid_t	process;
-	char	*str;
-	char	*str_two;
-	char	*str_itoa;
 	int	i;
-	int	nb_philosopher;
+	int	result;
 
-	str_two = 0;
-	str_itoa = 0;
-	
-	str = 0;
+	result = 0;
 	i = 0;
-	nb_philosopher = ft_atoi(argv[1]);
-	sem_fork = sem_open("name", O_CREAT, S_IRWXU, nb_philosopher);
-	sem_test = sem_open("test", O_CREAT, S_IRWXU, 1);
-	philosopher = malloc(sizeof(t_philosopher) * nb_philosopher);
-	if (philosopher == NULL)
-		return (1);
-	while (nb_philosopher > i)
+	result = alloc_things(&sem_fork, &sem_test, &philosopher, argv);
+	if (result == 1)
+		return (1);	
+	while (ft_atoi(argv[1]) > i)
 	{
-		philosopher[i] = malloc(sizeof(t_philosopher));
-		if (philosopher[i] == NULL)
-			return (0);
+		result = init_values(philosopher, argc, argv, i);
+		if (result == 1)
+			return (1);
 		philosopher[i]->fork = sem_fork;
-		str = ft_itoa(i);
-		philosopher[i]->secure = sem_open(str, O_CREAT, S_IRWXU, 1);
 		philosopher[i]->mutex_dead = sem_test;
-		free(str);
-		philosopher[i]->number = i + 1;
-		init_values(philosopher[i]);
-		init_values_time(philosopher[i], argc, argv);
 		i++;
 	}
-	i = 0;
-	while (nb_philosopher > i)
-	{
-		str_itoa = ft_itoa(i);
-		if (str_itoa == NULL)
-			return (1);
-		str_two = ft_strjoin("b", str_itoa);
-		if (str_two == NULL)
-		{
-			free(str_itoa);
-			return (1);
-		}
-		philosopher[i]->mutex = sem_open(str_two, O_CREAT, S_IRWXU, 1);
-		free(str_itoa);
-		free(str_two);
-		i++;
-	}
-	run_process(philosopher, nb_philosopher);
-	i = 0;
-	/*while (nb_philosopher > i)
-	{
-		str_itoa = ft_itoa(i);
-		if (str_itoa == NULL)
-			return (1);
-		str_two = ft_strjoin("b", str_itoa);
-		if (str_two == NULL)
-		{
-			free(str_itoa);
-			return (1);
-		}
-		philosopher[i]->mutex = sem_open(str_two, O_CREAT, S_IRWXU, nb_philosopher);
-		pthread_create(&philosopher[i]->thread, NULL,
-			philo_dead_routine, philosopher[i]);
-		free(str_itoa);
-		free(str_two);
-		i++;
-		usleep(10);
-	}
-	i = 0;
-	while (nb_philosopher > i)
-	{
-		pthread_join(philosopher[i]->thread, NULL);
-		i++;
-	}*/
-	sem_close(sem_test);
-	sem_unlink("test");
-	sem_close(sem_fork);
-	sem_unlink("name");
-	free_all(philosopher, nb_philosopher);
+	result = init_mutex(philosopher, ft_atoi(argv[1]));
+	if (result == 1)
+		return (1);
+	result = run_program(philosopher, argv, sem_fork, sem_test);
 	return (0);
 }

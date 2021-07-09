@@ -68,6 +68,7 @@ typedef struct	s_philosopher
 
 void	*start_routine(t_philosopher *philosopher);
 void	*philo_dead_routine(void *args);
+void	display(t_philosopher *philo, char *str, int is_dead);
 int	thinking(t_philosopher *philo);
 int	sleeping(t_philosopher *philo);
 int	eating(t_philosopher *philo);
