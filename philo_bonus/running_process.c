@@ -30,11 +30,12 @@ void	*philo_dead_routine(void *args)
 			return (NULL);
 		}
 		current_time = math_time();
-		if (current_time > (philo->state.time_simulation + philo->state.time_to_die))
+		if (current_time > (philo->state.time_simulation + philo->state.time_to_die)
+			&& philo->dead == 0)
 		{
-			philo->dead = 1;
+			
+			//sem_post(philo->mutex);
 			display(philo, "died", 1);
-			sem_post(philo->mutex);
 			return (NULL);
 		}
 		usleep(100);

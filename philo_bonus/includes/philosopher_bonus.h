@@ -52,6 +52,7 @@ typedef struct	s_philosopher
 	sem_t	*secure;
 	sem_t	*mutex;
 	sem_t	*mutex_dead;
+	sem_t	*test;
 	pthread_t	thread;
 	pid_t	process;
 	int	dead;

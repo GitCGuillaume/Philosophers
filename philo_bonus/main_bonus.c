@@ -17,18 +17,23 @@ int	free_all(t_philosopher **philo, int nb_philo)
 	char	*str;
 	char	*str_two;
 	int	i;
+	int	result;
 
 	i = 0;
 	str = 0;
 	str_two = 0;
+	result = 0;	
 	if (philo)
 	{
 		while (nb_philo > i)
 		{
 			if (philo[i] != NULL)
 			{
-				sem_close(philo[i]->secure);
-				sem_close(philo[i]->mutex);
+				result = sem_close(philo[i]->secure);			
+				if (result != -1)				
+					result = sem_close(philo[i]->mutex);			
+				else
+					sem_close(philo[i]->mutex);
 				str = ft_itoa(i);
 				if (str == NULL)
 					return (1);
@@ -38,9 +43,16 @@ int	free_all(t_philosopher **philo, int nb_philo)
 					free(str);
 					return (1);
 				}
-				sem_unlink(str);
-				sem_unlink(str_two);
+				if (result != -1)
+				{
+					result = sem_unlink(str);
+					if (result != -1)
+						result = sem_unlink(str_two);
+					else
+						sem_unlink(str_two);
+				}				
 				free(str);
+				free(str_two);				
 				free(philo[i]);
 			}
 			i++;
@@ -48,6 +60,8 @@ int	free_all(t_philosopher **philo, int nb_philo)
 		free(philo);
 	}
 	philo = NULL;
+	if (result == -1)
+		return (1);
 	return (0);
 }
 
@@ -67,53 +81,59 @@ int	run_process_two(t_philosopher *philo, long int current_time)
 		pthread_create(&philo->thread, NULL,
 			philo_dead_routine, philo);
 		start_routine(philo);
+		//sem_post(philo->mutex_dead);
 		pthread_join(philo->thread, NULL);
-		exit(0);
+		//exit(0);
 	}
 	return (0);
 }
 
-int	run_process(t_philosopher **philo, int nb_philosopher)
+int	run_process(t_philosopher **philo, int nb_philosopher, sem_t *sem_fork, sem_t *sem_dead)
 {
+	sem_t *test;
 	long int	current_time;
 	int	i;
 	int	wstatus;
+	int	result;
 
+	wstatus = 0;
 	current_time = math_time();
 	i = 0;
+	test = sem_open("test", O_CREAT, S_IRWXU, 0);
 	while (nb_philosopher > i)
 	{
+		philo[i]->test = test;
 		philo[i]->process = fork();
 		run_process_two(philo[i], current_time);
-		/*if (philo[i]->process == -1)
+		if (philo[i]->process == 0)
 		{
-			printf("Error no process returned\n");
-			return (1);
-		}
-		else if (philo[i]->process == 0)
-		{
-			philo[i]->dead = 0;
-			philo[i]->state.start_time = math_time();
-			start_routine(philo[i]);
+			
+			/*sem_unlink("dead");
+			sem_unlink("name");
+			sem_close(sem_fork);
+			sem_close(sem_dead);*/
+			free_all(philo, nb_philosopher);
 			exit(0);
-		}*/
+		}
 		i++;
 		usleep(10);
 	}
-	waitpid(-1, &wstatus, 0);
 	i = 0;
-	while (nb_philosopher > i)
-	{
-		kill(philo[i]->process, SIGKILL);
-		i++;
-	}
+	
+	sem_wait(test);
+	sem_close(test);
+	sem_unlink("test");
+	//waitpid(0, &wstatus, 0);
+	//while ((result = waitpid(0, &wstatus, WNOHANG) == 0));
+	/*sem_close(sem_fork);
+	sem_close(sem_dead);
+	sem_unlink("dead");
+	sem_unlink("name");*/
 	return (0);
 }
 
 void	init_values_time(t_philosopher *philo, int argc, char **argv)
 {
-	philo->state.current_time = math_time();
-	philo->state.time_simulation = math_time();
 	philo->state.time_to_die = ft_atoi(argv[2]);
 	philo->state.time_to_eat = ft_atoi(argv[3]);
 	philo->state.time_to_sleep = ft_atoi(argv[4]);
@@ -142,13 +162,17 @@ void	init_values_two(t_philosopher *philo)
 	philo->everyone = 0;
 }
 
-int	alloc_things(sem_t **sem_fork, sem_t **sem_test, t_philosopher ***philosopher, char **argv)
+int	alloc_things(sem_t **sem_fork, sem_t **sem_dead, t_philosopher ***philosopher, char **argv)
 {
 	int	nb_philosopher;
 
 	nb_philosopher = ft_atoi(argv[1]);
 	*sem_fork = sem_open("name", O_CREAT, S_IRWXU, nb_philosopher);
-	*sem_test = sem_open("test", O_CREAT, S_IRWXU, 1);
+	if (*sem_fork == SEM_FAILED)
+		return (1);
+	*sem_dead = sem_open("dead", O_CREAT, S_IRWXU, 1);
+	if (*sem_dead == SEM_FAILED)
+		return (1);
 	*philosopher = malloc(sizeof(t_philosopher) * nb_philosopher);
 	if (philosopher == NULL)
 		return (1);
@@ -164,8 +188,12 @@ int	init_values(t_philosopher **philosopher, int argc, char **argv, int i)
 	if (philosopher[i] == NULL)
 		return (1);
 	str = ft_itoa(i);
+	if (str == NULL)
+		return (1);
 	philosopher[i]->secure = sem_open(str, O_CREAT, S_IRWXU, 1);
 	free(str);
+	if (philosopher[i]->secure == SEM_FAILED)
+		return (1);
 	philosopher[i]->number = i + 1;
 	init_values_two(philosopher[i]);
 	init_values_time(philosopher[i], argc, argv);
@@ -192,24 +220,34 @@ int	init_mutex(t_philosopher **philosopher, int nb_philosopher)
 			free(str_itoa);
 			return (1);
 		}
-		philosopher[i]->mutex = sem_open(str, O_CREAT, S_IRWXU, 1);
 		free(str_itoa);
+		philosopher[i]->mutex = sem_open(str, O_CREAT, S_IRWXU, 1);
+		if (philosopher[i]->mutex == SEM_FAILED)
+			return (1);
 		free(str);
 		i++;
 	}
 	return (0);
 }
 
-int	run_program(t_philosopher **philosopher, char **argv, sem_t *sem_fork, sem_t *sem_test)
+int	run_program(t_philosopher **philosopher, char **argv, sem_t *sem_fork, sem_t *sem_dead)
 {
 	int	result;
+	int	i;
 
-	result = run_process(philosopher, ft_atoi(argv[1]));
+	i = 0;
+	result = run_process(philosopher, ft_atoi(argv[1]), sem_fork, sem_dead);
 	if (result == 1)
 		return (1);
+	while (ft_atoi(argv[1]) > i)
+	{
+		//sem_post(philo[i]->mutex_dead);
+		kill(philosopher[i]->process, SIGKILL);
+		i++;
+	}
 	sem_close(sem_fork);
-	sem_close(sem_test);
-	sem_unlink("test");
+	sem_close(sem_dead);
+	sem_unlink("dead");
 	sem_unlink("name");
 	result = free_all(philosopher, ft_atoi(argv[1]));
 	if (result == 1)
@@ -221,13 +259,13 @@ int	main(int argc, char **argv)
 {
 	t_philosopher	**philosopher;
 	sem_t	*sem_fork;
-	sem_t	*sem_test;
+	sem_t	*sem_dead;
 	int	i;
 	int	result;
 
 	result = 0;
 	i = 0;
-	result = alloc_things(&sem_fork, &sem_test, &philosopher, argv);
+	result = alloc_things(&sem_fork, &sem_dead, &philosopher, argv);
 	if (result == 1)
 		return (1);	
 	while (ft_atoi(argv[1]) > i)
@@ -236,12 +274,13 @@ int	main(int argc, char **argv)
 		if (result == 1)
 			return (1);
 		philosopher[i]->fork = sem_fork;
-		philosopher[i]->mutex_dead = sem_test;
+		philosopher[i]->mutex_dead = sem_dead;
 		i++;
 	}
 	result = init_mutex(philosopher, ft_atoi(argv[1]));
 	if (result == 1)
 		return (1);
-	result = run_program(philosopher, argv, sem_fork, sem_test);
+	result = run_program(philosopher, argv, sem_fork, sem_dead);
+	i = 0;
 	return (0);
 }
