@@ -20,16 +20,19 @@ int	mutex_init(t_philosopher **philosopher, t_fork **fork, int nb_philosopher)
 	i = 0;
 	while (nb_philosopher > i)
 	{
-		philosopher[i]->state.time_simulation = math_time();
+		//philosopher[i]->state.time_simulation = math_time();
+		philosopher[i]->state.time_simulation = -1;
 		if (philosopher[i]->state.time_simulation == -1)
 		{
-			free_all(philosopher, fork, nb_philosopher, 1);
+			free_all(philosopher, fork, nb_philosopher);
 			return (0);
 		}
 		if (pthread_mutex_init(&philosopher[i]->secure, NULL) != 0)
 			return (0);
+		philosopher[i]->secure_exist = 1;
 		if (pthread_mutex_init(&philosopher[i]->mutex, NULL) != 0)
 			return (0);
+		philosopher[i]->mutex_exist = 1;
 		i++;
 	}
 	return (1);
@@ -46,12 +49,9 @@ int	init_forks(t_philosopher **philosopher, t_fork **fork, int nb_philosopher)
 		philosopher[i]->fork_left = NULL;
 		if (nb_philosopher == 1)
 		{
-			//fork[i + 1] = malloc(sizeof(t_fork));
-			//if (fork[i + 1] == NULL)
-			//	return (0);
 			philosopher[i]->fork_left = fork[i + 1];
-			if (pthread_mutex_init(&fork[i + 1]->mutex, NULL) != 0)
-				return (0);
+			//if (pthread_mutex_init(&fork[i + 1]->mutex, NULL) != 0)
+			//	return (0);
 		}
 		else if (i != 0 && fork[i - 1] != NULL)
 			philosopher[i]->fork_left = fork[i - 1];
@@ -98,6 +98,7 @@ int	init_values(t_philosopher **philosopher,
 	{
 		if (pthread_mutex_init(&fork[i]->mutex, NULL) != 0)
 			return (0);
+		fork[i]->fork_exist = 1;
 		fork[i]->id = i + 1;
 		philosopher[i]->number = i + 1;
 		philosopher[i]->state.time_to_die = ft_atoi(argv[2]);
@@ -110,6 +111,7 @@ int	init_values(t_philosopher **philosopher,
 	{
 		if (pthread_mutex_init(&fork[1]->mutex, NULL) != 0)
 			return (0);
+		fork[1]->fork_exist = 1;
 		fork[1]->id = 2;
 	}
 	return (1);

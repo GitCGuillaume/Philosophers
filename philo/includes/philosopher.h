@@ -82,7 +82,7 @@ void	*running_thread(t_philosopher **philosopher, int nb_philosopher);
  ** INIT
 */
 
-void	free_all(t_philosopher **philo, t_fork **fork, int nb_philo, int free_mutex);
+void	free_all(t_philosopher **philo, t_fork **fork, int nb_philo);
 int	init_values(t_philosopher **philosopher, t_fork **fork, char **argv, int argc);
 void	init_values_two(t_philosopher **philosopher, char **argv, int argc, int i);
 int	init_forks(t_philosopher **philosopher, t_fork **fork, int nb_philosopher);

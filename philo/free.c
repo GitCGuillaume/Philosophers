@@ -25,6 +25,8 @@ static void	free_malloc(t_philosopher **philo, t_fork **fork, int nb_philo)
 			free(fork[i]);
 		i++;
 	}
+	if (nb_philo == 1)
+		free(fork[1]);
 	if (fork)
 		free(fork);
 	if (philo)
@@ -32,23 +34,34 @@ static void	free_malloc(t_philosopher **philo, t_fork **fork, int nb_philo)
 }
 
 void	free_all(t_philosopher **philo, t_fork **fork,
-		int nb_philo, int free_mutex)
+		int nb_philo)
 {
 	int	i;
 
 	i = 0;
 	while (nb_philo > i)
 	{
-		if (free_mutex == 1)
+		if (philo[i]->secure_exist == 1)
 		{
 			pthread_mutex_unlock(&philo[i]->secure);
-			pthread_mutex_unlock(&philo[i]->mutex);
 			pthread_mutex_destroy(&philo[i]->secure);
+		}
+		if (philo[i]->mutex_exist == 1)
+		{
+			pthread_mutex_unlock(&philo[i]->mutex);
 			pthread_mutex_destroy(&philo[i]->mutex);
 		}
-		pthread_mutex_unlock(&fork[i]->mutex);
-		pthread_mutex_destroy(&fork[i]->mutex);
+		if (fork[i]->fork_exist == 1)
+		{
+			pthread_mutex_unlock(&fork[i]->mutex);
+			pthread_mutex_destroy(&fork[i]->mutex);
+		}		
 		i++;
+	}
+	if (nb_philo == 1 && fork[1]->fork_exist == 1)
+	{
+		pthread_mutex_unlock(&fork[1]->mutex);
+		pthread_mutex_destroy(&fork[1]->mutex);
 	}
 	free_malloc(philo, fork, nb_philo);
 }

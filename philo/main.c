@@ -13,28 +13,38 @@
 #include "philosopher.h"
 #include "philosopher_tools.h"
 
-void	*run_philosopher_two(t_philosopher **philosopher,
+int	run_philosopher_two(t_philosopher **philosopher,
 		t_fork **fork, int nb_philosopher, int argc)
 {
+	int	result;
+
 	if (philosopher[0]->state.time_to_die < 1
 		|| philosopher[0]->state.time_to_eat < 1
 		|| philosopher[0]->state.time_to_sleep < 1
 		|| (philosopher[0]->state.nb_time_eat < 1 && argc == 6))
 	{
 		printf("Values must be higher than 0\n");
-		free_all(philosopher, fork, nb_philosopher, 0);
-		return (NULL);
+		free_all(philosopher, fork, nb_philosopher);
+		return (1);
 	}
-	init_forks(philosopher, fork, nb_philosopher);
-	mutex_init(philosopher, fork, nb_philosopher);
+	result = init_forks(philosopher, fork, nb_philosopher);
+	//exit(0);
+	if (result == 0)
+		return (1);
+	result = mutex_init(philosopher, fork, nb_philosopher);
+	if (result == 0)
+	{
+		free_all(philosopher, fork, nb_philosopher);
+		return (1);
+	}
 	running_thread(philosopher, nb_philosopher);
 	if (argc == 6)
 	{
 		usleep(1);
 		printf("Everyone has eaten\n");
 	}
-	free_all(philosopher, fork, nb_philosopher, 1);
-	return (NULL);
+	free_all(philosopher, fork, nb_philosopher);
+	return (0);
 }
 
 void	free_init_null(t_philosopher **philo, t_fork **fork, int nb_philosopher)
@@ -106,7 +116,7 @@ int	init_to_null(t_philosopher **philo, t_fork **fork, int nb_philosopher)
 	}
 	return (1);
 }
-t_philosopher	**run_philosopher(int nb_philosopher, int argc, char **argv)
+int	run_philosopher(int nb_philosopher, int argc, char **argv)
 {
 	t_philosopher	**philosopher;
 	t_fork			**fork;
@@ -118,38 +128,47 @@ t_philosopher	**run_philosopher(int nb_philosopher, int argc, char **argv)
 	if (nb_philosopher < 1)
 	{
 		printf("Values must be higher than 0\n");
-		return (NULL);
+		return (0);
 	}
 	philosopher = malloc(sizeof(t_philosopher) * nb_philosopher);
-	if (philosopher == NULL)
-		return (NULL);
+	if (philosopher == 0)
+		return (0);
 	if (nb_philosopher > 1)
 		fork = malloc(sizeof(t_fork) * nb_philosopher);
 	else if (nb_philosopher == 1)
 		fork = malloc(sizeof(t_fork) * 2);
 	if (fork == NULL)
-		return (NULL);
+	{
+		free(philosopher);
+		return (0);
+	}	
 	result = init_to_null(philosopher, fork, nb_philosopher);	
 	if (result == 0)
 	{
 		free(fork);
 		free(philosopher);
-		return (NULL);
+		return (0);
 	}
 	result = init_values(philosopher, fork, argv, argc);
 	if (result == 0)
-		return (NULL);
-	run_philosopher_two(philosopher, fork, nb_philosopher, argc);
-	return (NULL);
+	{
+		free_all(philosopher, fork, nb_philosopher);
+		return (0);
+	}	
+	result = run_philosopher_two(philosopher, fork, nb_philosopher, argc);
+	return (result);
 }
 
 int	main(int argc, char **argv)
 {
 	int	nb_philosopher;
+	int	result;
 
 	if (check_args(argc, argv) == 0)
 		return (0);
 	nb_philosopher = ft_atoi(argv[1]);
-	run_philosopher(nb_philosopher, argc, argv);
+	result = run_philosopher(nb_philosopher, argc, argv);
+	if (result == 0)
+		return (1);
 	return (0);
 }
