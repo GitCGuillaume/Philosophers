@@ -24,6 +24,7 @@
 typedef struct	s_fork
 {
 	int	id;
+	char	fork_exist;
 	pthread_mutex_t	mutex;
 }	t_fork;
 
@@ -47,6 +48,8 @@ typedef struct s_philosopher
 	pthread_mutex_t secure;
 	pthread_mutex_t	mutex;
 	int	*dead;
+	char	secure_exist;
+	char	mutex_exist;
 	int	number;
 	int	eat;
 	int	sleep;

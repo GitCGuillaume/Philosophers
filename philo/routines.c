@@ -16,11 +16,13 @@ int	thinking(t_philosopher *philo)
 {
 	pthread_mutex_lock(&philo->secure);
 	philo->state.current_time = math_time();
-	philo->eat = 0;
-	philo->sleep = 0;
 	if (*philo->dead == 0)
+	{
 		printf("%ld %d is thinking\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
+		philo->eat = 0;
+		philo->sleep = 0;
+	}	
 	pthread_mutex_unlock(&philo->secure);
 	return (0);
 }
@@ -29,11 +31,13 @@ int	sleeping(t_philosopher *philo)
 {
 	pthread_mutex_lock(&philo->secure);
 	philo->state.current_time = math_time();
-	philo->sleep = 1;
 	if (*philo->dead == 0)
+	{
+		philo->sleep = 1;
 		printf("%ld %d is sleeping\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
-	usleep(philo->state.time_to_sleep * 1000);
+		usleep(philo->state.time_to_sleep * 1000);
+	}	
 	pthread_mutex_unlock(&philo->secure);
 	return (0);
 }
@@ -43,9 +47,11 @@ int	eating(t_philosopher *philo)
 	philo->state.current_time = math_time();
 	philo->state.time_simulation = math_time();
 	if (*philo->dead == 0)
+	{
 		printf("%ld %d is eating\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
-	usleep(philo->state.time_to_eat * 1000);
+		usleep(philo->state.time_to_eat * 1000);
+	}	
 	if (philo->nb_time_active == 1)
 	{
 		philo->nb_time = philo->nb_time + 1;

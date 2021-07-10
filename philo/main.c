@@ -37,6 +37,75 @@ void	*run_philosopher_two(t_philosopher **philosopher,
 	return (NULL);
 }
 
+void	free_init_null(t_philosopher **philo, t_fork **fork, int nb_philosopher)
+{
+	int	i;
+
+	i = 0;
+	if (philo && fork)
+	{
+		while (nb_philosopher > i)
+		{
+			if (philo[i])
+				free(philo[i]);
+			if (fork[i])
+				free(fork[i]);
+			i++;
+		}
+	}
+}
+
+int	init_to_null(t_philosopher **philo, t_fork **fork, int nb_philosopher)
+{
+	int	i;
+
+	i = 0;
+	if (philo && fork)
+	{
+		while (nb_philosopher > i)
+		{
+			philo[i] = NULL;
+			fork[i] = NULL;
+			i++;
+		}
+		i = 0;
+		if (nb_philosopher == 1)
+			fork[1] = NULL;
+		while (nb_philosopher > i)
+		{
+			philo[i] = malloc(sizeof(t_philosopher));
+			if (philo[i] == NULL)
+			{
+				free_init_null(philo, fork, nb_philosopher);
+				return (0);
+			}
+			philo[i]->fork_left = NULL;
+			philo[i]->fork_right = NULL;
+			philo[i]->secure_exist = 0;
+			philo[i]->mutex_exist = 0;
+			fork[i] = malloc(sizeof(t_fork));
+			if (fork[i] == NULL)
+			{
+				free_init_null(philo, fork, nb_philosopher);
+				return (0);
+			}		
+			fork[i]->fork_exist = 0;
+			i++;
+		}
+
+		if (nb_philosopher == 1)
+		{
+			fork[1] = malloc(sizeof(t_philosopher));
+			if (fork[1] == NULL)
+			{
+				free_init_null(philo, fork, nb_philosopher);
+				return (0);
+			}
+			fork[1]->fork_exist = 0;
+		}
+	}
+	return (1);
+}
 t_philosopher	**run_philosopher(int nb_philosopher, int argc, char **argv)
 {
 	t_philosopher	**philosopher;
@@ -45,6 +114,7 @@ t_philosopher	**run_philosopher(int nb_philosopher, int argc, char **argv)
 
 	philosopher = NULL;
 	fork = NULL;
+	result = 0;
 	if (nb_philosopher < 1)
 	{
 		printf("Values must be higher than 0\n");
@@ -53,9 +123,19 @@ t_philosopher	**run_philosopher(int nb_philosopher, int argc, char **argv)
 	philosopher = malloc(sizeof(t_philosopher) * nb_philosopher);
 	if (philosopher == NULL)
 		return (NULL);
-	fork = malloc(sizeof(t_fork) * nb_philosopher);
+	if (nb_philosopher > 1)
+		fork = malloc(sizeof(t_fork) * nb_philosopher);
+	else if (nb_philosopher == 1)
+		fork = malloc(sizeof(t_fork) * 2);
 	if (fork == NULL)
 		return (NULL);
+	result = init_to_null(philosopher, fork, nb_philosopher);	
+	if (result == 0)
+	{
+		free(fork);
+		free(philosopher);
+		return (NULL);
+	}
 	result = init_values(philosopher, fork, argv, argc);
 	if (result == 0)
 		return (NULL);

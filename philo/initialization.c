@@ -46,9 +46,9 @@ int	init_forks(t_philosopher **philosopher, t_fork **fork, int nb_philosopher)
 		philosopher[i]->fork_left = NULL;
 		if (nb_philosopher == 1)
 		{
-			fork[i + 1] = malloc(sizeof(t_fork));
-			if (fork[i + 1] == NULL)
-				return (0);
+			//fork[i + 1] = malloc(sizeof(t_fork));
+			//if (fork[i + 1] == NULL)
+			//	return (0);
 			philosopher[i]->fork_left = fork[i + 1];
 			if (pthread_mutex_init(&fork[i + 1]->mutex, NULL) != 0)
 				return (0);
@@ -96,12 +96,6 @@ int	init_values(t_philosopher **philosopher,
 	nb_philosopher = ft_atoi(argv[1]);
 	while (nb_philosopher > i)
 	{
-		philosopher[i] = malloc(sizeof(t_philosopher));
-		if (philosopher[i] == NULL)
-			return (0);
-		fork[i] = malloc(sizeof(t_fork));
-		if (fork[i] == NULL)
-			return (0);
 		if (pthread_mutex_init(&fork[i]->mutex, NULL) != 0)
 			return (0);
 		fork[i]->id = i + 1;
@@ -111,6 +105,12 @@ int	init_values(t_philosopher **philosopher,
 		philosopher[i]->state.time_to_sleep = ft_atoi(argv[4]);
 		init_values_two(philosopher, argv, argc, i);
 		i++;
+	}
+	if (nb_philosopher == 1)
+	{
+		if (pthread_mutex_init(&fork[1]->mutex, NULL) != 0)
+			return (0);
+		fork[1]->id = 2;
 	}
 	return (1);
 }
