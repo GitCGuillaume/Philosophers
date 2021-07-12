@@ -71,21 +71,34 @@ typedef struct s_main
 /*
  ** THREAD
 */
+
 int	is_dead(t_philosopher *philo);
 int	thinking(t_philosopher *philo);
 int	sleeping(t_philosopher *philo);
 int	eating(t_philosopher *philo);
 int	take_fork(t_philosopher *philo);
-void	*running_thread(t_philosopher **philosopher, int nb_philosopher);
+int	running_thread(t_philosopher **philosopher, int argc, int nb_philosopher);
 
 /*
- ** INIT
+ ** FREE
 */
 
 void	free_all(t_philosopher **philo, t_fork **fork, int nb_philo);
+void	free_init_null(t_philosopher **philo, t_fork **fork, int nb_philosopher);
+
+/*
+ ** TOOLS
+*/
+int	check_inputs_values(t_philosopher **philosopher, t_fork **fork,
+	int argc, int nb_philosopher);
+int	check_nb_philosopher(int nb_philosopher);
+/*
+ ** INIT
+*/
+int	init_to_null(t_philosopher **philo, t_fork **fork, int nb_philosopher);
 int	init_values(t_philosopher **philosopher, t_fork **fork, char **argv, int argc);
 void	init_values_two(t_philosopher **philosopher, char **argv, int argc, int i);
 int	init_forks(t_philosopher **philosopher, t_fork **fork, int nb_philosopher);
-int	mutex_init(t_philosopher **philosopher, t_fork **fork, int nb_philosopher);
+int	init_mutex(t_philosopher **philosopher, int nb_philosopher);
 
 #endif

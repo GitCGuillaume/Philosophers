@@ -27,7 +27,6 @@ static void	*philo_dead_routine(void *args)
 			pthread_mutex_unlock(&philo->mutex);
 			return (NULL);
 		}
-		//printf("current=%zd time_sim=%ld time_to=%ld\n", math_time(), philo->state.time_simulation, philo->state.time_to_die);
 		result = is_dead(philo);
 		if (result == 1)
 		{
@@ -69,22 +68,47 @@ static void	*start_routine(void *args)
 	return (NULL);
 }
 
-void	*running_thread(t_philosopher **philosopher, int nb_philosopher)
+int	running_thread(t_philosopher **philosopher, int argc, int nb_philosopher)
 {
 	pthread_t	main_thread;
 	int			i;
 	int			dead;
+	int			result;
 
 	i = 0;
 	dead = 0;
+	result = 1;
+	if (!philosopher)
+		return (1);
 	while (nb_philosopher > i)
 	{
 		philosopher[i]->dead = &dead;
-		philosopher[i]->state.start_time = math_time();
-		pthread_create(&main_thread, NULL, start_routine, philosopher[i]);
-		pthread_detach(main_thread);
-		pthread_create(&philosopher[i]->thread, NULL,
+		philosopher[i]->state.start_time = math_time();	
+		result = pthread_create(&main_thread, NULL, start_routine, philosopher[i]);
+		if (result != 0)
+		{
+			dead = 1;
+			printf("Thread allocation failed.\n");
+			return (1);
+		}
+		result = pthread_create(&philosopher[i]->thread, NULL,
 			philo_dead_routine, philosopher[i]);
+		if (result != 0)
+		{
+			dead = 1;
+			result = pthread_join(main_thread, NULL);
+			if (result != 0)
+				printf("Thread terminated state failed.\n");
+			printf("Thread allocation failed.\n");
+			return (1);
+		}
+		result = pthread_join(main_thread, NULL);
+		if (result != 0)
+		{
+			dead = 1;
+			printf("Thread terminated state failed.\n");
+			return (1);
+		}
 		i++;
 		usleep(10);
 	}
@@ -94,5 +118,10 @@ void	*running_thread(t_philosopher **philosopher, int nb_philosopher)
 		pthread_join(philosopher[i]->thread, NULL);
 		i++;
 	}
-	return (NULL);
+	if (argc == 6 && dead == 0)
+	{
+		usleep(1);
+		printf("Everyone has eaten\n");
+	}
+	return (0);
 }
