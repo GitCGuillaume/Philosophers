@@ -57,9 +57,8 @@ static void	free_mutex_fork(t_fork **fork, int i)
 {
 	if (fork)
 	{
-		if (fork[i]->fork_exist == 1)
+		if (fork[i]->fork_exist == 1 || fork[i]->fork_exist == 2)
 		{
-			pthread_mutex_unlock(&fork[i]->mutex);
 			pthread_mutex_destroy(&fork[i]->mutex);
 		}
 	}
@@ -71,12 +70,10 @@ static void	free_mutex_philosopher(t_philosopher **philo, int i)
 	{
 		if (philo[i]->secure_exist == 1)
 		{
-			pthread_mutex_unlock(&philo[i]->secure);
 			pthread_mutex_destroy(&philo[i]->secure);
 		}
 		if (philo[i]->mutex_exist == 1)
 		{
-			pthread_mutex_unlock(&philo[i]->mutex);
 			pthread_mutex_destroy(&philo[i]->mutex);
 		}
 	}
@@ -96,12 +93,11 @@ void	free_all(t_philosopher **philo, t_fork **fork,
 	}
 	if (fork)
 	{
-		if (nb_philo == 1 && fork[1]->fork_exist == 1)
+		if (nb_philo == 1 && (fork[1]->fork_exist == 1 || fork[1]->fork_exist == 2))
 		{
-			pthread_mutex_unlock(&fork[1]->mutex);
 			pthread_mutex_destroy(&fork[1]->mutex);
 		}
 	}
 	free_malloc(philo, fork, nb_philo);
-	usleep(1000);
+	//usleep(1000);
 }

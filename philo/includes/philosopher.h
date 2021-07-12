@@ -45,6 +45,7 @@ typedef struct s_philosopher
 	t_fork	*fork_right;
 	t_fork	*fork_left;
 	pthread_t thread;
+	pthread_t main_thread;
 	pthread_mutex_t secure;
 	pthread_mutex_t	mutex;
 	int	*dead;
@@ -71,7 +72,7 @@ typedef struct s_main
 /*
  ** THREAD
 */
-
+void	*start_routine(void *args);
 int	is_dead(t_philosopher *philo);
 int	thinking(t_philosopher *philo);
 int	sleeping(t_philosopher *philo);
