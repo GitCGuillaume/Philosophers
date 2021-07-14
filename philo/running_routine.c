@@ -1,5 +1,5 @@
 #include "philosopher.h"
-
+/*
 static void	dead_routine_two(t_philosopher *philo)
 {
 	if (philo->fork_left->fork_exist == 1)
@@ -8,7 +8,7 @@ static void	dead_routine_two(t_philosopher *philo)
 		pthread_mutex_unlock(&philo->fork_right->mutex);
 		pthread_mutex_unlock(&philo->fork_left->mutex);
 	}
-}
+}*/
 
 static void	*philo_dead_routine(void *args)
 {
@@ -17,24 +17,23 @@ static void	*philo_dead_routine(void *args)
 
 	philo = (t_philosopher *)args;
 	result = 0;
+	pthread_mutex_lock(&philo->mutex);
 	while (result == 0 && *philo->dead == 0)
 	{
-		pthread_mutex_lock(&philo->mutex);
-		if (philo->nb_time_reach > 0)
+		/*if (philo->nb_time_reach > 0)
 		{
 			pthread_mutex_unlock(&philo->mutex);
 			return (NULL);
-		}
+		}*/
 		result = is_dead(philo);
 		if (result == 1)
 		{
-			pthread_mutex_unlock(&philo->mutex);
-			dead_routine_two(philo);		
+			//dead_routine_two(philo);		
 			return (NULL);
 		}
-		pthread_mutex_unlock(&philo->mutex);
-		usleep(5);
+		usleep(10);
 	}
+	pthread_mutex_unlock(&philo->mutex);
 	return (NULL);
 }
 
@@ -98,5 +97,8 @@ void	*start_routine(void *args)
 		}
 	}
 	close_routine(philosopher, &result);
+	//wait for pthread_detach to terminate correctly
+	usleep(5);
+	//printf("a\n");
 	return (NULL);
 }
