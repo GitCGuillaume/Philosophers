@@ -65,7 +65,7 @@ static void	loop_routine(t_philosopher *philosopher, int *result)
 static void	close_routine(t_philosopher *philosopher, int *result)
 {
 	if (philosopher->fork_left->fork_exist == 1
-		&& philosopher->eat == 0 && *result == 0)
+		/*&& philosopher->eat == 0*/ && *result == 0)
 	{
 		philosopher->fork_left->fork_exist = 2;
 		pthread_mutex_unlock(&philosopher->fork_right->mutex);

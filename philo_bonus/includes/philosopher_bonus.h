@@ -49,11 +49,13 @@ typedef struct	s_philosopher
 	t_fork	*fork_left;
 	t_fork	*fork_right;
 	sem_t	*fork;
-	sem_t	*secure;
 	sem_t	*mutex;
+	sem_t	*secure;
 	sem_t	*mutex_dead;
-	sem_t	*test;
+	sem_t	*wait_loop;
+	sem_t	*sem_eat_end;
 	pthread_t	thread;
+	pthread_t	thread_eat;
 	pid_t	process;
 	int	dead;
 	int	number;
@@ -64,9 +66,11 @@ typedef struct	s_philosopher
 	int	nb_time_active;
 	int	nb_time;
 	int	nb_time_reach;
-	int	everyone;
+	int	eat_end;
 }	t_philosopher;
 
+void	*philo_eat_routine(void *args);
+int	free_all(t_philosopher **philo, int nb_philo);
 void	*start_routine(t_philosopher *philosopher);
 void	*philo_dead_routine(void *args);
 void	display(t_philosopher *philo, char *str, int is_dead);

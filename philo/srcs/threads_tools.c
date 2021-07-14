@@ -31,7 +31,8 @@ int	is_dead(t_philosopher *philo)
 	long int	current_time;
 
 	current_time = math_time();
-	if (current_time > (philo->state.time_simulation + philo->state.time_to_die))
+	if (current_time != -1
+		&& current_time > (philo->state.time_simulation + philo->state.time_to_die))
 	{
 		*philo->dead = 1;
 		printf("%ld %d died\n",

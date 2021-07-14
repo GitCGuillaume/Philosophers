@@ -16,9 +16,11 @@ static int	prepare_thread(t_philosopher **philosopher, int *dead, int i)
 {
 	int	result;
 
-	philosopher[i]->state.start_time = math_time();	
-	result = pthread_create(&philosopher[i]->main_thread,
-		NULL, start_routine, philosopher[i]);
+	result = 1;
+	philosopher[i]->state.start_time = math_time();
+	if (philosopher[i]->state.start_time != -1)
+		result = pthread_create(&philosopher[i]->main_thread,
+			NULL, start_routine, philosopher[i]);
 	if (result != 0)
 	{
 		*dead = 1;
