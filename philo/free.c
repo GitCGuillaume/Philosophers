@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:23:04 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/02 13:47:05 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/15 10:55:46 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ static void	free_mutex_philosopher(t_philosopher **philo, int i)
 		{
 			pthread_mutex_destroy(&philo[i]->mutex);
 		}
+		if (philo[i]->mutex_eat_exist == 1)
+			pthread_mutex_destroy(&philo[i]->mutex_eat);
 	}
 }
 
@@ -85,6 +87,8 @@ void	free_all(t_philosopher **philo, t_fork **fork,
 	int	i;
 
 	i = 0;
+	if (!philo || !fork)
+		return ;
 	while (nb_philo > i)
 	{
 		free_mutex_philosopher(philo, i);

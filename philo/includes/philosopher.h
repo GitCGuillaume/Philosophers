@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:25:41 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/02 11:23:30 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/15 11:46:29 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,15 @@ typedef struct s_philosopher
 	t_fork	*fork_left;
 	pthread_t thread;
 	pthread_t main_thread;
+	pthread_t eat_thread;
 	pthread_mutex_t secure;
 	pthread_mutex_t	mutex;
+	pthread_mutex_t	mutex_eat;
 	int	*dead;
+	int	*everyone_eat;
 	char	secure_exist;
 	char	mutex_exist;
+	char	mutex_eat_exist;
 	int	number;
 	int	eat;
 	int	sleep;
@@ -59,7 +63,7 @@ typedef struct s_philosopher
 	int	nb_time_active;
 	int	nb_time;
 	int	nb_time_reach;
-	int	everyone;
+	int	nb_philosopher;
 } t_philosopher;
 
 typedef struct s_main
@@ -78,6 +82,8 @@ int	thinking(t_philosopher *philo);
 int	sleeping(t_philosopher *philo);
 int	eating(t_philosopher *philo);
 int	take_fork(t_philosopher *philo);
+void	*philo_dead_routine(void *args);
+void	*philo_eat_routine(void *args);
 int	running_thread(t_philosopher **philosopher, int argc, int nb_philosopher);
 
 /*

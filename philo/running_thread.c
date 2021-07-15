@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:32:34 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/07 11:02:44 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/15 11:37:52 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ static int	prepare_thread(t_philosopher **philosopher, int *dead, int i)
 	result = 1;
 	philosopher[i]->state.start_time = math_time();
 	if (philosopher[i]->state.start_time != -1)
+	{
 		result = pthread_create(&philosopher[i]->main_thread,
 			NULL, start_routine, philosopher[i]);
+	}
 	if (result != 0)
 	{
 		*dead = 1;
@@ -40,9 +42,8 @@ void	end_running_thread(t_philosopher **philosopher, int argc, int *dead, int nb
 		pthread_join(philosopher[i]->main_thread, NULL);
 		i++;
 	}
-	if (argc == 6 && *dead == 0)
+	if (argc == 6 && *dead == 0 && *philosopher[0]->everyone_eat == nb_philosopher)
 	{
-		usleep(1);
 		printf("Everyone has eaten\n");
 	}
 }
@@ -50,16 +51,20 @@ int	running_thread(t_philosopher **philosopher, int argc, int nb_philosopher)
 {
 	int			i;
 	int			dead;
+	int			nb_eat;
 	int			result;
 
 	i = 0;
 	dead = 0;
 	result = 1;
+	nb_eat = 0;
 	if (!philosopher)
 		return (1);
 	while (nb_philosopher > i)
 	{
 		philosopher[i]->dead = &dead;
+		philosopher[i]->everyone_eat = &nb_eat;
+		philosopher[i]->nb_philosopher = nb_philosopher;
 		result = prepare_thread(philosopher, &dead, i);
 		if (result != 0)
 			return (1);

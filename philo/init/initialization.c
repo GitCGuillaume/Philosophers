@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 10:20:51 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/07 11:02:32 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/15 09:57:27 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ int	init_mutex(t_philosopher **philosopher, int nb_philosopher)
 		if (result != 0)
 			return (0);
 		philosopher[i]->mutex_exist = 1;
+		result = pthread_mutex_init(&philosopher[i]->mutex_eat, NULL);	
+		if (result != 0)
+			return (0);
+		philosopher[i]->mutex_eat_exist = 1;
 		i++;
 	}
 	return (1);
@@ -82,7 +86,7 @@ void	init_values_two(t_philosopher **philosopher,
 	philosopher[i]->nb_fork = 0;
 	philosopher[i]->dead = 0;
 	philosopher[i]->thread = 0;
-	philosopher[i]->everyone = 0;
+	philosopher[i]->everyone_eat = 0;
 }
 
 int	init_values(t_philosopher **philosopher,
