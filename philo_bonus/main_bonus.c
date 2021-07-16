@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:15:30 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/07 14:50:54 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/16 02:59:49 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ int	free_all(t_philosopher **philo, int nb_philo)
 	result = 0;	
 	if (philo)
 	{
+		if (philo[0])
+			sem_close(philo[0]->sem_eat_wait);
 		while (nb_philo > i)
 		{
 			if (philo[i] != NULL)
 			{
 				result = sem_close(philo[i]->secure);
+				result = sem_close(philo[i]->sem_eat_finish);
 				free(philo[i]);
 			}
 			i++;
@@ -68,6 +71,7 @@ int	run_process_two(t_philosopher *philo, long int current_time)
 int	run_process(t_philosopher **philo, int nb_philosopher)
 {
 	sem_t *wait_loop;
+	pthread_t	thread_eat;
 	long int	current_time;
 	int	i;
 	int	wstatus;
@@ -76,11 +80,13 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 	wstatus = 0;
 	current_time = math_time();
 	i = 0;
-	wait_loop = sem_open("test", O_CREAT, S_IRWXU, 0);
-	sem_unlink("test");
-	pthread_create(&philo->thread_eat, NULL,
-		philo_eat_routine, philo);
-	pthread_detach(philo->thread_eat);
+	wait_loop = sem_open("wait_loop", O_CREAT, S_IRWXU, 0);
+	sem_unlink("wait_loop");
+	if (philo[0]->nb_time_active == 1)
+	{
+		pthread_create(&thread_eat, NULL, philo_eat_routine, philo[0]);
+		pthread_detach(thread_eat);
+	}
 	while (nb_philosopher > i)
 	{
 		philo[i]->wait_loop = wait_loop;
@@ -91,6 +97,8 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 	}
 	sem_wait(wait_loop);
 	sem_close(wait_loop);
+	//anti valgrind leak
+	usleep(1000);
 	return (0);
 }
 
@@ -111,7 +119,7 @@ void	init_values_time(t_philosopher *philo, int argc, char **argv)
 	}
 }
 
-void	init_values_two(t_philosopher *philo)
+void	init_values_two(t_philosopher *philo, int nb_philosopher)
 {
 	philo->dead = 0;
 	philo->eat = 0;
@@ -121,7 +129,37 @@ void	init_values_two(t_philosopher *philo)
 	philo->nb_time_active = 0;
 	philo->nb_time = 0;
 	philo->nb_time_reach = 0;
-	philo->eat_end = 0;
+	philo->nb_philosopher = nb_philosopher;
+}
+
+int	init_values(t_philosopher **philosopher, int argc, char **argv, int i)
+{
+	char	*str;
+	char	*str_two;
+
+	str = 0;
+	str_two = 0;
+	philosopher[i] = malloc(sizeof(t_philosopher));
+	if (philosopher[i] == NULL)
+		return (1);
+	str = ft_itoa(i);
+	if (str == NULL)
+		return (1);
+	philosopher[i]->secure = sem_open(str, O_CREAT, S_IRWXU, 1);
+	sem_unlink(str);
+	str_two = ft_strjoin(str, "b");
+	free(str);
+	if (str_two == NULL)
+		return (1);
+	philosopher[i]->sem_eat_finish = sem_open(str_two, O_CREAT, S_IRWXU, 0);
+	sem_unlink(str_two);
+	free(str_two);
+	if (philosopher[i]->secure == SEM_FAILED)
+		return (1);
+	philosopher[i]->number = i + 1;
+	init_values_two(philosopher[i], ft_atoi(argv[1]));
+	init_values_time(philosopher[i], argc, argv);
+	return (0);
 }
 
 int	alloc_things(sem_t **sem_fork, sem_t **sem_dead, t_philosopher ***philosopher, char **argv)
@@ -143,35 +181,15 @@ int	alloc_things(sem_t **sem_fork, sem_t **sem_dead, t_philosopher ***philosophe
 	return (0);
 }
 
-int	init_values(t_philosopher **philosopher, int argc, char **argv, int i)
-{
-	char	*str;
-
-	str = 0;
-	philosopher[i] = malloc(sizeof(t_philosopher));
-	if (philosopher[i] == NULL)
-		return (1);
-	str = ft_itoa(i);
-	if (str == NULL)
-		return (1);
-	philosopher[i]->secure = sem_open(str, O_CREAT, S_IRWXU, 1);
-	sem_unlink(str);
-	free(str);
-	if (philosopher[i]->secure == SEM_FAILED)
-		return (1);
-	philosopher[i]->number = i + 1;
-	init_values_two(philosopher[i]);
-	init_values_time(philosopher[i], argc, argv);
-	return (0);
-}
-
 int	init_mutex(t_philosopher **philosopher, int nb_philosopher)
 {
 	sem_t	*mutex;
-	sem_t	*eat_end;
+	sem_t	*sem_eat_wait;
 	int	i;
+
 	i = 0;
 	mutex = sem_open("mutex1", O_CREAT, S_IRWXU, 1);
+	sem_unlink("mutex1");
 	while (nb_philosopher > i)
 	{
 		philosopher[i]->mutex = mutex;
@@ -179,17 +197,16 @@ int	init_mutex(t_philosopher **philosopher, int nb_philosopher)
 			return (1);
 		i++;
 	}
+	sem_eat_wait = sem_open("sem_eat_wait", O_CREAT, S_IRWXU, 0);
+	sem_unlink("sem_eat_wait");
 	i = 0;
-	sem_unlink("mutex1");
-	eat_end = sem_open("sem_eat_end", O_CREAT, S_IRWXU, nb_philosopher);
 	while (nb_philosopher > i)
 	{
-		philosopher[i]->sem_eat_end = eat_end;
-		if (philosopher[i]->mutex == SEM_FAILED)
+		philosopher[i]->sem_eat_wait = sem_eat_wait;
+		if (philosopher[i]->sem_eat_wait == SEM_FAILED)
 			return (1);
 		i++;
 	}
-	sem_unlink("sem_eat_end");
 	return (0);
 }
 

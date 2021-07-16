@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 11:42:29 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/15 11:55:48 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/16 03:05:24 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,7 @@ void	*philo_dead_routine(void *args)
 	{
 		result = is_dead(philo);
 		if (result == 1)
-		{
 			return (NULL);
-		}
 		usleep(10);
 	}
 	pthread_mutex_unlock(&philo->mutex);

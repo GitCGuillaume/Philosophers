@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:06:09 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/06 20:58:13 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/15 15:40:25 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ int	eating(t_philosopher *philo)
 		philo->nb_time = philo->nb_time + 1;
 		if (philo->nb_time >= philo->state.nb_time_eat
 			&& philo->nb_time_reach == 0)
+		{
 			philo->nb_time_reach = philo->nb_time_reach + 1;
+			sem_post(philo->sem_eat_wait);
+		}
 	}
 	usleep(philo->state.time_to_eat * 1000);
 	sem_post(philo->fork);

@@ -41,7 +41,7 @@ static void	loop_routine(t_philosopher *philosopher, int *result)
 static void	close_routine(t_philosopher *philosopher, int *result)
 {
 	if (philosopher->fork_left->fork_exist == 1
-		/*&& philosopher->eat == 0*/ && *result == 0)
+		&& philosopher->eat == 0 && *result == 0)
 	{
 		philosopher->fork_left->fork_exist = 2;
 		pthread_mutex_unlock(&philosopher->fork_right->mutex);
@@ -54,7 +54,7 @@ static void run_private_threads(t_philosopher *philosopher)
 	pthread_create(&philosopher->thread, NULL,
 		philo_dead_routine, philosopher);
 	pthread_detach(philosopher->thread);
-	if (philosopher->nb_time_active == 1)
+	if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
 	{
 		pthread_create(&philosopher->eat_thread, NULL,
 			philo_eat_routine, philosopher);
