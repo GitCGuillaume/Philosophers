@@ -44,9 +44,9 @@ void	*philo_wait_eat_routine(void *args)
 
 	philo = (t_philosopher *)args;
 	sem_wait(philo->sem_eat_finish);
-	philo->dead=1;
+	if (philo->dead == 0)
+		printf("everyone has eaten\n");
 	sem_post(philo->wait_loop);
-	printf("everyone has eaten\n");
 	exit(3);
 	return (NULL);
 }
@@ -89,8 +89,20 @@ void	*start_routine(t_philosopher *philosopher)
 	i = 0;
 	if (philosopher->nb_philosopher > 0 && philosopher->nb_time_active == 1)
 	{
-		pthread_create(&thread_eat, NULL, philo_wait_eat_routine, philosopher);
-		pthread_detach(thread_eat);
+		result = pthread_create(&thread_eat, NULL, philo_wait_eat_routine, philosopher);		
+		if (result != 0)
+		{
+			printf("Error\nCan't launch wait_eat_routine\n");
+			sem_post(philosopher->wait_loop);
+			exit(3);
+		}
+		result = pthread_detach(thread_eat);
+		if (result != 0)
+		{
+			printf("Error\nCan't launch wait_eat_routine\n");
+			sem_post(philosopher->wait_loop);
+			exit(3);
+		}
 	}
 	while (philosopher->dead == 0)
 	{	

@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:14:31 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/16 01:49:29 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/16 16:18:44 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ typedef struct	s_philosopher
 	sem_t	*sem_eat_finish;
 	pthread_t	thread;
 	pid_t	process;
+	char	fork_exist;
+	char	mutex_exist;
+	char	secure_exist;
+	char	mutex_dead_exist;
+	char	wait_loop_exist;
+	char	eat_wait_exist;
+	char	eat_finish_exist;
 	char	dead;
 	char	eat;
 	char	sleep;
@@ -80,5 +87,7 @@ int	sleeping(t_philosopher *philo);
 int	eating(t_philosopher *philo);
 int	take_fork(t_philosopher *philo);
 int	is_dead(t_philosopher *philo);
-
+int	check_nb_philosopher(int nb_philosopher);
+int	check_inputs_values(t_philosopher **philosopher, int argc, int nb_philosopher);
+void	stop_routine(t_philosopher *philo, int result);
 #endif

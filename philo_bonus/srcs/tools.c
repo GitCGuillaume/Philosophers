@@ -1,48 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_args.c                                          :+:      :+:    :+:   */
+/*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/23 14:05:29 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/03 12:02:56 by gchopin          ###   ########.fr       */
+/*   Created: 2021/07/16 17:53:25 by gchopin           #+#    #+#             */
+/*   Updated: 2021/07/16 17:53:28 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
-int	argv_ok(char *str)
+int	check_inputs_values(t_philosopher **philosopher, int argc, int nb_philosopher)
 {
-	int	result;
-
-	result = ft_str_is_digit(str);
-	return (result);
+	if (philosopher[0]->state.time_to_die < 1
+		|| philosopher[0]->state.time_to_eat < 1
+		|| philosopher[0]->state.time_to_sleep < 1
+		|| (philosopher[0]->state.nb_time_eat < 1 && argc == 6))
+	{
+		printf("Values must be higher than 0\n");
+		free_all(philosopher, nb_philosopher);
+		return (1);
+	}
+	return (0);
 }
 
-int	check_args(int argc, char **argv)
+int	check_nb_philosopher(int nb_philosopher)
 {
-	int	i;
-
-	i = 1;
-	if (argc < 5)
+	if (nb_philosopher < 1)
 	{
-		printf("Error\nNot enough parameters.\n");
+		printf("Values must be higher than 0\n");
 		return (1);
-	}
-	if (argc > 6)
-	{
-		printf("Error\nToo much parameters.\n");
-		return (1);
-	}
-	while (argc > i)
-	{
-		if (argv_ok(argv[i]) == 0)
-		{
-			printf("Error\n");
-			return (1);
-		}
-		i++;
 	}
 	return (0);
 }

@@ -40,7 +40,7 @@ int	check_args(int argc, char **argv)
 		if (argv_ok(argv[i]) == 0)
 		{
 			printf("Error\n");
-			return (0);
+			return (1);
 		}
 		i++;
 	}
