@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:24:11 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/02 14:23:51 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/16 11:35:17 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static int	run_philosopher_two(t_philosopher **philosopher,
 	return (result);
 }
 
-static int	malloc_philo_fork(t_philosopher ***philosopher, t_fork ***fork, int nb_philosopher)
+static int	malloc_philo_fork(t_philosopher ***philosopher,
+	t_fork ***fork, int nb_philosopher)
 {
 	*philosopher = malloc(sizeof(t_philosopher) * nb_philosopher);
 	if (*philosopher == 0)
@@ -69,7 +70,7 @@ static int	run_philosopher(int nb_philosopher, int argc, char **argv)
 	result = malloc_philo_fork(&philosopher, &fork, nb_philosopher);
 	if (result == 0)
 		return (0);
-	result = init_to_null(philosopher, fork, nb_philosopher);	
+	result = init_to_null(philosopher, fork, nb_philosopher);
 	if (result == 0)
 	{
 		free(fork);

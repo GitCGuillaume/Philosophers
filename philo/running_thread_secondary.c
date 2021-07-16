@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 11:42:29 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/16 03:05:24 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/16 11:38:13 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*philo_eat_routine(void *args)
 	result = 0;
 	pthread_mutex_lock(&philo->mutex_eat);
 	while (result == 0 && *philo->dead == 0
-			&& philo->nb_philosopher > *philo->everyone_eat)
+		&& philo->nb_philosopher > *philo->everyone_eat)
 	{
 		if (result == 0 && philo->nb_time_reach > 0)
 		{

@@ -2,7 +2,7 @@ SRCS	=	srcs
 
 SRCS_PATH	=	$(SRCS)/ft_args.c $(SRCS)/ft_atoi.c $(SRCS)/ft_str_is_digit.c $(SRCS)/threads_tools.c $(SRCS)/tools.c
 
-SRCS_PATH_ONE	=	free.c init/initialization.c init/initialization_two.c routines.c running_thread.c running_routine.c running_thread_secondary.c main.c
+SRCS_PATH_ONE	=	free.c init/initialization.c init/initialization_two.c routines.c routines_secondary.c running_thread.c running_routine.c running_thread_secondary.c main.c
 
 OBJS	=	$(SRCS_PATH:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:23:04 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/15 10:55:46 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/16 12:10:57 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,11 @@ void	free_all(t_philosopher **philo, t_fork **fork,
 	}
 	if (fork)
 	{
-		if (nb_philo == 1 && (fork[1]->fork_exist == 1 || fork[1]->fork_exist == 2))
+		if (nb_philo == 1
+			&& (fork[1]->fork_exist == 1 || fork[1]->fork_exist == 2))
 		{
 			pthread_mutex_destroy(&fork[1]->mutex);
 		}
 	}
 	free_malloc(philo, fork, nb_philo);
-	//usleep(1000);
 }

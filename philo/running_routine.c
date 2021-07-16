@@ -49,7 +49,7 @@ static void	close_routine(t_philosopher *philosopher, int *result)
 	}
 }
 
-static void run_private_threads(t_philosopher *philosopher)
+static void	run_private_threads(t_philosopher *philosopher)
 {
 	pthread_create(&philosopher->thread, NULL,
 		philo_dead_routine, philosopher);
@@ -71,7 +71,8 @@ void	*start_routine(void *args)
 	philosopher = (t_philosopher *)args;
 	run_private_threads(philosopher);
 	while (*philosopher->dead == 0
-		&& result == 0 && philosopher->nb_philosopher > *philosopher->everyone_eat)
+		&& result == 0
+		&& philosopher->nb_philosopher > *philosopher->everyone_eat)
 	{
 		loop_routine(philosopher, &result);
 		if (result != 0 && philosopher->fork_left->fork_exist == 1
@@ -81,7 +82,7 @@ void	*start_routine(void *args)
 			philosopher->fork_left->fork_exist = 2;
 			pthread_mutex_unlock(&philosopher->fork_right->mutex);
 			pthread_mutex_unlock(&philosopher->fork_left->mutex);
-			break;
+			break ;
 		}
 	}
 	close_routine(philosopher, &result);

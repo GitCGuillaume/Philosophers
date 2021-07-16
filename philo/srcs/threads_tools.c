@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 13:36:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/14 22:28:34 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/16 12:11:55 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ long int	math_time(void)
 {
 	struct timeval	time;
 	int				res;
-	long int				value;
+	long int		value;
 
 	res = gettimeofday(&time, NULL);
 	if (res == 0)
@@ -32,7 +32,8 @@ int	is_dead(t_philosopher *philo)
 
 	current_time = math_time();
 	if (current_time != -1
-		&& current_time > (philo->state.time_simulation + philo->state.time_to_die))
+		&& current_time > (philo->state.time_simulation
+			+ philo->state.time_to_die))
 	{
 		*philo->dead = 1;
 		printf("%ld %d died\n",

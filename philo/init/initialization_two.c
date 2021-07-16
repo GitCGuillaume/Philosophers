@@ -3,7 +3,8 @@
  ** Need to put everyone to NULL, easier to free
 */
 
-static int	loop_set_null(t_philosopher **philo, t_fork **fork, int nb_philosopher)
+static int	loop_set_null(t_philosopher **philo, t_fork **fork,
+	int nb_philosopher)
 {
 	int	i;
 
@@ -25,7 +26,8 @@ static int	loop_set_null(t_philosopher **philo, t_fork **fork, int nb_philosophe
  ** Give a fork to the only philosopher
 */
 
-static int	give_fork_philo(t_philosopher **philo, t_fork **fork, int nb_philosopher)
+static int	give_fork_philo(t_philosopher **philo, t_fork **fork,
+	int nb_philosopher)
 {
 	if (!philo || !fork)
 		return (0);
@@ -42,7 +44,8 @@ static int	give_fork_philo(t_philosopher **philo, t_fork **fork, int nb_philosop
 	return (1);
 }
 
-static int	set_values(t_philosopher **philo, t_fork **fork, int nb_philosopher, int i)
+static int	set_values(t_philosopher **philo, t_fork **fork,
+	int nb_philosopher, int i)
 {
 	if (!philo || !fork)
 		return (0);
