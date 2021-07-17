@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 16:50:20 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 18:00:50 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/17 19:05:28 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	init_values_two(t_philosopher *philo,
 	}
 }
 
-int	init_values(t_philosopher **philosopher, int argc, char **argv, int i)
+int	init_values(t_philosopher **philosopher, int i)
 {
 	char	*str;
 	char	*str_two;

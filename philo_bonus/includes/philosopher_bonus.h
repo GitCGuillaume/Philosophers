@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:14:31 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 18:24:21 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/17 19:07:21 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ void		init_sem_exist(t_philosopher *philosopher,
 				sem_t *sem_fork, sem_t *sem_dead);
 void		init_values_two(t_philosopher *philo,
 				int nb_philosopher, int argc, char **argv);
-int			init_values(t_philosopher **philosopher,
-				int argc, char **argv, int i);
+int			init_values(t_philosopher **philosopher, int i);
 int			alloc_things(sem_t **sem_fork, sem_t **sem_dead,
 				t_philosopher ***philosopher, char **argv);
 

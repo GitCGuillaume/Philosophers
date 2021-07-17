@@ -1,14 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   running_routine.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/07/17 18:46:37 by gchopin           #+#    #+#             */
+/*   Updated: 2021/07/17 18:46:44 by gchopin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philosopher.h"
-/*
-static void	dead_routine_two(t_philosopher *philo)
-{
-	if (philo->fork_left->fork_exist == 1)
-	{
-		philo->fork_left->fork_exist = 2;
-		pthread_mutex_unlock(&philo->fork_right->mutex);
-		pthread_mutex_unlock(&philo->fork_left->mutex);
-	}
-}*/
 
 static void	loop_routine(t_philosopher *philosopher, int *result)
 {

@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:15:30 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 16:27:21 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/17 19:06:04 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	main(int argc, char **argv)
 		return (1);
 	while (ft_atoi(argv[1]) > i)
 	{
-		result = init_values(philosopher, argc, argv, i);
+		result = init_values(philosopher, i);
 		init_values_two(philosopher[i], ft_atoi(argv[1]), argc, argv);
 		if (result == 1)
 		{
