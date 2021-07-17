@@ -6,41 +6,11 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:06:09 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/15 15:40:25 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/17 18:00:00 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
-
-void	stop_routine(t_philosopher *philo, int result)
-{
-	if (result != 0)
-	{
-		philo->dead = 1;
-		sem_post(philo->wait_loop);
-		exit(3);
-	}
-}
-
-void	stop_routine_timer(t_philosopher *philo)
-{
-	if (philo->state.current_time == -1)
-	{
-		philo->dead = 1;
-		sem_post(philo->wait_loop);
-		exit(3);
-	}
-}
-
-void	stop_routine_timer_sim(t_philosopher *philo)
-{
-	if (philo->state.time_simulation == -1)
-	{
-		philo->dead = 1;
-		sem_post(philo->wait_loop);
-		exit(3);
-	}
-}
 
 int	thinking(t_philosopher *philo)
 {
@@ -62,7 +32,7 @@ int	sleeping(t_philosopher *philo)
 {
 	int	result;
 
-	result = sem_wait(philo->secure);	
+	result = sem_wait(philo->secure);
 	stop_routine(philo, result);
 	philo->state.current_time = math_time();
 	stop_routine_timer(philo);
@@ -72,6 +42,21 @@ int	sleeping(t_philosopher *philo)
 	stop_routine(philo, result);
 	usleep(philo->state.time_to_sleep * 1000);
 	return (0);
+}
+
+void	count_eat(t_philosopher *philo, int *result)
+{
+	if (philo->nb_time_active == 1)
+	{
+		philo->nb_time = philo->nb_time + 1;
+		if (philo->nb_time >= philo->state.nb_time_eat
+			&& philo->nb_time_reach == 0)
+		{
+			philo->nb_time_reach = philo->nb_time_reach + 1;
+			*result = sem_post(philo->sem_eat_wait);
+			stop_routine(philo, *result);
+		}
+	}
 }
 
 int	eating(t_philosopher *philo)
@@ -85,23 +70,13 @@ int	eating(t_philosopher *philo)
 	display(philo, "is eating", 0);
 	philo->nb_fork = 0;
 	philo->eat = 1;
-	if (philo->nb_time_active == 1)
-	{
-		philo->nb_time = philo->nb_time + 1;
-		if (philo->nb_time >= philo->state.nb_time_eat
-			&& philo->nb_time_reach == 0)
-		{
-			philo->nb_time_reach = philo->nb_time_reach + 1;
-			result = sem_post(philo->sem_eat_wait);
-			stop_routine(philo, result);
-		}
-	}
+	count_eat(philo, &result);
 	usleep(philo->state.time_to_eat * 1000);
 	result = sem_post(philo->fork);
 	stop_routine(philo, result);
 	result = sem_post(philo->fork);
 	stop_routine(philo, result);
-	return (0);
+	return (result);
 }
 
 int	take_fork(t_philosopher *philo)

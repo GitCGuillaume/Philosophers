@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:01:07 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/16 03:03:15 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/17 17:51:49 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	*philo_eat_routine(void *args)
 {
-	t_philosopher	*philo;
-	int	nb_eat;
-	int	i;
+	t_philosopher		*philo;
+	int					nb_eat;
+	int					i;
 
 	nb_eat = 0;
 	i = 0;
@@ -45,16 +45,16 @@ void	*philo_wait_eat_routine(void *args)
 	philo = (t_philosopher *)args;
 	sem_wait(philo->sem_eat_finish);
 	if (philo->dead == 0)
-		printf("everyone has eaten\n");
+		display(philo, "Everyone has eaten", 0);
 	sem_post(philo->wait_loop);
-	exit(3);
+	exit(EXIT_SUCCESS);
 	return (NULL);
 }
 
 void	*philo_dead_routine(void *args)
 {
 	t_philosopher	*philo;
-	long int	current_time;
+	long int		current_time;
 	int				result;
 
 	philo = (t_philosopher *)args;
@@ -64,13 +64,14 @@ void	*philo_dead_routine(void *args)
 	{
 		sem_wait(philo->mutex);
 		current_time = math_time();
-		if (current_time > (philo->state.time_simulation + philo->state.time_to_die)
+		if (current_time > (philo->state.time_simulation
+				+ philo->state.time_to_die)
 			&& philo->dead == 0)
 		{
 			result = sem_wait(philo->mutex_dead);
 			display(philo, "died", 1);
 			philo->dead = 1;
-			exit(3);
+			exit(EXIT_SUCCESS);
 			return (NULL);
 		}
 		sem_post(philo->mutex);
@@ -79,31 +80,39 @@ void	*philo_dead_routine(void *args)
 	return (NULL);
 }
 
-void	*start_routine(t_philosopher *philosopher)
+int	launch_thread(t_philosopher *philosopher)
 {
-	pthread_t	thread_eat;
+	pthread_t		thread_eat;
 	int				result;
-	int	i;
 
 	result = 0;
-	i = 0;
 	if (philosopher->nb_philosopher > 0 && philosopher->nb_time_active == 1)
 	{
-		result = pthread_create(&thread_eat, NULL, philo_wait_eat_routine, philosopher);		
+		result = pthread_create(&thread_eat, NULL,
+				philo_wait_eat_routine, philosopher);
 		if (result != 0)
 		{
 			printf("Error\nCan't launch wait_eat_routine\n");
 			sem_post(philosopher->wait_loop);
-			exit(3);
+			exit(EXIT_FAILURE);
 		}
 		result = pthread_detach(thread_eat);
 		if (result != 0)
 		{
-			printf("Error\nCan't launch wait_eat_routine\n");
+			printf("Error\nCan't clear wait_eat_routine\n");
 			sem_post(philosopher->wait_loop);
-			exit(3);
+			exit(EXIT_FAILURE);
 		}
 	}
+	return (result);
+}
+
+void	*start_routine(t_philosopher *philosopher)
+{
+	int			result;
+
+	result = 0;
+	result = launch_thread(philosopher);
 	while (philosopher->dead == 0)
 	{	
 		if (philosopher->nb_fork == 0 && result == 0

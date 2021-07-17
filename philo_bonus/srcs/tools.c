@@ -6,13 +6,14 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/16 17:53:25 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/16 17:53:28 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/07/17 18:04:54 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
-int	check_inputs_values(t_philosopher **philosopher, int argc, int nb_philosopher)
+int	check_inputs_values(t_philosopher **philosopher,
+	int argc, int nb_philosopher)
 {
 	if (philosopher[0]->state.time_to_die < 1
 		|| philosopher[0]->state.time_to_eat < 1
