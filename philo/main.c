@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:24:11 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/16 11:35:17 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/02 10:42:47 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ static int	run_philosopher_two(t_philosopher **philosopher,
 	if (!philosopher || !fork)
 	{
 		free_all(philosopher, fork, nb_philosopher);
-		return (1);
+		return (0);
 	}
 	result = check_inputs_values(philosopher, fork, argc, nb_philosopher);
 	if (result == 0)
-		return (1);
+		return (0);
 	result = init_forks(philosopher, fork, nb_philosopher);
 	if (result == 0)
-		return (1);
+		return (0);
 	result = init_mutex(philosopher, nb_philosopher);
 	if (result == 0)
 	{
 		free_all(philosopher, fork, nb_philosopher);
-		return (1);
+		return (0);
 	}
 	result = running_thread(philosopher, argc, nb_philosopher);
 	free_all(philosopher, fork, nb_philosopher);
@@ -93,7 +93,7 @@ int	main(int argc, char **argv)
 	int	result;
 
 	if (check_args(argc, argv) == 0)
-		return (0);
+		return (1);
 	nb_philosopher = ft_atoi(argv[1]);
 	result = run_philosopher(nb_philosopher, argc, argv);
 	if (result == 0)

@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:32:34 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/16 11:37:53 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/02 10:43:30 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	running_thread(t_philosopher **philosopher, int argc, int nb_philosopher)
 	result = 1;
 	nb_eat = 0;
 	if (!philosopher)
-		return (1);
+		return (0);
 	while (nb_philosopher > i)
 	{
 		philosopher[i]->dead = &dead;
@@ -70,10 +70,10 @@ int	running_thread(t_philosopher **philosopher, int argc, int nb_philosopher)
 		philosopher[i]->nb_philosopher = nb_philosopher;
 		result = prepare_thread(philosopher, &dead, i);
 		if (result != 0)
-			return (1);
+			return (0);
 		i++;
-		usleep(15);
+		usleep(10);
 	}
 	end_running_thread(philosopher, argc, &dead, nb_philosopher);
-	return (0);
+	return (1);
 }
