@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:08:50 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 17:52:35 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/02 13:50:59 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 	{
 		sem_close(wait_loop);
 		return (2);
-	}	
+	}
 	if (loop_process(philo, wait_loop, current_time, nb_philosopher) == 2)
 		return (2);
 	sem_wait(wait_loop);

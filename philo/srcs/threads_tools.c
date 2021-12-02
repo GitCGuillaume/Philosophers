@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 13:36:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/16 12:11:55 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/02 14:46:26 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	is_dead(t_philosopher *philo)
 	long int	current_time;
 
 	current_time = math_time();
-	if (current_time != -1
+	if (current_time != -1 && *philo->dead == 0
 		&& current_time > (philo->state.time_simulation
 			+ philo->state.time_to_die))
 	{

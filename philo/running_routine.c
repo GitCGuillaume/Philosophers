@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 18:46:37 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 11:51:22 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/02 14:32:14 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,6 @@ void	*start_routine(void *args)
 	}
 	close_routine(philosopher, &result);
 	//wait for pthread_detach valgring that is rly slow to terminate correctly
-	usleep(15);
+	usleep(25);
 	return (NULL);
 }
