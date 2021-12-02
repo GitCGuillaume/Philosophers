@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 10:20:51 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/16 11:43:08 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/02 11:09:12 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,19 @@ int	init_forks(t_philosopher **philosopher, t_fork **fork, int nb_philosopher)
 	i = 0;
 	while (nb_philosopher > i)
 	{
-		philosopher[i]->fork_right = fork[i];
+		if (fork && fork[i] && fork[i]->fork_exist == 1)
+			philosopher[i]->fork_right = fork[i];
+		else
+			philosopher[i]->fork_right = NULL;
 		philosopher[i]->fork_left = NULL;
-		if (nb_philosopher == 1)
+		/*if (nb_philosopher == 1)
 			philosopher[i]->fork_left = fork[i + 1];
-		else if (i != 0 && fork[i - 1] != NULL)
+		else */if (i != 0 && fork[i - 1] != NULL && fork[i - 1]->fork_exist == 1)
 			philosopher[i]->fork_left = fork[i - 1];
-		else if (i == 0 && nb_philosopher > 1)
-			philosopher[i]->fork_left = fork[nb_philosopher - 1];
+		else if (i == 0 && nb_philosopher > 1
+			&& fork && fork[nb_philosopher - 1]
+			&& fork[nb_philosopher - 1]->fork_exist == 1)
+				philosopher[i]->fork_left = fork[nb_philosopher - 1];
 		i++;
 	}
 	return (1);

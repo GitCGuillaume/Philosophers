@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:24:11 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 10:42:47 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/02 11:12:02 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,15 @@ static int	malloc_philo_fork(t_philosopher ***philosopher,
 	t_fork ***fork, int nb_philosopher)
 {
 	*philosopher = malloc(sizeof(t_philosopher) * nb_philosopher);
-	if (*philosopher == 0)
+	if (!fork)
+		return (0);
+	if (!philosopher || *philosopher == 0)
 		return (0);
 	if (nb_philosopher > 1)
 		*fork = malloc(sizeof(t_fork) * nb_philosopher);
 	else if (nb_philosopher == 1)
-		*fork = malloc(sizeof(t_fork) * 2);
-	if (*fork == NULL)
+		*fork = malloc(sizeof(t_fork));
+	if (fork && *fork == NULL)
 	{
 		free(*philosopher);
 		return (0);

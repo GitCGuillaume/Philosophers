@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 18:46:37 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 18:46:44 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/02 11:51:22 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ static void	loop_routine(t_philosopher *philosopher, int *result)
 
 static void	close_routine(t_philosopher *philosopher, int *result)
 {
-	if (philosopher->fork_left->fork_exist == 1
-		&& philosopher->eat == 0 && *result == 0)
+	if (philosopher->eat == 0 && *result == 0)
 	{
-		philosopher->fork_left->fork_exist = 2;
-		pthread_mutex_unlock(&philosopher->fork_right->mutex);
-		pthread_mutex_unlock(&philosopher->fork_left->mutex);
+		if (philosopher->fork_left)
+			philosopher->fork_left->fork_exist = 2;
+		if (philosopher->fork_right)
+			pthread_mutex_unlock(&philosopher->fork_right->mutex);
+		if (philosopher->fork_left)
+			pthread_mutex_unlock(&philosopher->fork_left->mutex);
 	}
 }
 
@@ -72,18 +74,19 @@ void	*start_routine(void *args)
 	result = 0;
 	philosopher = (t_philosopher *)args;
 	run_private_threads(philosopher);
-	while (*philosopher->dead == 0
+	while (philosopher && *philosopher->dead == 0
 		&& result == 0
 		&& philosopher->nb_philosopher > *philosopher->everyone_eat)
 	{
 		loop_routine(philosopher, &result);
-		if (result != 0 && philosopher->fork_left->fork_exist == 1
-			&& philosopher->eat == 0)
+		if (result != 0 && philosopher->eat == 0)
 		{
 			*philosopher->dead = 1;
-			philosopher->fork_left->fork_exist = 2;
+			if (philosopher->fork_left)
+				philosopher->fork_left->fork_exist = 2;
 			pthread_mutex_unlock(&philosopher->fork_right->mutex);
-			pthread_mutex_unlock(&philosopher->fork_left->mutex);
+			if (philosopher->fork_left && philosopher->fork_left->fork_exist == 1)
+				pthread_mutex_unlock(&philosopher->fork_left->mutex);
 			break ;
 		}
 	}
