@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/16 11:24:24 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 14:05:43 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/06 17:27:10 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	take_fork_two(t_philosopher *philo)
 	int	result_two;
 
 	result_two = 0;
-	if (philo->fork_right && philo->fork_right->fork_exist)
+	if (philo->fork_right && philo->fork_right->fork_exist && *philo->dead == 0)
 	{
 		result_two = pthread_mutex_lock(&philo->fork_right->mutex);
 		philo->state.current_time = math_time();
@@ -45,10 +45,10 @@ int	take_fork_two(t_philosopher *philo)
 		printf("%ld %d has taken a fork\n",
 			philo->state.current_time - philo->state.start_time, philo->number);
 	}
-	else if (result_two == 0)
+	else if (result_two == 0 || *philo->dead == 1)
 	{
 		if (philo->fork_right)
-			result_two = pthread_mutex_unlock(&philo->fork_right->mutex);
+			pthread_mutex_unlock(&philo->fork_right->mutex);
 		if (philo->fork_left)
 			pthread_mutex_unlock(&philo->fork_left->mutex);
 		return (1);
