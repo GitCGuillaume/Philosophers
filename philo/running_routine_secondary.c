@@ -48,9 +48,9 @@ void	*philo_dead_routine(void *args)
 		result = is_dead(philo);
 		if (result == 1)
 		{
-			//pthread_mutex_unlock(&philo->fork_right->mutex);
-			//pthread_mutex_unlock(&philo->fork_left->mutex);
-			//pthread_mutex_unlock(&philo->mutex);
+			pthread_mutex_unlock(&philo->fork_right->mutex);
+			pthread_mutex_unlock(&philo->fork_left->mutex);
+			pthread_mutex_unlock(&philo->mutex);
 			return (NULL);
 		}
 		pthread_mutex_unlock(&philo->mutex);
