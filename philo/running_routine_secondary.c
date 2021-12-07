@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 11:42:29 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/07 15:14:59 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/07 22:02:49 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,10 @@ void	*philo_dead_routine(void *args)
 		result = is_dead(philo);
 		if (result == 1)
 		{
-			pthread_mutex_unlock(&philo->fork_right->mutex);
-			pthread_mutex_unlock(&philo->fork_left->mutex);
+			if (philo->fork_right && philo->fork_right->fork_exist == 1)
+				pthread_mutex_unlock(&philo->fork_right->mutex);
+			if (philo->fork_left && philo->fork_left->fork_exist == 1)
+				pthread_mutex_unlock(&philo->fork_left->mutex);
 			pthread_mutex_unlock(&philo->mutex);
 			return (NULL);
 		}

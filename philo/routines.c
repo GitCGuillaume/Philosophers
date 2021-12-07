@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:46:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/07 15:44:39 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/07 22:01:40 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,28 +121,34 @@ int	take_fork(t_philosopher *philo)
 	//if (philo && philo->fork_left && *philo->dead == 0
 	//	&& philo->fork_left->fork_exist == 1)
 	//{
-		result_one = pthread_mutex_lock(&philo->fork_left->mutex);
-		//pthread_mutex_lock(&philo->display);
-		philo->nb_fork += 1;
-		pthread_mutex_lock(&philo->display);
-		if (*philo->dead == 0)
+		if (philo->fork_left && philo->fork_left->fork_exist == 1)
 		{
-			philo->state.current_time = math_time();
-			printf("%ld %d has taken a fork\n",
-				philo->state.current_time - philo->state.start_time, philo->number);
+			result_one = pthread_mutex_lock(&philo->fork_left->mutex);
+			//pthread_mutex_lock(&philo->display);
+			philo->nb_fork += 1;
+			pthread_mutex_lock(&philo->display);
+			if (*philo->dead == 0)
+			{
+				philo->state.current_time = math_time();
+				printf("%ld %d has taken a fork\n",
+					philo->state.current_time - philo->state.start_time, philo->number);
+			}
+			pthread_mutex_unlock(&philo->display);
 		}
-		pthread_mutex_unlock(&philo->display);
-		result_one = pthread_mutex_lock(&philo->fork_right->mutex);
-		//pthread_mutex_lock(&philo->display);
-		philo->nb_fork += 1;
-		pthread_mutex_lock(&philo->display);
-		if (*philo->dead == 0)
+		if (philo->fork_right && philo->fork_right->fork_exist == 1)
 		{
-			philo->state.current_time = math_time();
-			printf("%ld %d has taken a fork\n",
-				philo->state.current_time - philo->state.start_time, philo->number);
+			result_one = pthread_mutex_lock(&philo->fork_right->mutex);
+			//pthread_mutex_lock(&philo->display);
+			philo->nb_fork += 1;
+			pthread_mutex_lock(&philo->display);
+			if (*philo->dead == 0)
+			{
+				philo->state.current_time = math_time();
+				printf("%ld %d has taken a fork\n",
+					philo->state.current_time - philo->state.start_time, philo->number);
+			}
+			pthread_mutex_unlock(&philo->display);
 		}
-		pthread_mutex_unlock(&philo->display);
 		//pthread_mutex_unlock(&philo->display);
 	//}
 	//if (philo && /**philo->dead == 0 && result_one == 0
