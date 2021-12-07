@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 10:20:51 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 11:09:12 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/07 15:30:22 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,22 @@ int	init_mutex(t_philosopher **philosopher, int nb_philosopher)
 {
 	int	i;
 	int	result;
+	pthread_mutex_t				display;
 
 	i = 0;
+	result = pthread_mutex_init(&display, NULL);
+	if (result != 0)
+		return (0);
 	while (nb_philosopher > i)
 	{
 		philosopher[i]->state.time_simulation = math_time();
 		if (philosopher[i]->state.time_simulation == -1)
 			return (0);
+		philosopher[i]->display = display;
+		//result = pthread_mutex_init(&philosopher[i]->display, NULL);
+		//if (result != 0)
+		//	return (0);
+		philosopher[i]->display_exist = 1;
 		result = pthread_mutex_init(&philosopher[i]->secure, NULL);
 		if (result != 0)
 			return (0);

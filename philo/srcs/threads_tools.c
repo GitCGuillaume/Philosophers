@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 13:36:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 14:46:26 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/07 15:49:19 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@ int	is_dead(t_philosopher *philo)
 		&& current_time > (philo->state.time_simulation
 			+ philo->state.time_to_die))
 	{
+		pthread_mutex_lock(&philo->display);
 		*philo->dead = 1;
 		printf("%ld %d died\n",
 			current_time - philo->state.start_time, philo->number);
+		pthread_mutex_unlock(&philo->display);
 		return (1);
 	}
 	return (0);
