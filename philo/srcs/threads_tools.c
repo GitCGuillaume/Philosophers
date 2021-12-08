@@ -31,18 +31,18 @@ int	is_dead(t_philosopher *philo)
 	long int	current_time;
 
 	current_time = math_time();
-	pthread_mutex_lock(&philo->display);
+	//pthread_mutex_lock(&philo->display);
 	if (current_time != -1 && *philo->dead == 0
-		&& current_time >= (philo->state.time_simulation
+		&& current_time > (philo->state.time_simulation
 			+ philo->state.time_to_die))
 	{
 		//pthread_mutex_lock(&philo->display);
 		*philo->dead = 1;
 		printf("%ld %d died\n",
 			current_time - philo->state.start_time, philo->number);
-		pthread_mutex_unlock(&philo->display);
+		//pthread_mutex_unlock(&philo->display);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->display);
+	//pthread_mutex_unlock(&philo->display);
 	return (0);
 }
