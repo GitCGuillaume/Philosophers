@@ -48,12 +48,10 @@ void	*philo_dead_routine(void *args)
 		result = is_dead(philo);
 		if (result == 1)
 		{
-			//pthread_mutex_unlock(&philo->display);
 			if (philo->fork_right && philo->fork_right->fork_exist == 1)
 				pthread_mutex_unlock(&philo->fork_right->mutex);
 			if (philo->fork_left && philo->fork_left->fork_exist == 1)
 				pthread_mutex_unlock(&philo->fork_left->mutex);
-			//pthread_mutex_unlock(&philo->mutex);
 			return (NULL);
 		}
 		usleep(10);

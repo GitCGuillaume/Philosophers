@@ -35,7 +35,7 @@ int	unlock_eating(t_philosopher *philo)
 		printf("Error unlock mutex\n");
 	return (result);
 }
-
+/*
 int	take_fork_two(t_philosopher *philo)
 {
 	int	result_two;
@@ -66,3 +66,4 @@ int	take_fork_two(t_philosopher *philo)
 	pthread_mutex_unlock(&philo->display);
 	return (0);
 }
+*/
