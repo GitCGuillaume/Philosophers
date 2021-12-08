@@ -76,7 +76,7 @@ int	running_thread(t_philosopher **philosopher, int argc, int nb_philosopher)
 		if (result != 0)
 			return (0);
 		i++;
-		usleep(10);
+		usleep(33);
 	}
 	end_running_thread(philosopher, argc, &dead, nb_philosopher);
 	return (1);
