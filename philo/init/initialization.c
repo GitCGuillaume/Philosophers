@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 10:20:51 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/07 15:30:22 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/08 10:23:51 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,13 +122,13 @@ int	init_values(t_philosopher **philosopher,
 		init_values_two(philosopher, argv, argc, i);
 		i++;
 	}
-	if (nb_philosopher == 1)
+	/*if (nb_philosopher == 1)
 	{
 		result = pthread_mutex_init(&fork[1]->mutex, NULL);
 		if (result != 0)
 			return (0);
 		fork[1]->fork_exist = 1;
 		fork[1]->id = 2;
-	}
+	}*/
 	return (1);
 }

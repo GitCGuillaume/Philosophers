@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:46:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/07 22:01:40 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/08 11:14:37 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ int	thinking(t_philosopher *philo)
 				philo->number);
 			philo->eat = 0;
 			philo->sleep = 0;
-			pthread_mutex_unlock(&philo->display);
 		}
 		else
 			result = 1;
-		if (*philo->dead == 1)
-			pthread_mutex_unlock(&philo->display);
+		pthread_mutex_unlock(&philo->display);
+		//if (*philo->dead == 1 && philo->sleep != 0)
+		//	pthread_mutex_unlock(&philo->display);
 		if (result == 1)
 			pthread_mutex_unlock(&philo->secure);
 		else
@@ -67,9 +67,8 @@ int	sleeping(t_philosopher *philo)
 				philo->number);
 			pthread_mutex_unlock(&philo->display);
 			usleep(philo->state.time_to_sleep * 1000);
-			philo->state.time_simulation = philo->state.current_time;
 		}
-		if (*philo->dead == 1)
+		if (*philo->dead == 1 && philo->sleep != 1)
 			pthread_mutex_unlock(&philo->display);
 		if (philo->state.current_time == -1)
 		{
@@ -88,7 +87,7 @@ int	eating(t_philosopher *philo)
 	{
 		pthread_mutex_lock(&philo->display);
 		philo->state.current_time = math_time();
-		if (/*philo->dead == 0 &&*/ philo->state.time_simulation != -1)
+		if (*philo->dead == 0 && philo->state.time_simulation != -1)
 		{
 			philo->state.time_simulation = math_time();
 			printf("%ld %d is eating\n",
@@ -105,10 +104,10 @@ int	eating(t_philosopher *philo)
 			}
 			philo->eat = 1;
 		}
-		if (*philo->dead == 1)
+		if (*philo->dead == 1 && philo->eat != 1)
 			pthread_mutex_unlock(&philo->display);
-		philo->nb_fork = 0;
-		unlock_eating(philo);
+		if (philo->eat == 1)
+			unlock_eating(philo);
 	}
 	return (0);
 }
@@ -125,13 +124,13 @@ int	take_fork(t_philosopher *philo)
 		{
 			result_one = pthread_mutex_lock(&philo->fork_left->mutex);
 			//pthread_mutex_lock(&philo->display);
-			philo->nb_fork += 1;
 			pthread_mutex_lock(&philo->display);
 			if (*philo->dead == 0)
 			{
 				philo->state.current_time = math_time();
 				printf("%ld %d has taken a fork\n",
 					philo->state.current_time - philo->state.start_time, philo->number);
+				philo->nb_fork += 1;
 			}
 			pthread_mutex_unlock(&philo->display);
 		}
@@ -139,20 +138,20 @@ int	take_fork(t_philosopher *philo)
 		{
 			result_one = pthread_mutex_lock(&philo->fork_right->mutex);
 			//pthread_mutex_lock(&philo->display);
-			philo->nb_fork += 1;
 			pthread_mutex_lock(&philo->display);
 			if (*philo->dead == 0)
 			{
 				philo->state.current_time = math_time();
 				printf("%ld %d has taken a fork\n",
 					philo->state.current_time - philo->state.start_time, philo->number);
+				philo->nb_fork += 1;
 			}
 			pthread_mutex_unlock(&philo->display);
 		}
 		//pthread_mutex_unlock(&philo->display);
 	//}
 	//if (philo && /**philo->dead == 0 && result_one == 0
-	//	&&*/ philo->state.current_time != -1)
+	//	&& philo->state.current_time != -1)
 	//{
 	//	result_one = take_fork_two(philo);
 	//}

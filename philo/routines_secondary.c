@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/16 11:24:24 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/07 15:36:48 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/08 10:27:34 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,20 @@ int	unlock_eating(t_philosopher *philo)
 	int	result;
 
 	result = 0;
-	if (philo->fork_right && philo->fork_right->fork_exist == 1)
+	if (philo->fork_right && philo->fork_right->fork_exist == 1
+		&& philo->nb_fork > 0)
+	{
 		result = pthread_mutex_unlock(&philo->fork_right->mutex);
+		philo->nb_fork = philo->nb_fork - 1;
+	}
 	if (result != 0)
 		printf("Error unlock mutex\n");
-	if (philo->fork_left && philo->fork_left->fork_exist == 1)
+	if (philo->fork_left && philo->fork_left->fork_exist == 1
+		&& philo->nb_fork > 0)
+	{
 		result = pthread_mutex_unlock(&philo->fork_left->mutex);
+		philo->nb_fork = philo->nb_fork - 1;
+	}
 	if (result != 0)
 		printf("Error unlock mutex\n");
 	return (result);
