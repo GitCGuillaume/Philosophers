@@ -40,12 +40,10 @@ static void	run_private_threads(t_philosopher *philosopher)
 {
 	pthread_create(&philosopher->thread, NULL,
 		philo_is_dead, philosopher);
-	//pthread_detach(philosopher->thread);
 	if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
 	{
 		pthread_create(&philosopher->eat_thread, NULL,
 			philo_is_eat, philosopher);
-	//	pthread_detach(philosopher->eat_thread);
 	}
 }
 
