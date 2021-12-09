@@ -33,18 +33,18 @@ int	init_mutex(t_philosopher **philosopher, int nb_philosopher)
 		//if (result != 0)
 		//	return (0);
 		philosopher[i]->display_exist = 1;
-		result = pthread_mutex_init(&philosopher[i]->secure, NULL);
-		if (result != 0)
-			return (0);
-		philosopher[i]->secure_exist = 1;
-		result = pthread_mutex_init(&philosopher[i]->mutex, NULL);
-		if (result != 0)
-			return (0);
-		philosopher[i]->mutex_exist = 1;
-		result = pthread_mutex_init(&philosopher[i]->mutex_eat, NULL);
-		if (result != 0)
-			return (0);
-		philosopher[i]->mutex_eat_exist = 1;
+		//result = pthread_mutex_init(&philosopher[i]->secure, NULL);
+		//if (result != 0)
+		//	return (0);
+		//philosopher[i]->secure_exist = 1;
+		//result = pthread_mutex_init(&philosopher[i]->mutex, NULL);
+		//if (result != 0)
+		//	return (0);
+		//philosopher[i]->mutex_exist = 1;
+		//result = pthread_mutex_init(&philosopher[i]->mutex_eat, NULL);
+		//if (result != 0)
+		//	return (0);
+		//philosopher[i]->mutex_eat_exist = 1;
 		i++;
 	}
 	return (1);

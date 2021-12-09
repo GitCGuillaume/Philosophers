@@ -47,16 +47,16 @@ typedef struct s_philosopher
 	pthread_t					thread;
 	pthread_t					main_thread;
 	pthread_t					eat_thread;
-	pthread_mutex_t				display;
-	pthread_mutex_t				secure;
-	pthread_mutex_t				mutex;
-	pthread_mutex_t				mutex_eat;
+	pthread_mutex_t					display;
+	//pthread_mutex_t				secure;
+	//pthread_mutex_t				mutex;
+	//pthread_mutex_t				mutex_eat;
 	int							*dead;
 	int							*everyone_eat;
 	char						display_exist;
-	char						secure_exist;
-	char						mutex_exist;
-	char						mutex_eat_exist;
+	//char						secure_exist;
+	//char						mutex_exist;
+	//char						mutex_eat_exist;
 	int							number;
 	int							eat;
 	int							sleep;
@@ -89,8 +89,8 @@ int		unlock_eating(t_philosopher *philo);
 int		take_fork(t_philosopher *philo);
 int		take_fork_left(t_philosopher *philo);
 int		take_fork_right(t_philosopher *philo);
-void	*philo_dead_routine(void *args);
-void	*philo_eat_routine(void *args);
+void	*philo_is_dead(void *args);
+void	*philo_is_eat(void *args);
 
 /*
  ** FREE

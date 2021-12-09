@@ -70,12 +70,12 @@ static void	free_mutex_philosopher(t_philosopher **philo, int i)
 	{
 		if (philo[i]->display_exist == 1)
 			pthread_mutex_destroy(&philo[i]->display);
-		if (philo[i]->secure_exist == 1)
-			pthread_mutex_destroy(&philo[i]->secure);
-		if (philo[i]->mutex_exist == 1)
-			pthread_mutex_destroy(&philo[i]->mutex);
-		if (philo[i]->mutex_eat_exist == 1)
-			pthread_mutex_destroy(&philo[i]->mutex_eat);
+		//if (philo[i]->secure_exist == 1)
+		//	pthread_mutex_destroy(&philo[i]->secure);
+		//if (philo[i]->mutex_exist == 1)
+		//	pthread_mutex_destroy(&philo[i]->mutex);
+		//if (philo[i]->mutex_eat_exist == 1)
+		//	pthread_mutex_destroy(&philo[i]->mutex_eat);
 	}
 }
 

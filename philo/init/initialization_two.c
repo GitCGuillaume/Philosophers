@@ -69,9 +69,9 @@ static int	set_values(t_philosopher **philo, t_fork **fork,
 	}
 	philo[i]->fork_left = NULL;
 	philo[i]->fork_right = NULL;
-	philo[i]->secure_exist = 0;
-	philo[i]->mutex_exist = 0;
-	philo[i]->mutex_eat_exist = 0;
+	//philo[i]->secure_exist = 0;
+	//philo[i]->mutex_exist = 0;
+	//philo[i]->mutex_eat_exist = 0;
 	fork[i] = malloc(sizeof(t_fork));
 	if (fork[i] == NULL)
 	{

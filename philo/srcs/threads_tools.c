@@ -15,8 +15,8 @@
 long int	math_time(void)
 {
 	struct timeval	time;
-	int				res;
 	long int		value;
+	int				res;
 
 	res = gettimeofday(&time, NULL);
 	if (res == 0)
@@ -35,10 +35,14 @@ int	is_dead(t_philosopher *philo)
 		&& current_time > (philo->state.time_simulation
 			+ philo->state.time_to_die))
 	{
-		*philo->dead = 1;
+		*philo->dead = *philo->dead + 1;
 		pthread_mutex_lock(&philo->display);
-		printf("%ld %d died\n",
-			current_time - philo->state.start_time, philo->number);
+		if (*philo->dead == 1)
+		{
+			printf("%ld %d died\n",
+			current_time
+			- philo->state.start_time, philo->number);
+		}
 		return (1);
 	}
 	return (0);

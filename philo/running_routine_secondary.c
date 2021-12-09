@@ -12,14 +12,13 @@
 
 #include "philosopher.h"
 
-void	*philo_eat_routine(void *args)
+void	*philo_is_eat(void *args)
 {
 	t_philosopher	*philo;
 	int				result;
 
 	philo = (t_philosopher *)args;
 	result = 0;
-	//pthread_mutex_lock(&philo->mutex_eat);
 	while (result == 0 && *philo->dead == 0
 		&& philo->nb_philosopher > *philo->everyone_eat)
 	{
@@ -29,13 +28,12 @@ void	*philo_eat_routine(void *args)
 			result = 1;
 			return (NULL);
 		}
-		usleep(200);
+		usleep(300);
 	}
-	//pthread_mutex_unlock(&philo->mutex_eat);
 	return (NULL);
 }
 
-void	*philo_dead_routine(void *args)
+void	*philo_is_dead(void *args)
 {
 	t_philosopher	*philo;
 	int				result;
@@ -45,7 +43,6 @@ void	*philo_dead_routine(void *args)
 	while (result == 0 && *philo->dead == 0
 		&& philo->nb_philosopher > *philo->everyone_eat)
 	{
-		//pthread_mutex_lock(&philo->mutex);
 		result = is_dead(philo);
 		if (result == 1)
 		{
@@ -55,8 +52,7 @@ void	*philo_dead_routine(void *args)
 				pthread_mutex_unlock(&philo->fork_left->mutex);
 			return (NULL);
 		}
-		usleep(200);
-		//pthread_mutex_unlock(&philo->mutex);
+		usleep(180);
 	}
 	return (NULL);
 }
