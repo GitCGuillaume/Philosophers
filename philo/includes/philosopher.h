@@ -71,22 +71,31 @@ typedef struct s_philosopher
 /*
  ** THREAD
 */
+
 int		running_thread(t_philosopher **philosopher,
 			int argc, int nb_philosopher);
 void	*start_routine(void *args);
 int		is_dead(t_philosopher *philo);
+
+/*
+ ** ROUTINES
+*/
+
 int		thinking(t_philosopher *philo);
 int		sleeping(t_philosopher *philo);
 int		eating(t_philosopher *philo);
+int		eating_two(t_philosopher *philo);
 int		unlock_eating(t_philosopher *philo);
 int		take_fork(t_philosopher *philo);
-int		take_fork_two(t_philosopher *philo);
+int		take_fork_left(t_philosopher *philo);
+int		take_fork_right(t_philosopher *philo);
 void	*philo_dead_routine(void *args);
 void	*philo_eat_routine(void *args);
 
 /*
  ** FREE
 */
+
 void	free_all(t_philosopher **philo, t_fork **fork, int nb_philo);
 void	free_init_null(t_philosopher **philo,
 			t_fork **fork, int nb_philosopher);
@@ -94,12 +103,15 @@ void	free_init_null(t_philosopher **philo,
 /*
  ** TOOLS
 */
+
 int		check_inputs_values(t_philosopher **philosopher, t_fork **fork,
 			int argc, int nb_philosopher);
 int		check_nb_philosopher(int nb_philosopher);
+
 /*
  ** INIT
 */
+
 int		init_to_null(t_philosopher **philo, t_fork **fork, int nb_philosopher);
 int		init_values(t_philosopher **philosopher, t_fork **fork,
 			char **argv, int argc);

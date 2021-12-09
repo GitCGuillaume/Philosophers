@@ -36,33 +36,14 @@ static void	loop_routine(t_philosopher *philosopher, int *result)
 		*result = thinking(philosopher);
 }
 
-/*
- ** anti deadlock when die
-*/
-
-static void	close_routine(t_philosopher *philosopher, int *result)
-{
-	if (philosopher->eat == 0 && *result == 0)
-	{
-		if (philosopher->fork_left)
-			philosopher->fork_left->fork_exist = 2;
-		if (philosopher->fork_right)
-			pthread_mutex_unlock(&philosopher->fork_right->mutex);
-		if (philosopher->fork_left)
-			pthread_mutex_unlock(&philosopher->fork_left->mutex);
-	}
-}
-
 static void	run_private_threads(t_philosopher *philosopher)
 {
 	pthread_create(&philosopher->thread, NULL,
 		philo_dead_routine, philosopher);
-	pthread_detach(philosopher->thread);
 	if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
 	{
 		pthread_create(&philosopher->eat_thread, NULL,
 			philo_eat_routine, philosopher);
-		pthread_detach(philosopher->eat_thread);
 	}
 }
 
@@ -75,23 +56,12 @@ void	*start_routine(void *args)
 	philosopher = (t_philosopher *)args;
 	run_private_threads(philosopher);
 	while (philosopher && *philosopher->dead == 0
-		&& result == 0
 		&& philosopher->nb_philosopher > *philosopher->everyone_eat)
 	{
 		loop_routine(philosopher, &result);
-		if (result != 0 && philosopher->eat == 0)
-		{
-			*philosopher->dead = 1;
-			if (philosopher->fork_left)
-				philosopher->fork_left->fork_exist = 2;
-			pthread_mutex_unlock(&philosopher->fork_right->mutex);
-			if (philosopher->fork_left && philosopher->fork_left->fork_exist == 1)
-				pthread_mutex_unlock(&philosopher->fork_left->mutex);
-			break ;
-		}
 	}
-	close_routine(philosopher, &result);
-	//wait for pthread_detach valgring that is rly slow to terminate correctly
-	usleep(25);
+	pthread_join(philosopher->thread, NULL);
+	if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
+		pthread_join(philosopher->eat_thread, NULL);
 	return (NULL);
 }
