@@ -36,12 +36,11 @@ int	is_dead(t_philosopher *philo)
 			+ philo->state.time_to_die))
 	{
 		*philo->dead = *philo->dead + 1;
-		pthread_mutex_lock(&philo->display);
 		if (*philo->dead == 1)
 		{
 			printf("%ld %d died\n",
-			current_time
-			- philo->state.start_time, philo->number);
+				current_time
+				- philo->state.start_time, philo->number);
 		}
 		return (1);
 	}

@@ -17,10 +17,13 @@ int	init_mutex(t_philosopher **philosopher, int nb_philosopher)
 {
 	int	i;
 	int	result;
-	pthread_mutex_t				display;
+	pthread_mutex_t				*display;
 
 	i = 0;
-	result = pthread_mutex_init(&display, NULL);
+	display = malloc(sizeof(pthread_mutex_t));
+	if (!display)
+		return (0);
+	result = pthread_mutex_init(display, NULL);
 	if (result != 0)
 		return (0);
 	while (nb_philosopher > i)

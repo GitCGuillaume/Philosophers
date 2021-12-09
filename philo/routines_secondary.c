@@ -40,14 +40,13 @@ int	eating_two(t_philosopher *philo)
 {
 	if (!philo)
 		return (1);
-	if (pthread_mutex_lock(&philo->display) != 0)
+	if (pthread_mutex_lock(philo->display) != 0)
 		return (1);
 	philo->state.current_time = math_time();
-	philo->state.time_simulation = math_time();
 	if (philo->state.current_time == -1
 		|| philo->state.time_simulation == -1)
 	{
-		pthread_mutex_unlock(&philo->display);
+		pthread_mutex_unlock(philo->display);
 		return (1);
 	}
 	if (*philo->dead == 0)
@@ -56,7 +55,8 @@ int	eating_two(t_philosopher *philo)
 			philo->state.current_time
 			- philo->state.start_time, philo->number);
 	}
-	pthread_mutex_unlock(&philo->display);
+	philo->state.time_simulation = math_time();
+	pthread_mutex_unlock(philo->display);
 	return (0);
 }
 
@@ -71,7 +71,7 @@ int	take_fork_left(t_philosopher *philo)
 			return (0);
 		if (*philo->dead == 0)
 		{
-			if (pthread_mutex_lock(&philo->display) != 0)
+			if (pthread_mutex_lock(philo->display) != 0)
 				return (1);
 			philo->state.current_time = math_time();
 			if (philo->state.current_time != -1
@@ -80,7 +80,7 @@ int	take_fork_left(t_philosopher *philo)
 						philo->state.current_time
 				- philo->state.start_time, philo->number);
 			philo->nb_fork += 1;
-			pthread_mutex_unlock(&philo->display);
+			pthread_mutex_unlock(philo->display);
 		}
 	}
 	if (*philo->dead == 1)
@@ -99,7 +99,7 @@ int	take_fork_right(t_philosopher *philo)
 			return (1);
 		if (*philo->dead == 0)
 		{
-			if (pthread_mutex_lock(&philo->display) != 0)
+			if (pthread_mutex_lock(philo->display) != 0)
 				return (1);
 			philo->state.current_time = math_time();
 			if (philo->state.current_time != -1
@@ -108,7 +108,7 @@ int	take_fork_right(t_philosopher *philo)
 					philo->state.current_time
 					- philo->state.start_time, philo->number);
 			philo->nb_fork += 1;
-			pthread_mutex_unlock(&philo->display);
+			pthread_mutex_unlock(philo->display);
 		}
 	}
 	if (*philo->dead == 1)

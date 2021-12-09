@@ -18,7 +18,7 @@ int	thinking(t_philosopher *philo)
 		return (0);
 	if (*philo->dead == 0)
 	{
-		if (pthread_mutex_lock(&philo->display) != 0)
+		if (pthread_mutex_lock(philo->display) != 0)
 			return (1);
 		philo->state.current_time = math_time();
 		if (philo->state.current_time != -1
@@ -28,7 +28,7 @@ int	thinking(t_philosopher *philo)
 				philo->state.current_time - philo->state.start_time,
 				philo->number);
 		}
-		pthread_mutex_unlock(&philo->display);
+		pthread_mutex_unlock(philo->display);
 		if (philo->state.current_time == -1)
 			return (1);
 		philo->eat = 0;
@@ -45,7 +45,7 @@ int	sleeping(t_philosopher *philo)
 		return (0);
 	if (*philo->dead == 0)
 	{
-		if (pthread_mutex_lock(&philo->display) != 0)
+		if (pthread_mutex_lock(philo->display) != 0)
 			return (1);
 		philo->state.current_time = math_time();
 		if (philo->state.current_time != -1
@@ -55,7 +55,7 @@ int	sleeping(t_philosopher *philo)
 				philo->state.current_time - philo->state.start_time,
 				philo->number);
 		}
-		pthread_mutex_unlock(&philo->display);
+		pthread_mutex_unlock(philo->display);
 		if (philo->state.current_time == -1)
 			return (1);
 		usleep(philo->state.time_to_sleep * 1000);

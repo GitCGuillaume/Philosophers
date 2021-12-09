@@ -43,15 +43,18 @@ void	*philo_is_dead(void *args)
 	while (result == 0 && *philo->dead == 0
 		&& philo->nb_philosopher > *philo->everyone_eat)
 	{
+		pthread_mutex_lock(philo->display);
 		result = is_dead(philo);
 		if (result == 1)
 		{
+			pthread_mutex_unlock(philo->display);
 			if (philo->fork_right && philo->fork_right->fork_exist == 1)
 				pthread_mutex_unlock(&philo->fork_right->mutex);
 			if (philo->fork_left && philo->fork_left->fork_exist == 1)
 				pthread_mutex_unlock(&philo->fork_left->mutex);
 			return (NULL);
 		}
+		pthread_mutex_unlock(philo->display);
 		usleep(180);
 	}
 	return (NULL);
