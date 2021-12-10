@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   free_two.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:01:06 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 17:19:10 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/10 12:39:37 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,16 @@ static void	clean_loop(t_philosopher **philo, int nb_philosopher, int *result)
 					*result = sem_close(philo[i]->sem_eat_finish);
 					philo[i]->eat_finish_exist = 2;
 				}
-				free(philo[i]);
+				if (philo[i])
+				{
+				//	free(philo[i]->fork_left);
+				//	philo[i]->fork_left = NULL;
+				//	free(philo[i]->fork_right);
+				//	philo[i]->fork_right = NULL;
+					free(philo[i]);
+					philo[i] = NULL;
+				}
+				
 			}
 			i++;
 		}
@@ -80,7 +89,7 @@ static void	clean_sem_alone(t_philosopher *philo)
 	}
 }
 
-int	free_all(t_philosopher **philo, int nb_philosopher)
+int	free_all_two(t_philosopher **philo, int nb_philosopher)
 {
 	char	*str;
 	int		result;
@@ -92,9 +101,7 @@ int	free_all(t_philosopher **philo, int nb_philosopher)
 		if (philo[0])
 			clean_sem_alone(philo[0]);
 		clean_loop(philo, nb_philosopher, &result);
-		free(philo);
 	}
-	philo = NULL;
 	if (result == -1)
 		return (1);
 	return (0);

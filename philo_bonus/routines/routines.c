@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:06:09 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 18:00:00 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/10 18:25:39 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,31 @@
 
 int	thinking(t_philosopher *philo)
 {
-	int	result;
+	int	result=0;
 
-	result = sem_wait(philo->secure);
+	//result = sem_wait(philo->secure);
 	stop_routine(philo, result);
 	philo->state.current_time = math_time();
 	stop_routine_timer(philo);
 	display(philo, "is thinking", 0);
 	philo->eat = 0;
 	philo->sleep = 0;
-	result = sem_post(philo->secure);
+	//result = sem_post(philo->secure);
 	stop_routine(philo, result);
 	return (0);
 }
 
 int	sleeping(t_philosopher *philo)
 {
-	int	result;
+	int	result=0;
 
-	result = sem_wait(philo->secure);
+	//result = sem_wait(philo->secure);
 	stop_routine(philo, result);
 	philo->state.current_time = math_time();
 	stop_routine_timer(philo);
 	display(philo, "is sleeping", 0);
 	philo->sleep = 1;
-	result = sem_post(philo->secure);
+	//result = sem_post(philo->secure);
 	stop_routine(philo, result);
 	usleep(philo->state.time_to_sleep * 1000);
 	return (0);

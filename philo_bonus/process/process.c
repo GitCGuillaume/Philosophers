@@ -67,6 +67,7 @@ void	end_process(t_philosopher *philo, int nb_philosopher)
 				i++;
 				usleep(10);
 			}
+			//pthread_join(philo->thread_eat, NULL);
 			//anti valgrind  pthreadleak
 			usleep(800);
 		}
@@ -107,7 +108,9 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 {
 	sem_t		*wait_loop;
 	long int	current_time;
+	int	i;
 
+	i = 0;
 	if (!philo)
 		return (2);
 	current_time = start_process(&wait_loop, philo[0]);
@@ -121,7 +124,15 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 	}
 	if (loop_process(philo, wait_loop, current_time, nb_philosopher) == 2)
 		return (2);
-	sem_wait(wait_loop);
+	waitpid(philo[0]->process, 0, 0);
+	/*while (waitpid(philo[i]->process, 0, WNOHANG))
+	{
+		i++;
+		if (i == nb_philosopher)
+			i = 0;
+	}*/
+	//waitpiddd();
+	//sem_wait(wait_loop);
 	end_process(philo[0], nb_philosopher);
 	return (0);
 }

@@ -48,21 +48,21 @@ int	run_process_two(t_philosopher *philo, long int current_time)
 
 int	start_eat_thread(t_philosopher *philo, sem_t *wait_loop)
 {
-	pthread_t		thread_eat;
+	//pthread_t		thread_eat;
 	int				result;
 
 	if (philo)
 	{
 		if (philo->nb_time_active == 1)
 		{
-			result = pthread_create(&thread_eat,
+			result = pthread_create(&philo->thread_eat,
 					NULL, philo_eat_routine, philo);
 			if (result != 0)
 			{
 				philo->wait_loop = wait_loop;
 				return (2);
 			}
-			pthread_detach(thread_eat);
+			pthread_detach(philo->thread_eat);
 		}
 	}
 	return (0);
