@@ -52,6 +52,7 @@ void	*philo_wait_eat_routine(void *args)
 		philo->dead = 1;
 		printf("Everyone has eaten\n");
 		sem_post(philo->mutex_dead);
+		printf("allo\n");
 		//sem_post(philo->fork);
 		//sem_post(philo->fork);
 		//display(philo, "Everyone has eaten", 2);
@@ -161,7 +162,7 @@ void	*start_routine(t_philosopher *philosopher)
 	sem_close(philosopher->sem_eat_wait);
 	sem_close(philosopher->fork);
 	sem_close(philosopher->mutex_dead);
-	/*if (philosopher->nb_time_active == 1)
+	if (philosopher->nb_time_active == 1)
 	{
 		if (pthread_join(philosopher->thread_wait_eat, NULL) != 0)
 		{
@@ -169,7 +170,13 @@ void	*start_routine(t_philosopher *philosopher)
 			sem_post(philosopher->wait_loop);
 			exit(EXIT_FAILURE);
 		}
-	}*/
+		/*if (pthread_join(philosopher->thread_eat, NULL) != 0)
+		{
+			printf("Error\nCan't clear eat_routine\n");
+			sem_post(philosopher->wait_loop);
+			exit(EXIT_FAILURE);
+		}*/
+	}
 	sem_post(philosopher->wait_loop);
 	sem_close(philosopher->wait_loop);
 	free(philosopher);

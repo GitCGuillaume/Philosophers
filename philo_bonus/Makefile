@@ -49,7 +49,7 @@ clean:
 
 fclean:
 	$(MAKE) clean
-	rm -rf $(NAME)
+	rm -f $(NAME)
 
 re:
 	$(MAKE) fclean
