@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 18:46:37 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/08 11:42:57 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/10 09:12:35 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	*start_routine(void *args)
 	}
 	if (philosopher->fork_right && philosopher->fork_right->fork_exist == 1)
 		pthread_mutex_unlock(&philosopher->fork_right->mutex);
-        if (philosopher->fork_left && philosopher->fork_left->fork_exist == 1)
-        	pthread_mutex_unlock(&philosopher->fork_left->mutex);
+	if (philosopher->fork_left && philosopher->fork_left->fork_exist == 1)
+		pthread_mutex_unlock(&philosopher->fork_left->mutex);
 	pthread_join(philosopher->thread, NULL);
 	if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
 		pthread_join(philosopher->eat_thread, NULL);

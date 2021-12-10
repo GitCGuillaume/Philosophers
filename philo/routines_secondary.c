@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/16 11:24:24 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/08 10:27:34 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/10 09:14:32 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,8 @@ int	take_fork_left(t_philosopher *philo)
 			if (philo->state.current_time != -1
 				&& *philo->dead == 0)
 				printf("%ld %d has taken a fork\n",
-						philo->state.current_time
-				- philo->state.start_time, philo->number);
+					philo->state.current_time
+					- philo->state.start_time, philo->number);
 			philo->nb_fork += 1;
 			pthread_mutex_unlock(philo->display);
 		}

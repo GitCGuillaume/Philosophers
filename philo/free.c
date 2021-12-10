@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:23:04 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 11:11:57 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/10 09:13:59 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,6 @@ static void	free_mutex_philosopher(t_philosopher **philo, int i)
 		{
 			pthread_mutex_destroy(philo[i]->display);
 		}
-		//if (philo[i]->secure_exist == 1)
-		//	pthread_mutex_destroy(&philo[i]->secure);
-		//if (philo[i]->mutex_exist == 1)
-		//	pthread_mutex_destroy(&philo[i]->mutex);
-		//if (philo[i]->mutex_eat_exist == 1)
-		//	pthread_mutex_destroy(&philo[i]->mutex_eat);
 	}
 }
 
@@ -97,13 +91,5 @@ void	free_all(t_philosopher **philo, t_fork **fork,
 	}
 	if (philo)
 		free(philo[0]->display);
-	/*if (fork)
-	{
-		if (nb_philo == 1
-			&& (fork[1]->fork_exist == 1 || fork[1]->fork_exist == 2))
-		{
-			pthread_mutex_destroy(&fork[1]->mutex);
-		}
-	}*/
 	free_malloc(philo, fork, nb_philo);
 }

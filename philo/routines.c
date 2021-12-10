@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:46:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/08 11:14:37 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/10 09:14:16 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,7 @@ int	eating(t_philosopher *philo)
 		}
 		philo->eat = 1;
 	}
-	//if (philo->eat == 1)
-		unlock_eating(philo);
+	unlock_eating(philo);
 	if (*philo->dead == 1)
 		return (1);
 	return (0);

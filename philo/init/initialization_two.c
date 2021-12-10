@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 18:45:54 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 18:45:56 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/10 09:15:25 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,6 @@ static int	set_values(t_philosopher **philo, t_fork **fork,
 	}
 	philo[i]->fork_left = NULL;
 	philo[i]->fork_right = NULL;
-	//philo[i]->secure_exist = 0;
-	//philo[i]->mutex_exist = 0;
-	//philo[i]->mutex_eat_exist = 0;
 	fork[i] = malloc(sizeof(t_fork));
 	if (fork[i] == NULL)
 	{

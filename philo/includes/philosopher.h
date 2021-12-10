@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:25:41 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 09:27:04 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/10 09:15:09 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,10 @@ typedef struct s_philosopher
 	pthread_t					thread;
 	pthread_t					main_thread;
 	pthread_t					eat_thread;
-	pthread_mutex_t					*display;
-	//pthread_mutex_t				secure;
-	//pthread_mutex_t				mutex;
-	//pthread_mutex_t				mutex_eat;
+	pthread_mutex_t				*display;
 	int							*dead;
 	int							*everyone_eat;
 	char						display_exist;
-	//char						secure_exist;
-	//char						mutex_exist;
-	//char						mutex_eat_exist;
 	int							number;
 	int							eat;
 	int							sleep;
