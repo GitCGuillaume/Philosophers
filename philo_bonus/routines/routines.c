@@ -14,6 +14,8 @@
 
 int	thinking(t_philosopher *philo)
 {
+	if (!philo)
+		return (1);
 	//int	result=0;
 
 	//result = sem_wait(philo->secure);
@@ -30,6 +32,8 @@ int	thinking(t_philosopher *philo)
 
 int	sleeping(t_philosopher *philo)
 {
+	if (!philo)
+		return (1);
 	//int	result=0;
 
 	//result = sem_wait(philo->secure);
@@ -39,21 +43,27 @@ int	sleeping(t_philosopher *philo)
 	display(philo, "is sleeping", philo->dead);
 	//result = sem_post(philo->secure);
 	//stop_routine(philo, result);
-	usleep(philo->state.time_to_sleep * 1000);
+	if (philo->dead == 0)
+		usleep(philo->state.time_to_sleep * 1000);
 	philo->sleep = 1;
 	return (0);
 }
 
 void	count_eat(t_philosopher *philo, int *result)
 {
+	if (!philo)
+		return ;
 	if (philo->nb_time_active == 1)
 	{
 		philo->nb_time = philo->nb_time + 1;
+		//printf("nb_time=%d\n state_eat=%ld\n", philo->nb_time, philo->state.nb_time_eat);
 		if (philo->nb_time >= philo->state.nb_time_eat
 			&& philo->nb_time_reach == 0)
 		{
 			philo->nb_time_reach = philo->nb_time_reach + 1;
 			*result = sem_post(philo->sem_eat_wait);
+			//philo->dead = 1;
+			//*result = sem_post(philo->sem_eat_finish);
 			stop_routine(philo, *result);
 		}
 	}
@@ -63,12 +73,15 @@ int	eating(t_philosopher *philo)
 {
 	int	result;
 
+	if (!philo)
+		return (1);
 	//philo->state.current_time = math_time();
 	//stop_routine_timer(philo);
 	display(philo, "is eating", philo->dead);
-	usleep(philo->state.time_to_eat * 1000);
-	count_eat(philo, &result);
 	philo->state.time_simulation = math_time();
+	if (philo->dead == 0)
+		usleep(philo->state.time_to_eat * 1000);
+	count_eat(philo, &result);
 	philo->nb_fork = 0;
 	philo->eat = 1;
 	//stop_routine_timer_sim(philo);
@@ -83,19 +96,21 @@ int	take_fork(t_philosopher *philo)
 {
 	int	result;
 
-	result = sem_wait(philo->fork);
-	stop_routine(philo, result);
-	result = sem_wait(philo->fork);
-	stop_routine(philo, result);
+	if (!philo)
+		return (1);
+	if (philo->dead == 0)
+	{
+		result = sem_wait(philo->fork);
+		stop_routine(philo, result);
+		display(philo, "has taken a fork", philo->dead);
+		philo->nb_fork += 1;
+	}
 	//philo->state.current_time = math_time();
 	//stop_routine_timer(philo);
 	if (philo->dead == 0)
 	{
-		display(philo, "has taken a fork", philo->dead);
-		philo->nb_fork += 1;
-	}
-	if (philo->dead == 0)
-	{
+		result = sem_wait(philo->fork);
+		stop_routine(philo, result);
 		display(philo, "has taken a fork", philo->dead);
 		philo->nb_fork += 1;
 	}

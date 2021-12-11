@@ -16,6 +16,7 @@ int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 {
 	//sem_t	*mutex;
 	sem_t	*sem_eat_wait;
+	sem_t	*sem_eat_finish;
 	int		i;
 
 	i = 0;
@@ -30,10 +31,17 @@ int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 		return (1);
 	}
 	sem_unlink("sem_eat_wait");
+	sem_eat_finish = sem_open("sem_eat_finish", O_CREAT, S_IRWXU, 0);
+	if (sem_eat_finish == SEM_FAILED)
+	{
+		//sem_close(mutex);
+		return (1);
+	}
+	sem_unlink("sem_eat_finish");
 	while (nb_philosopher > i)
 	{
-		//philosopher[i]->mutex = mutex;
-		//philosopher[i]->mutex_exist = 1;
+		philosopher[i]->sem_eat_finish = sem_eat_finish;
+		philosopher[i]->eat_finish_exist = 1;
 		philosopher[i]->sem_eat_wait = sem_eat_wait;
 		philosopher[i]->eat_wait_exist = 1;
 		i++;
@@ -55,7 +63,6 @@ void	init_sem_exist(t_philosopher *philosopher,
 	philosopher->fork_exist = 1;
 	philosopher->mutex_dead = sem_dead;
 	philosopher->mutex_dead_exist = 1;
-	philosopher->finish = 0;
 }
 
 void	init_values_two(t_philosopher *philo,
@@ -88,19 +95,19 @@ void	init_values_two(t_philosopher *philo,
 
 int	init_values(t_philosopher **philosopher, int i)
 {
-	char	*str;
-	char	*str_two;
+	//char	*str;
+	//char	*str_two;
 
-	str = ft_itoa(i);
-	if (str == NULL)
-		return (1);
+	//str = ft_itoa(i);
+	//if (str == NULL)
+	//	return (1);
 	/*philosopher[i]->secure = sem_open(str, O_CREAT, S_IRWXU, 1);
 	if (philosopher[i]->secure == SEM_FAILED)
 		return (1);
 	sem_unlink(str);
 	philosopher[i]->secure_exist = 1;
 	*/
-	str_two = ft_strjoin(str, "b");
+	/*str_two = ft_strjoin(str, "b");
 	free(str);
 	if (str_two == NULL)
 		return (1);
@@ -112,6 +119,8 @@ int	init_values(t_philosopher **philosopher, int i)
 	}
 	sem_unlink(str_two);
 	free(str_two);
+	*/
+	philosopher[i]->finish = 0;
 	philosopher[i]->number = i + 1;
 	return (0);
 }
@@ -122,10 +131,8 @@ int	alloc_things(sem_t **sem_fork, sem_t **sem_dead,
 	int	nb_philosopher;
 
 	nb_philosopher = ft_atoi(argv[1]);
-	if (nb_philosopher > 1)
+	if (nb_philosopher > 0)
 		*sem_fork = sem_open("name", O_CREAT, S_IRWXU, nb_philosopher);
-	else
-		*sem_fork = sem_open("name", O_CREAT, S_IRWXU, 2);
 	if (*sem_fork == SEM_FAILED)
 		return (1);
 	sem_unlink("name");

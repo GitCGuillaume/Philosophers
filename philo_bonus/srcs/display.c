@@ -28,14 +28,14 @@ void	display(t_philosopher *philo, char *str, int is_dead)
 	int			result;
 
 	//stop_routine_timer_two(philo, current_time);
-	if (is_dead == 1)
+	/*if (is_dead == 1)
 	{
 		philo->state.current_time = math_time();
 		printf("%ld %d %s\n",
 			philo->state.current_time - philo->state.start_time, philo->number, str);
 		//result = sem_post(philo->wait_loop);
 		//stop_routine(philo, result);
-	}
+	}*/
 	if (is_dead == 0)
 	{
 		result = sem_wait(philo->mutex_dead);

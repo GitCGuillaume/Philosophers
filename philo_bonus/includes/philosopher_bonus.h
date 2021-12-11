@@ -41,19 +41,14 @@ typedef struct s_philosopher
 {
 	t_philosopher_time_state	state;
 	sem_t						*fork;
-	//sem_t						*mutex;
-	//sem_t						*secure;
 	sem_t						*mutex_dead;
 	sem_t						*wait_loop;
 	sem_t						*sem_eat_wait;
 	sem_t						*sem_eat_finish;
 	pthread_t					thread;
-	pthread_t					thread_eat;
 	pthread_t					thread_wait_eat;
 	pid_t						process;
 	char						fork_exist;
-	//char						mutex_exist;
-	//char						secure_exist;
 	char						mutex_dead_exist;
 	char						wait_loop_exist;
 	char						eat_wait_exist;
@@ -101,7 +96,7 @@ void		end_process(t_philosopher *philo, int nb_philosopher);
 int			loop_process(t_philosopher **philo, sem_t *wait_loop,
 				long int current_time, int nb_philosopher);
 int			run_process(t_philosopher **philo, int nb_philosopher);
-int			run_process_two(t_philosopher *philo, long int current_time);
+int			run_process_two(t_philosopher **philo_clear, t_philosopher *philo, long int current_time);
 
 /*
  ** THREAD
