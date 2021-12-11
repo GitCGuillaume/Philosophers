@@ -23,12 +23,12 @@ void	*philo_eat_routine(void *args)
 	philo = (t_philosopher *)args;
 	if (philo->nb_philosopher > 0)
 	{
-		while (philo->nb_philosopher > nb_eat && philo->dead == 0)
+		while (philo->nb_philosopher > nb_eat)
 		{
 			sem_wait(philo->sem_eat_wait);
 			nb_eat++;
 		}
-		if (nb_eat == philo->nb_philosopher && philo->dead == 0)
+		if (nb_eat == philo->nb_philosopher)
 		{
 			sem_post(philo->sem_eat_finish);
 			return (NULL);
@@ -63,6 +63,7 @@ void	*philo_wait_eat_routine(void *args)
 		//printf("id=%d\ndead=%d\nfinish=%d\n", philo->number, philo->dead, philo->finish);
 		//printf("Everyone has eaten\n");
 		sem_post(philo->mutex_dead);
+		return (NULL);
 	}
 	return (NULL);
 }
@@ -104,12 +105,12 @@ void	*philo_dead_routine(void *args)
 			}
 			if (philo->nb_time_active == 1 && philo->finish == 0)
 			{
-				sem_post(philo->sem_eat_finish);
-				while (philo->nb_philosopher >= i)
+				//sem_post(philo->sem_eat_finish);
+				/*while (philo->nb_philosopher >= i)
 				{
 					sem_post(philo->sem_eat_wait);
 					i++;
-				}
+				}*/
 				i = 0;
 			}
 			//sem_post(philo->mutex_dead);
@@ -136,6 +137,7 @@ int	launch_wait_thread(t_philosopher *philosopher)
 			sem_post(philosopher->wait_loop);
 			exit(EXIT_FAILURE);
 		}
+		//pthread_detach(philosopher->thread_wait_eat);
 	}
 	return (result);
 }
@@ -168,13 +170,14 @@ void	*start_routine(t_philosopher *philosopher)
 			&& philosopher->sleep == 1)
 			result = thinking(philosopher);
 	}
-	while (philosopher->nb_philosopher >= i)
+	/*while (philosopher->nb_philosopher >= i)
 	{
 		sem_post(philosopher->fork);
 		i++;
-	}
+	}*/
 	if (philosopher->nb_time_active == 1)
 	{
+		sem_post(philosopher->sem_eat_finish);
 		if (pthread_join(philosopher->thread_wait_eat, NULL) != 0)
 		{
 			printf("Error\nCan't clear wait_eat_routine\n");

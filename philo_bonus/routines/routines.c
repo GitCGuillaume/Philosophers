@@ -43,7 +43,7 @@ int	sleeping(t_philosopher *philo)
 	display(philo, "is sleeping", philo->dead);
 	//result = sem_post(philo->secure);
 	//stop_routine(philo, result);
-	if (philo->dead == 0)
+	//if (philo->dead == 0)
 		usleep(philo->state.time_to_sleep * 1000);
 	philo->sleep = 1;
 	return (0);
@@ -79,7 +79,7 @@ int	eating(t_philosopher *philo)
 	//stop_routine_timer(philo);
 	display(philo, "is eating", philo->dead);
 	philo->state.time_simulation = math_time();
-	if (philo->dead == 0)
+	//if (philo->dead == 0)
 		usleep(philo->state.time_to_eat * 1000);
 	count_eat(philo, &result);
 	philo->nb_fork = 0;
