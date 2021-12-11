@@ -28,7 +28,6 @@ void	*philo_eat_routine(void *args)
 			sem_wait(philo->sem_eat_wait);
 			nb_eat++;
 		}
-		printf("nb=%d\n", nb_eat);
 		if (nb_eat == philo->nb_philosopher && philo->dead == 0)
 		{
 			sem_post(philo->sem_eat_finish);
@@ -58,7 +57,6 @@ void	*philo_wait_eat_routine(void *args)
 	printf("dead=%d\n", philo->dead);*/
 	if (philo->dead == 0)
 	{
-	printf("??zzz?\n");
 		sem_wait(philo->mutex_dead);
 		philo->dead = 100;
 		philo->finish = 1;
@@ -185,7 +183,6 @@ void	*start_routine(t_philosopher *philosopher)
 		}
 		if (philosopher->finish == 1 && philosopher->dead == 100)
 		{
-			printf("aaaa\n");
 			sem_wait(philosopher->mutex_dead);
 			printf("Everyone has eaten\n");
 		}
