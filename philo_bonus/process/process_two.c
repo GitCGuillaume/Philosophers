@@ -28,6 +28,7 @@ void	clear_mem_cpy(t_philosopher **philosopher, int nb_philosophers)
 	sem_close(philosopher[0]->mutex_dead);
 	sem_close(philosopher[0]->fork);
 	sem_close(philosopher[0]->wait_loop);
+	sem_close(philosopher[0]->special);
 	while (nb_philosophers > i)
 	{
 		if (philosopher[i])

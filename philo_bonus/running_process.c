@@ -84,10 +84,10 @@ void	*philo_dead_routine(void *args)
 		current_time = math_time();
 		if (current_time > (philo->state.time_simulation
 				+ philo->state.time_to_die)
-			&& philo->dead == 0 && philo->finish == 0)
+			&& philo->finish == 0 && philo->dead == 0)
 		{
 			philo->dead = 1;
-			usleep(800);
+			sem_wait(philo->special);
 			sem_wait(philo->mutex_dead);
 			current_time = math_time();
 			if (philo->dead == 1)
@@ -98,21 +98,22 @@ void	*philo_dead_routine(void *args)
 			//	sem_post(philo->mutex_dead);
 			//sem_post(philo->fork);
 			//sem_post(philo->fork);
-			while (philo->nb_philosopher >= i)
+			/*while (philo->nb_philosopher >= i)
 			{
 				sem_post(philo->fork);
 				i++;
-			}
+			}*/
 			if (philo->nb_time_active == 1 && philo->finish == 0)
 			{
 				//sem_post(philo->sem_eat_finish);
-				/*while (philo->nb_philosopher >= i)
+				while (philo->nb_philosopher >= i)
 				{
 					sem_post(philo->sem_eat_wait);
 					i++;
-				}*/
+				}
 				i = 0;
 			}
+			sem_post(philo->special);
 			//sem_post(philo->mutex_dead);
 			return (NULL);
 		}
@@ -170,13 +171,23 @@ void	*start_routine(t_philosopher *philosopher)
 			&& philosopher->sleep == 1)
 			result = thinking(philosopher);
 	}
-	/*while (philosopher->nb_philosopher >= i)
+	while (philosopher->nb_philosopher >= i)
 	{
 		sem_post(philosopher->fork);
 		i++;
-	}*/
+	}
+	//if (philosopher->dead == 1)
+	//	sem_post(philosopher->mutex_dead);
 	if (philosopher->nb_time_active == 1)
 	{
+		//sem_post(philosopher->special);
+		i = 0;
+		while (philosopher->nb_philosopher > i)
+		{
+			
+			sem_post(philosopher->sem_eat_wait);
+			i++;
+		}
 		sem_post(philosopher->sem_eat_finish);
 		if (pthread_join(philosopher->thread_wait_eat, NULL) != 0)
 		{
@@ -189,6 +200,7 @@ void	*start_routine(t_philosopher *philosopher)
 			sem_wait(philosopher->mutex_dead);
 			printf("Everyone has eaten\n");
 		}
+		//sem_post(philosopher->special);
 	}
 	return (NULL);
 }

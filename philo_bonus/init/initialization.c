@@ -17,6 +17,7 @@ int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 	//sem_t	*mutex;
 	sem_t	*sem_eat_wait;
 	sem_t	*sem_eat_finish;
+	sem_t	*special;
 	int		i;
 
 	i = 0;
@@ -38,12 +39,20 @@ int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 		return (1);
 	}
 	sem_unlink("sem_eat_finish");
+	special = sem_open("special", O_CREAT, S_IRWXU, 1);
+	if (sem_eat_wait == SEM_FAILED)
+	{
+		//sem_close(mutex);
+		return (1);
+	}
+	sem_unlink("special");
 	while (nb_philosopher > i)
 	{
 		philosopher[i]->sem_eat_finish = sem_eat_finish;
 		philosopher[i]->eat_finish_exist = 1;
 		philosopher[i]->sem_eat_wait = sem_eat_wait;
 		philosopher[i]->eat_wait_exist = 1;
+		philosopher[i]->special = special;
 		i++;
 	}
 	return (0);

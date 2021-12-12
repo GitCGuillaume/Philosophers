@@ -45,6 +45,7 @@ typedef struct s_philosopher
 	sem_t						*wait_loop;
 	sem_t						*sem_eat_wait;
 	sem_t						*sem_eat_finish;
+	sem_t						*special;
 	pthread_t					thread;
 	pthread_t					thread_wait_eat;
 	pid_t						process;

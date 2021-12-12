@@ -76,6 +76,7 @@ static void	clean_sem_alone(t_philosopher *philo)
 			sem_close(philo->mutex_dead);
 			philo->mutex_dead_exist = 2;
 		}
+		sem_close(philo->special);
 		clean_sem_alone_two(philo);
 	}
 }

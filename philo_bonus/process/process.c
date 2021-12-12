@@ -20,7 +20,7 @@ long int	start_process(sem_t **wait_loop, t_philosopher *philo)
 	if (current_time == -1)
 		return (-1);
 	if (wait_loop)
-		*wait_loop = sem_open("wait_loop", O_CREAT, S_IRWXU, 0);
+		*wait_loop = sem_open("wait_loop", O_CREAT, S_IRWXU, 1);
 	else
 		return (-1);
 	if (*wait_loop == SEM_FAILED)
