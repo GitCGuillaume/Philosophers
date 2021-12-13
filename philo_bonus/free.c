@@ -23,11 +23,6 @@ static void	clean_loop(t_philosopher **philo, int nb_philosopher, int *result)
 		{
 			if (philo[i] != NULL)
 			{
-				/*if (philo[i]->secure_exist == 1)
-				{
-					*result = sem_close(philo[i]->secure);
-					philo[i]->secure_exist = 2;
-				}*/
 				if (philo[i]->eat_finish_exist == 1)
 				{
 					*result = sem_close(philo[i]->sem_eat_finish);
@@ -66,16 +61,12 @@ static void	clean_sem_alone(t_philosopher *philo)
 			sem_close(philo->fork);
 			philo->fork_exist = 2;
 		}
-		/*if (philo->mutex_exist == 1)
-		{
-			sem_close(philo->mutex);
-			philo->mutex_exist = 2;
-		}*/
 		if (philo->mutex_dead_exist == 1)
 		{
 			sem_close(philo->mutex_dead);
 			philo->mutex_dead_exist = 2;
 		}
+		sem_close(philo->wait_loop);
 		clean_sem_alone_two(philo);
 	}
 }

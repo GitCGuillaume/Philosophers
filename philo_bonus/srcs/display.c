@@ -11,35 +11,20 @@
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
-/*
-static void	stop_routine_timer_two(t_philosopher *philo, int result)
-{
-	if (result == -1)
-	{
-		philo->dead = 1;
-		sem_post(philo->wait_loop);
-		exit(EXIT_FAILURE);
-	}
-}*/
 
-void	display(t_philosopher *philo, char *str, int is_dead)
+int	display(t_philosopher *philo, char *str, int is_dead)
 {
-	//long int	current_time;
-	int			result;
+	int	result;
 
-	//stop_routine_timer_two(philo, current_time);
-	/*if (is_dead == 1)
-	{
-		philo->state.current_time = math_time();
-		printf("%ld %d %s\n",
-			philo->state.current_time - philo->state.start_time, philo->number, str);
-		//result = sem_post(philo->wait_loop);
-		//stop_routine(philo, result);
-	}*/
+	result = 1;
 	if (is_dead == 0)
 	{
 		result = sem_wait(philo->mutex_dead);
+		if (result != 0)
+			return (1);
 		philo->state.current_time = math_time();
+		if (philo->state.current_time == -1)
+			return (1);
 		stop_routine(philo, result);
 		printf("%ld %d %s\n",
 			philo->state.current_time - philo->state.start_time, philo->number,
@@ -47,4 +32,5 @@ void	display(t_philosopher *philo, char *str, int is_dead)
 		result = sem_post(philo->mutex_dead);
 		stop_routine(philo, result);
 	}
+	return (0);
 }

@@ -46,6 +46,7 @@ typedef struct s_philosopher
 	sem_t						*sem_eat_wait;
 	sem_t						*sem_eat_finish;
 	pthread_t					thread;
+	pthread_t					thread_eat;
 	pthread_t					thread_wait_eat;
 	pid_t						process;
 	char						fork_exist;
@@ -79,22 +80,9 @@ int			alloc_things(sem_t **sem_fork, sem_t **sem_dead,
 				t_philosopher ***philosopher, char **argv);
 
 /*
- ** FREE
-*/
-/*
-void		clean_loop(t_philosopher **philo, int nb_philosopher, int *result);
-void		clean_sem_alone_two(t_philosopher *philo);
-void		clean_sem_alone(t_philosopher *philo);
-int			free_all(t_philosopher **philo, int nb_philosopher);
-*/
-/*
  ** RUN PROCESS
 */
-//long int	start_process(sem_t **wait_loop, t_philosopher *philo);
-void		loop_process_two(t_philosopher **philo, int nb_philosopher);
-void		end_process(t_philosopher *philo, int nb_philosopher);
-int			loop_process(t_philosopher **philo, sem_t *wait_loop,
-				long int current_time, int nb_philosopher);
+
 int			run_process(t_philosopher **philo, int nb_philosopher);
 int			run_process_two(t_philosopher *philo, long int current_time);
 
@@ -103,14 +91,13 @@ int			run_process_two(t_philosopher *philo, long int current_time);
 */
 
 int			start_eat_thread(t_philosopher *philo, sem_t *wait_loop);
-
 int			free_all(t_philosopher **philo, int nb_philo);
 int			free_all_two(t_philosopher **philo, int nb_philosopher);
 void		*start_routine(t_philosopher *philosopher);
 void		*philo_wait_eat_routine(void *args);
 void		*philo_eat_routine(void *args);
 void		*philo_dead_routine(void *args);
-void		display(t_philosopher *philo, char *str, int is_dead);
+int		display(t_philosopher *philo, char *str, int is_dead);
 int			thinking(t_philosopher *philo);
 int			sleeping(t_philosopher *philo);
 int			eating(t_philosopher *philo);
@@ -123,7 +110,5 @@ int			check_inputs_values(t_philosopher **philosopher,
  ** ROUTINES TOOLS
 */
 void		stop_routine(t_philosopher *philo, int result);
-void		stop_routine_timer(t_philosopher *philo);
-void		stop_routine_timer_sim(t_philosopher *philo);
 
 #endif
