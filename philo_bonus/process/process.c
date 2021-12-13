@@ -80,28 +80,27 @@ void	end_process(t_philosopher *philo, int nb_philosopher)
 int	loop_process(t_philosopher **philo, sem_t *wait_loop, int nb_philosopher)
 {
 	long int	current_time;
-	int	i;
+	int			i;
 
 	i = 0;
-	if (philo)
+	if (!philo)
+		return (2);
+	current_time = math_time();
+	if (current_time != -1)
 	{
-		current_time = math_time();
-		if (current_time != -1)
+		while (nb_philosopher > i)
 		{
-			while (nb_philosopher > i)
+			philo[i]->wait_loop = wait_loop;
+			philo[i]->process = fork();
+			if (run_process_two(philo[i], current_time) == 1)
 			{
-				philo[i]->wait_loop = wait_loop;
-				philo[i]->process = fork();
-				if (run_process_two(philo[i], current_time) == 1)
-				{
-					loop_process_two(philo, nb_philosopher);
-					sem_post(wait_loop);	
-					usleep(800);
-					return (2);
-				}
-				i++;
-				usleep(100);
+				loop_process_two(philo, nb_philosopher);
+				sem_post(wait_loop);
+				usleep(800);
+				return (2);
 			}
+			i++;
+			usleep(100);
 		}
 	}
 	return (0);
@@ -123,14 +122,17 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 		return (2);
 	}
 	if (loop_process(philo, wait_loop, nb_philosopher) == 2)
+	{
+		sem_close(wait_loop);
 		return (2);
+	}
 	sem_wait(wait_loop);
 	while (nb_philosopher > i)
 	{
 		kill(philo[i]->process, SIGKILL);
 		i++;
 	}
-	//waitpid(0, 0, 0);
+	waitpid(0, 0, 0);
 	end_process(philo[0], nb_philosopher);
 	return (0);
 }

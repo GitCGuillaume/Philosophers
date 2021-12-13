@@ -6,7 +6,7 @@ ROUTINES_PATH	=	./routines
 
 INIT_PATH	=	./init
 
-SRCS_FILES	=	$(SRCS_PATH)/ft_args.c $(SRCS_PATH)/ft_atoi.c $(SRCS_PATH)/ft_itoa.c $(SRCS_PATH)/ft_strdup.c $(SRCS_PATH)/ft_str_is_digit.c $(SRCS_PATH)/ft_strjoin.c $(SRCS_PATH)/threads_tools.c $(SRCS_PATH)/tools.c
+SRCS_FILES	=	$(SRCS_PATH)/ft_args.c $(SRCS_PATH)/ft_atoi.c $(SRCS_PATH)/ft_itoa.c $(SRCS_PATH)/ft_strdup.c $(SRCS_PATH)/ft_str_is_digit.c $(SRCS_PATH)/ft_strjoin.c $(SRCS_PATH)/process_tools.c $(SRCS_PATH)/tools.c
 
 SRCS_INIT	=	$(INIT_PATH)/initialization.c
 

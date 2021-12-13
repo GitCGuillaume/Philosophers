@@ -39,9 +39,9 @@ void	*philo_eat_routine(void *args)
 
 void	*philo_wait_eat_routine(void *args)
 {
-	t_philosopher	*philo;
-	int	i;
-	int	nb_eat;
+	t_philosopher		*philo;
+	int					i;
+	int					nb_eat;
 
 	i = 0;
 	nb_eat = 0;
@@ -60,9 +60,9 @@ void	*philo_wait_eat_routine(void *args)
 
 void	*philo_dead_routine(void *args)
 {
-	t_philosopher	*philo;
-	int				result;
-	int	i;
+	t_philosopher		*philo;
+	int					result;
+	int					i;
 
 	i = 0;
 	philo = (t_philosopher *)args;
@@ -103,58 +103,20 @@ int	launch_wait_thread(t_philosopher *philosopher)
 
 void	*start_routine(t_philosopher *philosopher)
 {
-	int			result;
+	int	result;
 	int	i;
 
 	i = 0;
 	if (!philosopher)
 		exit(EXIT_FAILURE);
 	result = launch_wait_thread(philosopher);
-	while (philosopher->dead == 0)
-	{
-		if (philosopher->nb_fork == 0 && result == 0
-			&& philosopher->eat == 0 && philosopher->dead == 0
-			&& philosopher->sleep == 0)
-			result = take_fork(philosopher);
-		if (philosopher->nb_fork == 2 && result == 0
-			&& philosopher->eat == 0 && philosopher->dead == 0
-			&& philosopher->sleep == 0)
-			result = eating(philosopher);
-		if (philosopher->nb_fork == 0 && result == 0
-			&& philosopher->eat == 1 && philosopher->dead == 0
-			&& philosopher->sleep == 0)
-			result = sleeping(philosopher);
-		if (philosopher->nb_fork == 0 && result == 0
-			&& philosopher->eat == 1 && philosopher->dead == 0
-			&& philosopher->sleep == 1)
-			result = thinking(philosopher);
-	}
+	loop_running_process(philosopher);
 	while (philosopher->nb_philosopher >= i)
 	{
 		sem_post(philosopher->fork);
 		i++;
 	}
 	if (philosopher->nb_time_active == 1)
-	{
-		i = 0;
-		while (philosopher->nb_philosopher > i)
-		{
-			
-			sem_post(philosopher->sem_eat_wait);
-			i++;
-		}
-		if (pthread_join(philosopher->thread_wait_eat, NULL) != 0)
-		{
-			printf("Error\nCan't clear wait_eat_routine\n");
-			sem_post(philosopher->wait_loop);
-			exit(EXIT_FAILURE);
-		}
-		if (philosopher->finish == 1 && philosopher->dead == 100)
-		{
-			sem_wait(philosopher->mutex_dead);
-			printf("Everyone has eaten\n");
-			sem_post(philosopher->wait_loop);
-		}
-	}
+		clear_finish_eat(philosopher);
 	return (NULL);
 }

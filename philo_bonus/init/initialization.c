@@ -21,15 +21,11 @@ int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 	i = 0;
 	sem_eat_wait = sem_open("sem_eat_wait", O_CREAT, S_IRWXU, 0);
 	if (sem_eat_wait == SEM_FAILED)
-	{
 		return (1);
-	}
 	sem_unlink("sem_eat_wait");
 	sem_eat_finish = sem_open("sem_eat_finish", O_CREAT, S_IRWXU, 0);
 	if (sem_eat_finish == SEM_FAILED)
-	{
 		return (1);
-	}
 	sem_unlink("sem_eat_finish");
 	while (nb_philosopher > i)
 	{
@@ -59,35 +55,41 @@ void	init_sem_exist(t_philosopher *philosopher,
 void	init_values_two(t_philosopher *philo,
 	int nb_philosopher, int argc, char **argv)
 {
-	philo->eat_finish_exist = 1;
-	philo->dead = 0;
-	philo->eat = 0;
-	philo->sleep = 0;
-	philo->nb_fork = 0;
-	philo->think = 0;
-	philo->nb_time_active = 0;
-	philo->nb_time = 0;
-	philo->nb_time_reach = 0;
-	philo->nb_philosopher = nb_philosopher;
-	philo->state.time_to_die = ft_atoi(argv[2]);
-	philo->state.time_to_eat = ft_atoi(argv[3]);
-	philo->state.time_to_sleep = ft_atoi(argv[4]);
-	if (argc == 6)
-	{
-		philo->nb_time_active = 1;
-		philo->state.nb_time_eat = ft_atoi(argv[5]);
-	}
-	else
+	if (philo)
 	{
 		philo->nb_time_active = 0;
-		philo->state.nb_time_eat = 0;
+		philo->nb_time = 0;
+		philo->nb_time_reach = 0;
+		philo->nb_philosopher = nb_philosopher;
+		philo->state.time_to_die = ft_atoi(argv[2]);
+		philo->state.time_to_eat = ft_atoi(argv[3]);
+		philo->state.time_to_sleep = ft_atoi(argv[4]);
+		if (argc == 6)
+		{
+			philo->nb_time_active = 1;
+			philo->state.nb_time_eat = ft_atoi(argv[5]);
+		}
+		else
+		{
+			philo->nb_time_active = 0;
+			philo->state.nb_time_eat = 0;
+		}
 	}
 }
 
 int	init_values(t_philosopher **philosopher, int i)
 {
-	philosopher[i]->finish = 0;
-	philosopher[i]->number = i + 1;
+	if (philosopher[i])
+	{
+		philosopher[i]->finish = 0;
+		philosopher[i]->number = i + 1;
+		philosopher[i]->eat_finish_exist = 1;
+		philosopher[i]->dead = 0;
+		philosopher[i]->eat = 0;
+		philosopher[i]->sleep = 0;
+		philosopher[i]->nb_fork = 0;
+		philosopher[i]->think = 0;
+	}
 	return (0);
 }
 
@@ -96,6 +98,8 @@ int	alloc_things(sem_t **sem_fork, sem_t **sem_dead,
 {
 	int	nb_philosopher;
 
+	if (!philosopher)
+		return (1);
 	nb_philosopher = ft_atoi(argv[1]);
 	if (nb_philosopher > 0)
 		*sem_fork = sem_open("name", O_CREAT, S_IRWXU, nb_philosopher);

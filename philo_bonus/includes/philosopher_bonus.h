@@ -85,6 +85,8 @@ int			alloc_things(sem_t **sem_fork, sem_t **sem_dead,
 
 int			run_process(t_philosopher **philo, int nb_philosopher);
 int			run_process_two(t_philosopher *philo, long int current_time);
+void		clear_finish_eat(t_philosopher *philosopher);
+void		loop_running_process(t_philosopher *philo);
 
 /*
  ** THREAD
@@ -97,7 +99,7 @@ void		*start_routine(t_philosopher *philosopher);
 void		*philo_wait_eat_routine(void *args);
 void		*philo_eat_routine(void *args);
 void		*philo_dead_routine(void *args);
-int		display(t_philosopher *philo, char *str, int is_dead);
+int			display(t_philosopher *philo, char *str, int is_dead);
 int			thinking(t_philosopher *philo);
 int			sleeping(t_philosopher *philo);
 int			eating(t_philosopher *philo);

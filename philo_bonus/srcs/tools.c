@@ -15,6 +15,8 @@
 int	check_inputs_values(t_philosopher **philosopher,
 	int argc, int nb_philosopher)
 {
+	if (!philosopher || !philosopher[0])
+		return (1);
 	if (philosopher[0]->state.time_to_die < 1
 		|| philosopher[0]->state.time_to_eat < 1
 		|| philosopher[0]->state.time_to_sleep < 1

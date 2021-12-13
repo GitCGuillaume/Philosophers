@@ -12,6 +12,60 @@
 
 #include "philosopher_bonus.h"
 
+void	clear_finish_eat(t_philosopher *philosopher)
+{
+	int	i;
+
+	i = 0;
+	if (!philosopher)
+		return ;
+	while (philosopher->nb_philosopher > i)
+	{
+		sem_post(philosopher->sem_eat_wait);
+		i++;
+	}
+	if (pthread_join(philosopher->thread_wait_eat, NULL) != 0)
+	{
+		printf("Error\nCan't clear wait_eat_routine\n");
+		sem_post(philosopher->wait_loop);
+		exit(EXIT_FAILURE);
+	}
+	if (philosopher->finish == 1 && philosopher->dead == 100)
+	{
+		sem_wait(philosopher->mutex_dead);
+		printf("Everyone has eaten\n");
+		sem_post(philosopher->wait_loop);
+	}
+}
+
+void	loop_running_process(t_philosopher *philosopher)
+{
+	int	result;
+
+	if (!philosopher)
+		return ;
+	result = 0;
+	while (philosopher->dead == 0)
+	{
+		if (philosopher->nb_fork == 0 && result == 0
+			&& philosopher->eat == 0 && philosopher->dead == 0
+			&& philosopher->sleep == 0)
+			result = take_fork(philosopher);
+		if (philosopher->nb_fork == 2 && result == 0
+			&& philosopher->eat == 0 && philosopher->dead == 0
+			&& philosopher->sleep == 0)
+			result = eating(philosopher);
+		if (philosopher->nb_fork == 0 && result == 0
+			&& philosopher->eat == 1 && philosopher->dead == 0
+			&& philosopher->sleep == 0)
+			result = sleeping(philosopher);
+		if (philosopher->nb_fork == 0 && result == 0
+			&& philosopher->eat == 1 && philosopher->dead == 0
+			&& philosopher->sleep == 1)
+			result = thinking(philosopher);
+	}
+}
+
 int	run_process_two(t_philosopher *philo, long int current_time)
 {
 	int	i;
@@ -33,10 +87,8 @@ int	run_process_two(t_philosopher *philo, long int current_time)
 		if (pthread_create(&philo->thread, NULL,
 				philo_dead_routine, philo) != 0)
 			exit(EXIT_FAILURE);
-		//pthread_detach(philo->thread);
 		start_routine(philo);
 		pthread_join(philo->thread, NULL);
-		//usleep(200);
 		exit(EXIT_SUCCESS);
 	}
 	return (0);

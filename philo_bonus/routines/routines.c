@@ -27,7 +27,7 @@ int	sleeping(t_philosopher *philo)
 	if (!philo)
 		return (1);
 	display(philo, "is sleeping", philo->dead);
-		usleep(philo->state.time_to_sleep * 1000);
+	usleep(philo->state.time_to_sleep * 1000);
 	philo->sleep = 1;
 	return (0);
 }
@@ -57,7 +57,7 @@ int	eating(t_philosopher *philo)
 		return (1);
 	display(philo, "is eating", philo->dead);
 	philo->state.time_simulation = math_time();
-		usleep(philo->state.time_to_eat * 1000);
+	usleep(philo->state.time_to_eat * 1000);
 	count_eat(philo, &result);
 	philo->nb_fork = 0;
 	philo->eat = 1;

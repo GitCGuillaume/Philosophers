@@ -21,6 +21,17 @@ int	run_program(t_philosopher **philosopher, char **argv)
 	result = run_process(philosopher, ft_atoi(argv[1]));
 	if (result == 2)
 	{
+		if (philosopher[0]->thread_eat)
+		{
+			i = 0;
+			while (ft_atoi(argv[1]) > i)
+			{
+				sem_post(philosopher[0]->sem_eat_wait);
+				i++;
+				usleep(10);
+			}
+			pthread_join(philosopher[0]->thread_eat, NULL);
+		}
 		printf("Error\n");
 		free_all(philosopher, ft_atoi(argv[1]));
 		return (1);
@@ -48,9 +59,14 @@ int	end_program(t_philosopher **philosopher, int argc, char **argv)
 {
 	int	result;
 
+	if (!philosopher)
+		return (1);
 	result = check_inputs_values(philosopher, argc, ft_atoi(argv[1]));
 	if (result == 1)
+	{
+		free_all(philosopher, ft_atoi(argv[1]));
 		return (1);
+	}
 	result = init_sem(philosopher, ft_atoi(argv[1]));
 	if (result == 1)
 	{
