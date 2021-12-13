@@ -40,6 +40,7 @@ static void	run_private_threads(t_philosopher *philosopher)
 {
 	pthread_create(&philosopher->thread, NULL,
 		philo_is_dead, philosopher);
+	pthread_detach(philosopher->thread);
 	if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
 	{
 		pthread_create(&philosopher->eat_thread, NULL,
@@ -64,8 +65,8 @@ void	*start_routine(void *args)
 		pthread_mutex_unlock(&philosopher->fork_right->mutex);
 	if (philosopher->fork_left && philosopher->fork_left->fork_exist == 1)
 		pthread_mutex_unlock(&philosopher->fork_left->mutex);
-	pthread_join(philosopher->thread, NULL);
 	if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
 		pthread_join(philosopher->eat_thread, NULL);
+	usleep(1000);
 	return (NULL);
 }

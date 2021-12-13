@@ -16,7 +16,7 @@
 long int	math_time(void);
 int			argv_ok(char *str);
 int			check_args(int argc, char **argv);
-int			ft_atoi(const char *str);
+ssize_t			ft_atoi(const char *str);
 int			ft_str_is_digit(char *str);
 
 #endif
