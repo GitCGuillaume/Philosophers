@@ -86,7 +86,7 @@ t_philosopher	**start_program(int argc, char **argv,
 	i = 0;
 	if (check_args(argc, argv) == 1)
 		return (NULL);
-	if (check_nb_philosopher(ft_atoi(argv[1])) == 1)
+	if (check_values(argv, argc) == 1)
 		return (NULL);
 	if (alloc_things(sem_fork, sem_dead, &philosopher, argv) == 1)
 		return (NULL);

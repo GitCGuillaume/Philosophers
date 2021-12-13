@@ -25,12 +25,14 @@ void	*philo_eat_routine(void *args)
 	{
 		while (philo->nb_philosopher > nb_eat)
 		{
-			sem_wait(philo->sem_eat_wait);
+			if (sem_wait(philo->sem_eat_wait) != 0)
+				kill(philo->process, SIGKILL);
 			nb_eat++;
 		}
 		if (nb_eat == philo->nb_philosopher)
 		{
-			sem_post(philo->sem_eat_finish);
+			if (sem_post(philo->sem_eat_finish) != 0)
+				kill(philo->process, SIGKILL);
 			return (NULL);
 		}
 	}
@@ -46,13 +48,16 @@ void	*philo_wait_eat_routine(void *args)
 	i = 0;
 	nb_eat = 0;
 	philo = (t_philosopher *)args;
-	sem_wait(philo->sem_eat_finish);
+	if (sem_wait(philo->sem_eat_finish) != 0)
+		kill(philo->process, SIGKILL);
 	if (philo->dead == 0)
 	{
-		sem_wait(philo->mutex_dead);
+		if (sem_wait(philo->mutex_dead) != 0)
+			kill(philo->process, SIGKILL);
 		philo->dead = 100;
 		philo->finish = 1;
-		sem_post(philo->mutex_dead);
+		if (sem_post(philo->mutex_dead) != 0)
+			kill(philo->process, SIGKILL);
 		return (NULL);
 	}
 	return (NULL);
@@ -70,13 +75,15 @@ void	*philo_dead_routine(void *args)
 	while (philo->dead == 0 && philo->finish == 0
 		&& result == 0)
 	{
-		sem_wait(philo->mutex_dead);
+		if (sem_wait(philo->mutex_dead) != 0)
+			kill(philo->process, SIGKILL);
 		result = is_dead(philo);
 		if (result)
 		{
 			return (NULL);
 		}
-		sem_post(philo->mutex_dead);
+		if (sem_post(philo->mutex_dead) != 0)
+			kill(philo->process, SIGKILL);
 		usleep(200);
 	}
 	return (NULL);
@@ -94,7 +101,7 @@ int	launch_wait_thread(t_philosopher *philosopher)
 		if (result != 0)
 		{
 			printf("Error\nCan't launch wait_eat_routine\n");
-			sem_post(philosopher->wait_loop);
+			return (1);
 		}
 	}
 	return (result);

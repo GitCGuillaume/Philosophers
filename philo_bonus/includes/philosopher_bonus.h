@@ -108,9 +108,4 @@ int			is_dead(t_philosopher *philo);
 int			check_nb_philosopher(int nb_philosopher);
 int			check_inputs_values(t_philosopher **philosopher,
 				int argc, int nb_philosopher);
-/*
- ** ROUTINES TOOLS
-*/
-void		stop_routine(t_philosopher *philo, int result);
-
 #endif

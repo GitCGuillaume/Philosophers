@@ -20,10 +20,11 @@ int			is_dying(long int current_time,
 long int	math_time(void);
 int			argv_ok(char *str);
 int			check_args(int argc, char **argv);
-int			ft_atoi(const char *str);
+ssize_t			ft_atoi(const char *str);
 char		*ft_strdup(const char *s1);
 char		*ft_itoa(int n);
 int			ft_str_is_digit(char *str);
 char		*ft_strjoin(char const *s1, char const *s2);
+int			check_values(char **argv, int argc);
 
 #endif

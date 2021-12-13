@@ -17,6 +17,8 @@ int	display(t_philosopher *philo, char *str, int is_dead)
 	int	result;
 
 	result = 1;
+	if (!philo || !str)
+		return (1);
 	if (is_dead == 0)
 	{
 		result = sem_wait(philo->mutex_dead);
@@ -25,12 +27,11 @@ int	display(t_philosopher *philo, char *str, int is_dead)
 		philo->state.current_time = math_time();
 		if (philo->state.current_time == -1)
 			return (1);
-		stop_routine(philo, result);
 		printf("%ld %d %s\n",
 			philo->state.current_time - philo->state.start_time, philo->number,
 			str);
-		result = sem_post(philo->mutex_dead);
-		stop_routine(philo, result);
+		if (sem_post(philo->mutex_dead) != 0)
+			return (1);
 	}
 	return (0);
 }

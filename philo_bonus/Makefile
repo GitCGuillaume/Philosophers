@@ -12,7 +12,7 @@ SRCS_INIT	=	$(INIT_PATH)/initialization.c
 
 SRCS_PROCESS	=	$(PROCESS_PATH)/process.c $(PROCESS_PATH)/process_two.c
 
-SRCS_ROUTINES	=	$(ROUTINES_PATH)/routines.c $(ROUTINES_PATH)/routines_tools.c $(SRCS_PATH)/display.c
+SRCS_ROUTINES	=	$(ROUTINES_PATH)/routines.c $(SRCS_PATH)/display.c
 
 SRCS		=	main_bonus.c free.c running_process.c
 

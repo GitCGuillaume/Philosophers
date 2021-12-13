@@ -36,11 +36,11 @@ static int	is_other(char c)
 		return (0);
 }
 
-int	ft_atoi(const char *str)
+ssize_t	ft_atoi(const char *str)
 {
-	int	i;
-	int	result;
-	int	symbol;
+	ssize_t	i;
+	ssize_t	result;
+	ssize_t	symbol;
 
 	i = 0;
 	result = 0;

@@ -29,9 +29,23 @@ int	check_inputs_values(t_philosopher **philosopher,
 	return (0);
 }
 
-int	check_nb_philosopher(int nb_philosopher)
+int	check_values(char **argv, int argc)
 {
-	if (nb_philosopher < 1)
+	if (ft_atoi(argv[1]) > 2147483647 || ft_atoi(argv[2]) > 2147483647
+		|| ft_atoi(argv[3]) > 2147483647 || ft_atoi(argv[4]) > 2147483647)
+	{
+		printf("Error\n");
+		return (1);
+	}
+	if (argc == 6)
+	{
+		if (ft_atoi(argv[5]) > 2147483647)
+		{
+			printf("Error\n");
+			return (1);
+		}
+	}
+	if (ft_atoi(argv[1]) < 1)
 	{
 		printf("Values must be higher than 0\n");
 		return (1);

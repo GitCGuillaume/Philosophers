@@ -25,7 +25,10 @@ int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 	sem_unlink("sem_eat_wait");
 	sem_eat_finish = sem_open("sem_eat_finish", O_CREAT, S_IRWXU, 0);
 	if (sem_eat_finish == SEM_FAILED)
+	{
+		sem_close(sem_eat_wait);
 		return (1);
+	}
 	sem_unlink("sem_eat_finish");
 	while (nb_philosopher > i)
 	{
@@ -100,7 +103,7 @@ int	alloc_things(sem_t **sem_fork, sem_t **sem_dead,
 {
 	int	nb_philosopher;
 
-	if (!philosopher)
+	if (!philosopher || !sem_fork || !sem_dead || !argv)
 		return (1);
 	nb_philosopher = ft_atoi(argv[1]);
 	if (nb_philosopher > 0)
