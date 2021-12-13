@@ -17,8 +17,10 @@ int	run_program(t_philosopher **philosopher, char **argv)
 	int	result;
 	int	i;
 
+	result = 2;
 	i = 0;
-	result = run_process(philosopher, ft_atoi(argv[1]));
+	if (philosopher && argv)
+		result = run_process(philosopher, ft_atoi(argv[1]));
 	if (result == 2)
 	{
 		if (philosopher[0]->thread_eat)
@@ -36,7 +38,8 @@ int	run_program(t_philosopher **philosopher, char **argv)
 		free_all(philosopher, ft_atoi(argv[1]));
 		return (1);
 	}
-	free_all(philosopher, ft_atoi(argv[1]));
+	if (philosopher && argv)
+		free_all(philosopher, ft_atoi(argv[1]));
 	return (result);
 }
 

@@ -44,22 +44,25 @@ int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 void	init_sem_exist(t_philosopher *philosopher,
 	sem_t *sem_fork, sem_t *sem_dead)
 {
-	philosopher->wait_loop = 0;
-	philosopher->fork_exist = 0;
-	philosopher->mutex_dead_exist = 0;
-	philosopher->wait_loop_exist = 0;
-	philosopher->eat_wait_exist = 0;
-	philosopher->eat_finish_exist = 0;
-	philosopher->fork = sem_fork;
-	philosopher->fork_exist = 1;
-	philosopher->mutex_dead = sem_dead;
-	philosopher->mutex_dead_exist = 1;
+	if (philosopher && sem_dead && sem_fork)
+	{
+		philosopher->wait_loop = 0;
+		philosopher->fork_exist = 0;
+		philosopher->mutex_dead_exist = 0;
+		philosopher->wait_loop_exist = 0;
+		philosopher->eat_wait_exist = 0;
+		philosopher->eat_finish_exist = 0;
+		philosopher->fork = sem_fork;
+		philosopher->fork_exist = 1;
+		philosopher->mutex_dead = sem_dead;
+		philosopher->mutex_dead_exist = 1;
+	}
 }
 
 void	init_values_two(t_philosopher *philo,
 	int nb_philosopher, int argc, char **argv)
 {
-	if (philo)
+	if (philo && argv)
 	{
 		philo->thread_eat = 0;
 		philo->nb_time_active = 0;
@@ -84,6 +87,8 @@ void	init_values_two(t_philosopher *philo,
 
 int	init_values(t_philosopher **philosopher, int i)
 {
+	if (!philosopher || !philosopher[i])
+		return (1);
 	if (philosopher[i])
 	{
 		philosopher[i]->finish = 0;
