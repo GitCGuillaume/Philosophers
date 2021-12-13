@@ -91,13 +91,27 @@ static int	run_philosopher(int nb_philosopher, int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	int	nb_philosopher;
+	ssize_t	nb_philosopher;
 	int	result;
 
 	if (check_args(argc, argv) == 0)
 		return (1);
 	nb_philosopher = ft_atoi(argv[1]);
-	result = run_philosopher(nb_philosopher, argc, argv);
+	if (nb_philosopher > 2147483647 || ft_atoi(argv[2]) > 2147483647
+		|| ft_atoi(argv[3]) > 2147483647 || ft_atoi(argv[4]) > 2147483647)
+	{
+		printf("Error\n");
+		return (1);
+	}
+	if (argc == 6)
+	{
+		if (ft_atoi(argv[5]) > 2147483647)
+		{
+			printf("Error\n");
+			return (1);
+		}
+	}
+	result = run_philosopher((int)nb_philosopher, argc, argv);
 	if (result == 0)
 		return (1);
 	return (0);
