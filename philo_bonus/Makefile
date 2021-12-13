@@ -14,7 +14,7 @@ SRCS_PROCESS	=	$(PROCESS_PATH)/process.c $(PROCESS_PATH)/process_two.c
 
 SRCS_ROUTINES	=	$(ROUTINES_PATH)/routines.c $(ROUTINES_PATH)/routines_tools.c $(SRCS_PATH)/display.c
 
-SRCS		=	main_bonus.c free.c free_two.c running_process.c
+SRCS		=	main_bonus.c free.c running_process.c
 
 OBJS_FILES	=	$(SRCS_FILES:.c=.o)
 

@@ -6,43 +6,13 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:16:05 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 17:16:08 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:13:01 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
-/*
- ** Childs processes copy the memory table from it's parent, so you need to clear
- ** the still reachables, if you don't want them to appear into the valgrind log
- ** Even though it should clear by itself when the child stop.
-*/
-
-void	clear_mem_cpy(t_philosopher **philosopher, int nb_philosophers)
-{
-	int	i;
-
-	i = 0;
-	if (!philosopher)
-		return ;
-	sem_close(philosopher[0]->mutex_dead);
-	sem_close(philosopher[0]->fork);
-	sem_close(philosopher[0]->wait_loop);
-	sem_close(philosopher[0]->special);
-	while (nb_philosophers > i)
-	{
-		if (philosopher[i])
-		{
-			sem_close(philosopher[i]->sem_eat_finish);
-			sem_close(philosopher[i]->sem_eat_wait);
-			free(philosopher[i]);
-		}
-		i++;
-	}
-	free(philosopher);
-}
-
-int	run_process_two(t_philosopher **philo_clear, t_philosopher *philo, long int current_time)
+int	run_process_two(t_philosopher *philo, long int current_time)
 {
 	int	i;
 	int	nb_philosophers;
@@ -68,9 +38,8 @@ int	run_process_two(t_philosopher **philo_clear, t_philosopher *philo, long int 
 		if (pthread_create(&philo->thread, NULL,
 				philo_dead_routine, philo) != 0)
 			exit(EXIT_FAILURE);
+		pthread_detach(philo->thread);
 		start_routine(philo);
-	  	pthread_join(philo->thread, NULL);
-		clear_mem_cpy(philo_clear, philo->nb_philosopher);
 		exit(EXIT_SUCCESS);
 	}
 	return (0);

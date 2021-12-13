@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:15:30 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 19:06:04 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:58:12 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ int	run_program(t_philosopher **philosopher, char **argv)
 		free_all(philosopher, ft_atoi(argv[1]));
 		return (1);
 	}
-	while (ft_atoi(argv[1]) > i)
+	/*while (ft_atoi(argv[1]) > i)
 	{
 		kill(philosopher[i]->process, SIGKILL);
 		i++;
-	}
+	}*/
 	free_all(philosopher, ft_atoi(argv[1]));
 	return (result);
 }

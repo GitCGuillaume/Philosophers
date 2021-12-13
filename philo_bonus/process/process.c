@@ -6,27 +6,23 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:08:50 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 13:50:59 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:01:15 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
-long int	start_process(sem_t **wait_loop, t_philosopher *philo)
+long int	start_process(sem_t **wait_loop)
 {
 	long int	current_time;
 
 	current_time = math_time();
-	if (current_time == -1)
+	if (current_time == -1 || !wait_loop) //|| !*wait_loop)
 		return (-1);
-	if (wait_loop)
-		*wait_loop = sem_open("wait_loop", O_CREAT, S_IRWXU, 1);
-	else
-		return (-1);
+	*wait_loop = sem_open("wait_loop", O_CREAT, S_IRWXU, 0);
 	if (*wait_loop == SEM_FAILED)
 		return (-1);
 	sem_unlink("wait_loop");
-	philo->wait_loop_exist = 1;
 	return (current_time);
 }
 
@@ -37,6 +33,7 @@ void	loop_process_two(t_philosopher **philo, int nb_philosopher)
 	i = 0;
 	if (philo)
 	{
+		printf("in\n");
 		while (philo[0]->nb_time_active == 1 && nb_philosopher > i)
 		{
 			sem_post(philo[0]->sem_eat_wait);
@@ -74,8 +71,6 @@ void	end_process(t_philosopher *philo, int nb_philosopher)
 				i++;
 				usleep(10);
 			}
-			//pthread_join(philo->thread_eat, NULL);
-			//anti valgrind  pthreadleak
 			usleep(800);
 		}
 	}
@@ -97,7 +92,7 @@ int	loop_process(t_philosopher **philo, sem_t *wait_loop,
 		{
 			philo[i]->wait_loop = wait_loop;
 			philo[i]->process = fork();
-			if (run_process_two(philo, philo[i], current_time) == 1)
+			if (run_process_two(philo[i], current_time) == 1)
 			{
 				loop_process_two(philo, nb_philosopher);
 				sem_post(wait_loop);
@@ -115,15 +110,14 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 {
 	sem_t		*wait_loop;
 	long int	current_time;
-	int	i;
+	int			i;
 
 	i = 0;
 	if (!philo)
 		return (2);
-	current_time = start_process(&wait_loop, philo[0]);
+	current_time = start_process(&wait_loop);
 	if (current_time == -1)
 		return (2);
-	philo[0]->wait_loop = wait_loop;
 	if (start_eat_thread(philo[0], wait_loop) != 0)
 	{
 		sem_close(wait_loop);
@@ -131,15 +125,14 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 	}
 	if (loop_process(philo, wait_loop, current_time, nb_philosopher) == 2)
 		return (2);
-	waitpid(0, 0, 0);
-	/*while (waitpid(philo[i]->process, 0, WNOHANG))
+	sem_wait(wait_loop);
+	while (nb_philosopher > i)
 	{
+		kill(philo[i]->process, SIGKILL);
 		i++;
-		if (i == nb_philosopher)
-			i = 0;
-	}*/
-	//waitpiddd();
-	//sem_wait(wait_loop);
+	}
+	waitpid(0, 0, 0);
+	sem_close(wait_loop);
 	end_process(philo[0], nb_philosopher);
 	return (0);
 }

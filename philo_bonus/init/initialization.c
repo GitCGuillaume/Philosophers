@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 16:50:20 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/10 18:30:39 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:10:01 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,45 +14,29 @@
 
 int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 {
-	//sem_t	*mutex;
 	sem_t	*sem_eat_wait;
 	sem_t	*sem_eat_finish;
-	sem_t	*special;
 	int		i;
 
 	i = 0;
-	//mutex = sem_open("mutex1", O_CREAT, S_IRWXU, 1);
-	//if (mutex == SEM_FAILED)
-	//	return (1);
-	//sem_unlink("mutex1");
 	sem_eat_wait = sem_open("sem_eat_wait", O_CREAT, S_IRWXU, 0);
 	if (sem_eat_wait == SEM_FAILED)
 	{
-		//sem_close(mutex);
 		return (1);
 	}
 	sem_unlink("sem_eat_wait");
 	sem_eat_finish = sem_open("sem_eat_finish", O_CREAT, S_IRWXU, 0);
 	if (sem_eat_finish == SEM_FAILED)
 	{
-		//sem_close(mutex);
 		return (1);
 	}
 	sem_unlink("sem_eat_finish");
-	special = sem_open("special", O_CREAT, S_IRWXU, 1);
-	if (sem_eat_wait == SEM_FAILED)
-	{
-		//sem_close(mutex);
-		return (1);
-	}
-	sem_unlink("special");
 	while (nb_philosopher > i)
 	{
 		philosopher[i]->sem_eat_finish = sem_eat_finish;
 		philosopher[i]->eat_finish_exist = 1;
 		philosopher[i]->sem_eat_wait = sem_eat_wait;
 		philosopher[i]->eat_wait_exist = 1;
-		philosopher[i]->special = special;
 		i++;
 	}
 	return (0);
@@ -62,8 +46,6 @@ void	init_sem_exist(t_philosopher *philosopher,
 	sem_t *sem_fork, sem_t *sem_dead)
 {
 	philosopher->fork_exist = 0;
-	//philosopher->mutex_exist = 0;
-	//philosopher->secure_exist = 0;
 	philosopher->mutex_dead_exist = 0;
 	philosopher->wait_loop_exist = 0;
 	philosopher->eat_wait_exist = 0;
@@ -104,31 +86,6 @@ void	init_values_two(t_philosopher *philo,
 
 int	init_values(t_philosopher **philosopher, int i)
 {
-	//char	*str;
-	//char	*str_two;
-
-	//str = ft_itoa(i);
-	//if (str == NULL)
-	//	return (1);
-	/*philosopher[i]->secure = sem_open(str, O_CREAT, S_IRWXU, 1);
-	if (philosopher[i]->secure == SEM_FAILED)
-		return (1);
-	sem_unlink(str);
-	philosopher[i]->secure_exist = 1;
-	*/
-	/*str_two = ft_strjoin(str, "b");
-	free(str);
-	if (str_two == NULL)
-		return (1);
-	philosopher[i]->sem_eat_finish = sem_open(str_two, O_CREAT, S_IRWXU, 0);
-	if (philosopher[i]->sem_eat_finish == SEM_FAILED)
-	{
-		free(str_two);
-		return (1);
-	}
-	sem_unlink(str_two);
-	free(str_two);
-	*/
 	philosopher[i]->finish = 0;
 	philosopher[i]->number = i + 1;
 	return (0);

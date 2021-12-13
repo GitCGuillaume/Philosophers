@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:01:07 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/10 18:30:49 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:12:00 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,29 +80,26 @@ void	*philo_dead_routine(void *args)
 	result = 0;
 	while (philo->dead == 0 && philo->finish == 0)
 	{
-		//result = sem_wait(philo->mutex_dead);
 		current_time = math_time();
 		if (current_time > (philo->state.time_simulation
 				+ philo->state.time_to_die)
 			&& philo->finish == 0 && philo->dead == 0)
 		{
 			philo->dead = 1;
-			sem_wait(philo->special);
 			sem_wait(philo->mutex_dead);
 			current_time = math_time();
-			if (philo->dead == 1)
-				printf("%ld %d died\n",
-					current_time
-					- philo->state.start_time, philo->number);
+			printf("%ld %d died\n",
+				current_time
+				- philo->state.start_time, philo->number);
 			//sem_post(philo->mutex_dead);
 			//	sem_post(philo->mutex_dead);
 			//sem_post(philo->fork);
 			//sem_post(philo->fork);
-			/*while (philo->nb_philosopher >= i)
+			while (philo->nb_philosopher >= i)
 			{
 				sem_post(philo->fork);
 				i++;
-			}*/
+			}
 			if (philo->nb_time_active == 1 && philo->finish == 0)
 			{
 				//sem_post(philo->sem_eat_finish);
@@ -113,11 +110,9 @@ void	*philo_dead_routine(void *args)
 				}
 				i = 0;
 			}
-			sem_post(philo->special);
-			//sem_post(philo->mutex_dead);
+			sem_post(philo->wait_loop);
 			return (NULL);
 		}
-		//result = sem_post(philo->mutex_dead);
 		usleep(200);
 	}
 	return (NULL);
@@ -188,7 +183,7 @@ void	*start_routine(t_philosopher *philosopher)
 			sem_post(philosopher->sem_eat_wait);
 			i++;
 		}
-		sem_post(philosopher->sem_eat_finish);
+		//sem_post(philosopher->sem_eat_finish);
 		if (pthread_join(philosopher->thread_wait_eat, NULL) != 0)
 		{
 			printf("Error\nCan't clear wait_eat_routine\n");
@@ -199,6 +194,7 @@ void	*start_routine(t_philosopher *philosopher)
 		{
 			sem_wait(philosopher->mutex_dead);
 			printf("Everyone has eaten\n");
+			sem_post(philosopher->wait_loop);
 		}
 		//sem_post(philosopher->special);
 	}

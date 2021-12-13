@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:01:06 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 17:19:10 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:09:37 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ static void	clean_sem_alone(t_philosopher *philo)
 			sem_close(philo->mutex_dead);
 			philo->mutex_dead_exist = 2;
 		}
-		sem_close(philo->special);
 		clean_sem_alone_two(philo);
 	}
 }

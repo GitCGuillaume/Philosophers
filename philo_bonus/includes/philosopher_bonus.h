@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:14:31 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 19:07:21 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/13 11:09:29 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ typedef struct s_philosopher
 	sem_t						*wait_loop;
 	sem_t						*sem_eat_wait;
 	sem_t						*sem_eat_finish;
-	sem_t						*special;
 	pthread_t					thread;
 	pthread_t					thread_wait_eat;
 	pid_t						process;
@@ -91,13 +90,13 @@ int			free_all(t_philosopher **philo, int nb_philosopher);
 /*
  ** RUN PROCESS
 */
-long int	start_process(sem_t **wait_loop, t_philosopher *philo);
+//long int	start_process(sem_t **wait_loop, t_philosopher *philo);
 void		loop_process_two(t_philosopher **philo, int nb_philosopher);
 void		end_process(t_philosopher *philo, int nb_philosopher);
 int			loop_process(t_philosopher **philo, sem_t *wait_loop,
 				long int current_time, int nb_philosopher);
 int			run_process(t_philosopher **philo, int nb_philosopher);
-int			run_process_two(t_philosopher **philo_clear, t_philosopher *philo, long int current_time);
+int			run_process_two(t_philosopher *philo, long int current_time);
 
 /*
  ** THREAD
