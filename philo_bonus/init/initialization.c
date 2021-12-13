@@ -41,6 +41,7 @@ int	init_sem(t_philosopher **philosopher, int nb_philosopher)
 void	init_sem_exist(t_philosopher *philosopher,
 	sem_t *sem_fork, sem_t *sem_dead)
 {
+	philosopher->wait_loop = 0;
 	philosopher->fork_exist = 0;
 	philosopher->mutex_dead_exist = 0;
 	philosopher->wait_loop_exist = 0;
@@ -57,6 +58,7 @@ void	init_values_two(t_philosopher *philo,
 {
 	if (philo)
 	{
+		philo->thread_eat = 0;
 		philo->nb_time_active = 0;
 		philo->nb_time = 0;
 		philo->nb_time_reach = 0;

@@ -56,17 +56,18 @@ static void	clean_sem_alone(t_philosopher *philo)
 {
 	if (philo)
 	{
-		if (philo->fork_exist == 1)
+		if (philo->fork)
 		{
 			sem_close(philo->fork);
 			philo->fork_exist = 2;
 		}
-		if (philo->mutex_dead_exist == 1)
+		if (philo->mutex_dead)
 		{
 			sem_close(philo->mutex_dead);
 			philo->mutex_dead_exist = 2;
 		}
-		sem_close(philo->wait_loop);
+		if (philo->wait_loop)
+			sem_close(philo->wait_loop);
 		clean_sem_alone_two(philo);
 	}
 }

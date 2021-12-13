@@ -85,15 +85,18 @@ int	run_process_two(t_philosopher *philo, long int current_time)
 		philo->state.time_simulation = current_time;
 		philo->state.current_time = current_time;
 		if (pthread_create(&philo->thread, NULL,
-				philo_dead_routine, philo) != 0)
-			exit(EXIT_FAILURE);
-		start_routine(philo);
-		pthread_join(philo->thread, NULL);
-		exit(EXIT_SUCCESS);
+				philo_dead_routine, philo) == 0)
+		{
+			start_routine(philo);
+			pthread_join(philo->thread, NULL);
+			exit(EXIT_SUCCESS);
+		}
+		sem_post(philo->wait_loop);
+		exit(0);
 	}
 	return (0);
 }
-
+/*
 int	start_eat_thread(t_philosopher *philo, sem_t *wait_loop)
 {
 	int				result;
@@ -113,3 +116,4 @@ int	start_eat_thread(t_philosopher *philo, sem_t *wait_loop)
 	}
 	return (0);
 }
+*/

@@ -12,14 +12,28 @@
 
 #include "philosopher_bonus.h"
 
-long int	start_process(sem_t **wait_loop)
+long int	start_process(sem_t **wait_loop, t_philosopher *philo)
 {
+	int	result;
+
+	result = 1;
 	if (!wait_loop)
 		return (-1);
 	*wait_loop = sem_open("wait_loop", O_CREAT, S_IRWXU, 0);
 	if (*wait_loop == SEM_FAILED)
 		return (-1);
 	sem_unlink("wait_loop");
+	if (philo->nb_time_active == 1)
+	{
+		result = pthread_create(&philo->thread_eat,
+				NULL, philo_eat_routine, philo);
+		if (result != 0)
+		{
+			sem_close(*wait_loop);
+			philo->wait_loop = *wait_loop;
+			return (2);
+		}
+	}
 	return (0);
 }
 
@@ -95,7 +109,6 @@ int	loop_process(t_philosopher **philo, sem_t *wait_loop, int nb_philosopher)
 			if (run_process_two(philo[i], current_time) == 1)
 			{
 				loop_process_two(philo, nb_philosopher);
-				sem_post(wait_loop);
 				usleep(800);
 				return (2);
 			}
@@ -114,13 +127,13 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 	i = 0;
 	if (!philo)
 		return (2);
-	if (start_process(&wait_loop) == -1)
+	if (start_process(&wait_loop, philo[0]) == -1)
 		return (2);
-	if (start_eat_thread(philo[0], wait_loop) != 0)
+	/*if (start_eat_thread(philo[0], wait_loop) != 0)
 	{
 		sem_close(wait_loop);
 		return (2);
-	}
+	}*/
 	if (loop_process(philo, wait_loop, nb_philosopher) == 2)
 	{
 		sem_close(wait_loop);

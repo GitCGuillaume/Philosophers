@@ -95,7 +95,6 @@ int	launch_wait_thread(t_philosopher *philosopher)
 		{
 			printf("Error\nCan't launch wait_eat_routine\n");
 			sem_post(philosopher->wait_loop);
-			exit(EXIT_FAILURE);
 		}
 	}
 	return (result);
@@ -108,8 +107,13 @@ void	*start_routine(t_philosopher *philosopher)
 
 	i = 0;
 	if (!philosopher)
-		exit(EXIT_FAILURE);
+	{
+		sem_post(philosopher->wait_loop);
+		return (NULL);
+	}
 	result = launch_wait_thread(philosopher);
+	if (result)
+		return (NULL);
 	loop_running_process(philosopher);
 	while (philosopher->nb_philosopher >= i)
 	{
@@ -118,5 +122,6 @@ void	*start_routine(t_philosopher *philosopher)
 	}
 	if (philosopher->nb_time_active == 1)
 		clear_finish_eat(philosopher);
+	sem_post(philosopher->wait_loop);
 	return (NULL);
 }
