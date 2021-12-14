@@ -6,15 +6,15 @@ ROUTINES_PATH	=	./routines
 
 INIT_PATH	=	./init
 
-SRCS_FILES	=	$(SRCS_PATH)/ft_args.c $(SRCS_PATH)/ft_atoi.c $(SRCS_PATH)/ft_itoa.c $(SRCS_PATH)/ft_strdup.c $(SRCS_PATH)/ft_str_is_digit.c $(SRCS_PATH)/ft_strjoin.c $(SRCS_PATH)/process_tools.c $(SRCS_PATH)/tools.c
+SRCS_FILES	=	$(SRCS_PATH)/ft_args_bonus.c $(SRCS_PATH)/ft_atoi_bonus.c $(SRCS_PATH)/ft_str_is_digit_bonus.c $(SRCS_PATH)/ft_strjoin_bonus.c $(SRCS_PATH)/process_tools_bonus.c $(SRCS_PATH)/tools_bonus.c
 
-SRCS_INIT	=	$(INIT_PATH)/initialization.c
+SRCS_INIT	=	$(INIT_PATH)/initialization_bonus.c
 
-SRCS_PROCESS	=	$(PROCESS_PATH)/process.c $(PROCESS_PATH)/process_two.c
+SRCS_PROCESS	=	$(PROCESS_PATH)/process_bonus.c $(PROCESS_PATH)/process_two_bonus.c
 
-SRCS_ROUTINES	=	$(ROUTINES_PATH)/routines.c $(SRCS_PATH)/display.c
+SRCS_ROUTINES	=	$(ROUTINES_PATH)/routines_bonus.c $(SRCS_PATH)/display_bonus.c
 
-SRCS		=	main_bonus.c free.c running_process.c
+SRCS		=	main_bonus.c free_bonus.c running_process_bonus.c
 
 OBJS_FILES	=	$(SRCS_FILES:.c=.o)
 
@@ -26,7 +26,7 @@ OBJS_PROCESS	=	$(SRCS_PROCESS:.c=.o)
 
 OBJS	=	$(SRCS:.c=.o)
 
-CLANG	=	clang -Wall -Wextra -Werror
+CLANG	=	cc -Wall -Wextra -Werror
 
 RM	=	rm -f
 

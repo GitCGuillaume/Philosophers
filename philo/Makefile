@@ -8,7 +8,7 @@ OBJS	=	$(SRCS_PATH:.c=.o)
 
 OBJS_ONE	=	$(SRCS_PATH_ONE:.c=.o)
 
-CLANG	=	clang -Wall -Wextra -Werror
+CLANG	=	cc -Wall -Wextra -Werror
 
 RM	=	rm -f
 

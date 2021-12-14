@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:15:30 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 13:48:26 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 14:22:37 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 int	run_program(t_philosopher **philosopher, char **argv)
 {
 	int	result;
-	int	i;
 
-	i = 0;
 	result = 2;
 	if (philosopher && argv)
 	{

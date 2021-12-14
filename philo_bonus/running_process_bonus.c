@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   running_process.c                                  :+:      :+:    :+:   */
+/*   running_process_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:01:07 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 09:25:24 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 14:23:44 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ void	*philo_eat_routine(void *args)
 {
 	t_philosopher		*philo;
 	int					nb_eat;
-	int					i;
 
 	nb_eat = 0;
-	i = 0;
 	philo = (t_philosopher *)args;
 	if (philo->nb_philosopher > 0)
 	{
@@ -42,11 +40,7 @@ void	*philo_eat_routine(void *args)
 void	*philo_wait_eat_routine(void *args)
 {
 	t_philosopher		*philo;
-	int					i;
-	int					nb_eat;
 
-	i = 0;
-	nb_eat = 0;
 	philo = (t_philosopher *)args;
 	if (sem_wait(philo->sem_eat_finish) != 0)
 		philo->dead = 1;
@@ -67,9 +61,7 @@ void	*philo_dead_routine(void *args)
 {
 	t_philosopher		*philo;
 	int					result;
-	int					i;
 
-	i = 0;
 	philo = (t_philosopher *)args;
 	result = 0;
 	while (philo->dead == 0 && philo->finish == 0

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   free_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:01:06 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/13 11:09:37 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 14:22:52 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,8 @@ static void	clean_sem_alone(t_philosopher *philo)
 
 int	free_all(t_philosopher **philo, int nb_philosopher)
 {
-	char	*str;
 	int		result;
 
-	str = 0;
 	result = -1;
 	if (philo)
 	{

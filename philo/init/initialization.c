@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 10:20:51 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 11:32:07 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 14:22:01 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,10 @@ int	init_values(t_philosopher **philosopher,
 	t_fork **fork, char **argv, int argc)
 {
 	int	i;
-	int	result;
 	int	nb_philosopher;
 
 	i = 0;
 	nb_philosopher = ft_atoi(argv[1]);
-	result = 1;
 	while (nb_philosopher > i)
 	{
 		if (pthread_mutex_init(&fork[i]->mutex, NULL) != 0)
