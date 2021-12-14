@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 11:24:11 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/02 11:12:02 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 09:26:03 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	run_philosopher(int nb_philosopher, int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	ssize_t	nb_philosopher;
-	int	result;
+	int		result;
 
 	if (check_args(argc, argv) == 0)
 		return (1);
