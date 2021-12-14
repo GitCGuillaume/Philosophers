@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:14:31 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 11:59:49 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 16:49:20 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void		*philo_wait_eat_routine(void *args);
 void		*philo_eat_routine(void *args);
 void		*philo_dead_routine(void *args);
 int			display(t_philosopher *philo, char *str, int is_dead);
+int			display_eat(t_philosopher *philo, int is_dead);
 int			thinking(t_philosopher *philo);
 int			sleeping(t_philosopher *philo);
 int			eating(t_philosopher *philo);

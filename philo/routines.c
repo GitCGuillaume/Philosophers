@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:46:21 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 10:27:19 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 17:31:21 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ int	sleeping(t_philosopher *philo)
 		pthread_mutex_unlock(philo->display);
 		if (philo->state.current_time == -1)
 			return (1);
-		usleep(philo->state.time_to_sleep * 1000);
+		if (*philo->dead == 0)
+			usleep(philo->state.time_to_sleep * 1000);
 		philo->sleep = 1;
 	}
 	if (*philo->dead == 1)

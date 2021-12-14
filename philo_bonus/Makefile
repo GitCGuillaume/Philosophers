@@ -6,7 +6,7 @@ ROUTINES_PATH	=	./routines
 
 INIT_PATH	=	./init
 
-SRCS_FILES	=	$(SRCS_PATH)/ft_args_bonus.c $(SRCS_PATH)/ft_atoi_bonus.c $(SRCS_PATH)/ft_str_is_digit_bonus.c $(SRCS_PATH)/ft_strjoin_bonus.c $(SRCS_PATH)/process_tools_bonus.c $(SRCS_PATH)/tools_bonus.c
+SRCS_FILES	=	$(SRCS_PATH)/ft_args_bonus.c $(SRCS_PATH)/ft_atoi_bonus.c $(SRCS_PATH)/ft_str_is_digit_bonus.c $(SRCS_PATH)/process_tools_bonus.c $(SRCS_PATH)/tools_bonus.c
 
 SRCS_INIT	=	$(INIT_PATH)/initialization_bonus.c
 
