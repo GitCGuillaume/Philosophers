@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_two.c                                      :+:      :+:    :+:   */
+/*   process_two_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:16:05 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 09:56:35 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 15:09:15 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	clear_finish_eat(t_philosopher *philosopher)
 	{
 		printf("Error\nCan't clear wait_eat_routine\n");
 		sem_post(philosopher->wait_loop);
-		exit(EXIT_FAILURE);
+		kill(philosopher->process, SIGKILL);
 	}
 	if (philosopher->finish == 1 && philosopher->dead == 100)
 	{
@@ -84,7 +84,8 @@ int	run_process_two(t_philosopher *philo, long int current_time)
 		{
 			start_routine(philo);
 			pthread_join(philo->thread, NULL);
-			exit(EXIT_SUCCESS);
+			sem_post(philo->wait_loop);
+			exit(0);
 		}
 		sem_post(philo->wait_loop);
 		exit(0);

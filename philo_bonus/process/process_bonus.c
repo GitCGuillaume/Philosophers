@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process.c                                          :+:      :+:    :+:   */
+/*   process_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:08:50 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 09:55:15 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 15:07:18 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,10 +137,10 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 	sem_wait(wait_loop);
 	while (nb_philosopher > i)
 	{
-		kill(philo[i]->process, SIGKILL);
+		if (philo[i]->process != -1)
+			kill(philo[i]->process, SIGKILL);
 		i++;
 	}
-	waitpid(0, 0, 0);
 	end_process(philo[0], nb_philosopher);
 	return (0);
 }

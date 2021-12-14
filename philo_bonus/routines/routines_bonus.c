@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routines.c                                         :+:      :+:    :+:   */
+/*   routines_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:06:09 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/10 18:25:39 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 15:41:45 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	eating(t_philosopher *philo)
 {
 	int	result;
 
+	result = 0;
 	if (!philo)
 		return (1);
 	if (display(philo, "is eating", philo->dead) != 0)
