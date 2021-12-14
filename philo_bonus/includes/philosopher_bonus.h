@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:14:31 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 09:49:06 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 11:59:49 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,5 @@ int			take_fork(t_philosopher *philo);
 int			is_dead(t_philosopher *philo);
 int			check_nb_philosopher(int nb_philosopher);
 int			check_inputs_values(t_philosopher **philosopher,
-				int argc, int nb_philosopher);
+				int argc);
 #endif
