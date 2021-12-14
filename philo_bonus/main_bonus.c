@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:15:30 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 09:49:55 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 13:48:26 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	end_program(t_philosopher **philosopher, int argc, char **argv)
 
 	if (!philosopher)
 		return (1);
-	result = check_inputs_values(philosopher, argc, ft_atoi(argv[1]));
+	result = check_inputs_values(philosopher, argc);
 	if (result == 1)
 	{
 		free_all(philosopher, ft_atoi(argv[1]));
