@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:08:50 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/13 12:56:56 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 09:55:15 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,11 +129,6 @@ int	run_process(t_philosopher **philo, int nb_philosopher)
 		return (2);
 	if (start_process(&wait_loop, philo[0]) == -1)
 		return (2);
-	/*if (start_eat_thread(philo[0], wait_loop) != 0)
-	{
-		sem_close(wait_loop);
-		return (2);
-	}*/
 	if (loop_process(philo, wait_loop, nb_philosopher) == 2)
 	{
 		sem_close(wait_loop);

@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:16:05 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/13 11:13:01 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 09:56:35 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,6 @@ void	loop_running_process(t_philosopher *philosopher)
 
 int	run_process_two(t_philosopher *philo, long int current_time)
 {
-	int	i;
-	int	nb_philosophers;
-
-	i = 0;
-	nb_philosophers = philo->nb_philosopher;
 	if (philo->process == -1)
 	{
 		printf("Error returned\n");
@@ -96,24 +91,3 @@ int	run_process_two(t_philosopher *philo, long int current_time)
 	}
 	return (0);
 }
-/*
-int	start_eat_thread(t_philosopher *philo, sem_t *wait_loop)
-{
-	int				result;
-
-	if (philo)
-	{
-		if (philo->nb_time_active == 1)
-		{
-			result = pthread_create(&philo->thread_eat,
-					NULL, philo_eat_routine, philo);
-			if (result != 0)
-			{
-				philo->wait_loop = wait_loop;
-				return (2);
-			}
-		}
-	}
-	return (0);
-}
-*/

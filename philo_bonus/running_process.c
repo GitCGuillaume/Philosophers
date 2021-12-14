@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:01:07 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/13 11:12:00 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 09:25:24 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	*philo_wait_eat_routine(void *args)
 	nb_eat = 0;
 	philo = (t_philosopher *)args;
 	if (sem_wait(philo->sem_eat_finish) != 0)
-		kill(philo->process, SIGKILL);
+		philo->dead = 1;
 	if (philo->dead == 0)
 	{
 		if (sem_wait(philo->mutex_dead) != 0)

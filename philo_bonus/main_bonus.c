@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 10:15:30 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/13 11:58:12 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 09:49:55 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,15 @@ int	run_program(t_philosopher **philosopher, char **argv)
 	int	result;
 	int	i;
 
-	result = 2;
 	i = 0;
+	result = 2;
 	if (philosopher && argv)
-		result = run_process(philosopher, ft_atoi(argv[1]));
-	if (result == 2)
 	{
-		if (philosopher[0]->thread_eat)
-		{
-			i = 0;
-			while (ft_atoi(argv[1]) > i)
-			{
-				sem_post(philosopher[0]->sem_eat_wait);
-				i++;
-				usleep(10);
-			}
-			pthread_join(philosopher[0]->thread_eat, NULL);
-		}
-		printf("Error\n");
-		free_all(philosopher, ft_atoi(argv[1]));
+		result = run_process(philosopher, ft_atoi(argv[1]));
+	}
+	if (philosopher && argv && result == 2)
+	{
+		big_error(philosopher, argv);
 		return (1);
 	}
 	if (philosopher && argv)
@@ -86,9 +76,9 @@ t_philosopher	**start_program(int argc, char **argv,
 	t_philosopher	**philosopher;
 	int				i;
 
-	i = 0;
-	if (check_args(argc, argv) == 1)
+	if (!sem_fork || !sem_dead)
 		return (NULL);
+	i = 0;
 	if (check_values(argv, argc) == 1)
 		return (NULL);
 	if (alloc_things(sem_fork, sem_dead, &philosopher, argv) == 1)
@@ -119,6 +109,8 @@ int	main(int argc, char **argv)
 	int				result;
 
 	i = 0;
+	if (!argv || check_args(argc, argv) == 1)
+		return (1);
 	philosopher = start_program(argc, argv, &sem_fork, &sem_dead);
 	if (philosopher == NULL)
 		return (1);

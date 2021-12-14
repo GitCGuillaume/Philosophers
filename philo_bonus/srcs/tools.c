@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/16 17:53:25 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 18:04:54 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 09:56:49 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,26 @@ int	check_values(char **argv, int argc)
 		return (1);
 	}
 	return (0);
+}
+
+void	big_error(t_philosopher **philosopher, char **argv)
+{
+	int	i;
+
+	i = 0;
+	if (philosopher && argv)
+	{
+		if (philosopher[0]->thread_eat)
+		{
+			i = 0;
+			while (ft_atoi(argv[1]) > i++)
+			{
+				sem_post(philosopher[0]->sem_eat_wait);
+				usleep(10);
+			}
+			pthread_join(philosopher[0]->thread_eat, NULL);
+		}
+		printf("Error\n");
+		free_all(philosopher, ft_atoi(argv[1]));
+	}
 }

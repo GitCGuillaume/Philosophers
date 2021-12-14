@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 12:00:54 by gchopin           #+#    #+#             */
-/*   Updated: 2021/07/17 18:09:54 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 09:57:04 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			is_dying(long int current_time,
 long int	math_time(void);
 int			argv_ok(char *str);
 int			check_args(int argc, char **argv);
-ssize_t			ft_atoi(const char *str);
+ssize_t		ft_atoi(const char *str);
 char		*ft_strdup(const char *s1);
 char		*ft_itoa(int n);
 int			ft_str_is_digit(char *str);
