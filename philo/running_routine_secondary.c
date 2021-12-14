@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/15 11:42:29 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/08 11:50:29 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 11:39:45 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	*philo_is_dead(void *args)
 			return (NULL);
 		}
 		pthread_mutex_unlock(philo->display);
-		usleep(180);
+		usleep(200);
 	}
 	return (NULL);
 }

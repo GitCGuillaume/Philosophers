@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/16 11:24:24 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/10 09:14:32 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 10:15:03 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ int	eating_two(t_philosopher *philo)
 		printf("%ld %d is eating\n",
 			philo->state.current_time
 			- philo->state.start_time, philo->number);
+		philo->state.time_simulation = math_time();
 	}
-	philo->state.time_simulation = math_time();
 	pthread_mutex_unlock(philo->display);
 	return (0);
 }

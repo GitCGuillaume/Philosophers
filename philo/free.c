@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 11:23:04 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/10 09:13:59 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 11:28:04 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ static void	free_malloc(t_philosopher **philo, t_fork **fork, int nb_philo)
 				free(fork[i]);
 		i++;
 	}
-	if (nb_philo == 1 && fork)
-		free(fork[1]);
 	if (fork)
 		free(fork);
 	if (philo)

@@ -6,34 +6,37 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 18:46:37 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/10 09:12:35 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 11:42:25 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher.h"
 
-static void	loop_routine(t_philosopher *philosopher, int *result)
+static void	loop_routine(t_philosopher *philo, int *result)
 {
-	if (philosopher->nb_fork == 0 && *result == 0
-		&& *philosopher->dead == 0 && philosopher->eat == 0
-		&& philosopher->sleep == 0
-		&& philosopher->nb_philosopher > *philosopher->everyone_eat)
-		*result = take_fork(philosopher);
-	if (philosopher->nb_fork == 2 && *result == 0
-		&& *philosopher->dead == 0 && philosopher->eat == 0
-		&& philosopher->sleep == 0
-		&& philosopher->nb_philosopher > *philosopher->everyone_eat)
-		*result = eating(philosopher);
-	if (philosopher->nb_fork == 0 && *result == 0
-		&& *philosopher->dead == 0 && philosopher->eat == 1
-		&& philosopher->sleep == 0
-		&& philosopher->nb_philosopher > *philosopher->everyone_eat)
-		*result = sleeping(philosopher);
-	if (philosopher->nb_fork == 0 && *result == 0
-		&& *philosopher->dead == 0 && philosopher->eat == 1
-		&& philosopher->sleep == 1
-		&& philosopher->nb_philosopher > *philosopher->everyone_eat)
-		*result = thinking(philosopher);
+	if (philo)
+	{
+		if (philo->nb_fork == 0 && *result == 0
+			&& *philo->dead == 0 && philo->eat == 0
+			&& philo->sleep == 0
+			&& philo->nb_philosopher > *philo->everyone_eat)
+			*result = take_fork(philo);
+		if (philo->nb_fork == 2 && *result == 0
+			&& *philo->dead == 0 && philo->eat == 0
+			&& philo->sleep == 0
+			&& philo->nb_philosopher > *philo->everyone_eat)
+			*result = eating(philo);
+		if (philo->nb_fork == 0 && *result == 0
+			&& *philo->dead == 0 && philo->eat == 1
+			&& philo->sleep == 0
+			&& philo->nb_philosopher > *philo->everyone_eat)
+			*result = sleeping(philo);
+		if (philo->nb_fork == 0 && *result == 0
+			&& *philo->dead == 0 && philo->eat == 1
+			&& philo->sleep == 1
+			&& philo->nb_philosopher > *philo->everyone_eat)
+			*result = thinking(philo);
+	}
 }
 
 static void	run_private_threads(t_philosopher *philosopher)
@@ -55,18 +58,21 @@ void	*start_routine(void *args)
 
 	result = 0;
 	philosopher = (t_philosopher *)args;
-	run_private_threads(philosopher);
-	while (philosopher && *philosopher->dead == 0 && result == 0
-		&& philosopher->nb_philosopher > *philosopher->everyone_eat)
+	if (philosopher)
 	{
-		loop_routine(philosopher, &result);
+		run_private_threads(philosopher);
+		while (philosopher && *philosopher->dead == 0 && result == 0
+			&& philosopher->nb_philosopher > *philosopher->everyone_eat)
+		{
+			loop_routine(philosopher, &result);
+		}
+		if (philosopher->fork_right && philosopher->fork_right->fork_exist == 1)
+			pthread_mutex_unlock(&philosopher->fork_right->mutex);
+		if (philosopher->fork_left && philosopher->fork_left->fork_exist == 1)
+			pthread_mutex_unlock(&philosopher->fork_left->mutex);
+		if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
+			pthread_join(philosopher->eat_thread, NULL);
 	}
-	if (philosopher->fork_right && philosopher->fork_right->fork_exist == 1)
-		pthread_mutex_unlock(&philosopher->fork_right->mutex);
-	if (philosopher->fork_left && philosopher->fork_left->fork_exist == 1)
-		pthread_mutex_unlock(&philosopher->fork_left->mutex);
-	if (philosopher->nb_time_active == 1 && philosopher->nb_philosopher)
-		pthread_join(philosopher->eat_thread, NULL);
 	usleep(1000);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 18:45:54 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/10 09:15:25 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/14 11:28:40 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,28 +31,6 @@ static int	loop_set_null(t_philosopher **philo, t_fork **fork,
 	}
 	if (nb_philosopher == 1)
 		fork[1] = NULL;
-	return (1);
-}
-
-/*
- ** Give a fork to the only philosopher
-*/
-
-static int	give_fork_philo(t_philosopher **philo, t_fork **fork,
-	int nb_philosopher)
-{
-	if (!philo || !fork)
-		return (0);
-	if (nb_philosopher == 1)
-	{
-		fork[1] = malloc(sizeof(t_philosopher));
-		if (fork[1] == NULL)
-		{
-			free_init_null(philo, fork, nb_philosopher);
-			return (0);
-		}
-		fork[1]->fork_exist = 0;
-	}
 	return (1);
 }
 
@@ -98,6 +76,5 @@ int	init_to_null(t_philosopher **philo, t_fork **fork, int nb_philosopher)
 			return (0);
 		i++;
 	}
-	result = give_fork_philo(philo, fork, nb_philosopher);
 	return (result);
 }
