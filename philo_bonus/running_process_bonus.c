@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/05 15:01:07 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 16:08:22 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/15 09:20:11 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ void	*start_routine(t_philosopher *philosopher)
 	}
 	if (philosopher->nb_time_active == 1)
 		clear_finish_eat(philosopher);
+	pthread_join(philosopher->thread, NULL);
 	exit(0);
 	return (NULL);
 }

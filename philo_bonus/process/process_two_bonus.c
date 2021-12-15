@@ -6,7 +6,7 @@
 /*   By: gchopin <gchopin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/17 17:16:05 by gchopin           #+#    #+#             */
-/*   Updated: 2021/12/14 15:09:15 by gchopin          ###   ########.fr       */
+/*   Updated: 2021/12/15 09:19:57 by gchopin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int	run_process_two(t_philosopher *philo, long int current_time)
 				philo_dead_routine, philo) == 0)
 		{
 			start_routine(philo);
-			pthread_join(philo->thread, NULL);
 			sem_post(philo->wait_loop);
 			exit(0);
 		}
