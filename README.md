@@ -9,5 +9,5 @@ Ce sujet consiste en un nombre de philosophe assis autour d'une table, ces philo
 * dormir
 
 Si un philosophe ne mange pas à temps, il meurt et le programme s'arrête.
-![ph1](https://github.com/GitCGuillaume/Philosophers/assets/34135668/689b03a5-1e25-401e-8913-48cda5441c98)
-![ph2](https://github.com/GitCGuillaume/Philosophers/assets/34135668/07e0df68-6d3d-400a-8e0c-1d5242040151)
+![ph1](https://github.com/GitCGuillaume/Philosophers/assets/34135668/ac16a48e-2d00-4fce-bf75-508aefa912fe)
+![ph2](https://github.com/GitCGuillaume/Philosophers/assets/34135668/551a6eba-3c98-4165-b513-ac3fa27f28e2)
